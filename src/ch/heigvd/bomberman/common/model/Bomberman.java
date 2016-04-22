@@ -6,10 +6,14 @@ import javafx.geometry.Point2D;
 
 import java.util.List;
 
+/**
+ * Represents a bomberman character in-game
+ */
 public class Bomberman {
     private Skin skin;
     private Point2D position;
     private Bomb bomb;
+    private int maxBombs;
     private List<PowerUp> powerUps;
 
     /**
@@ -30,7 +34,7 @@ public class Bomberman {
     }
 
     public void givePowerup(PowerUp powerUp){
-        powerUp.effect(this);
+        powerUp.apply(this);
     }
 
     public Bomb getBomb(){
