@@ -1,4 +1,4 @@
-package ch.heigvd.bomberman.common.model;
+package ch.heigvd.bomberman.common.game;
 
 import javafx.scene.image.Image;
 

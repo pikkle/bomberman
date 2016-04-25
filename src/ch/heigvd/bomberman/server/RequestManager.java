@@ -1,37 +1,67 @@
 package ch.heigvd.bomberman.server;
 
+import ch.heigvd.bomberman.common.communication.requests.Request;
+import ch.heigvd.bomberman.common.communication.responses.NoResponse;
+import ch.heigvd.bomberman.common.communication.responses.Response;
+
 import java.io.*;
 import java.net.Socket;
 
 public class RequestManager extends Thread {
     private Socket socket;
-    private PrintWriter writer;
-    private BufferedReader reader;
+    private ObjectOutputStream writer;
+    private ObjectInputStream reader;
 
     public RequestManager(Socket socket) {
         this.socket = socket;
         try {
-            this.writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.writer = new ObjectOutputStream(socket.getOutputStream());
+            this.reader = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void run(){
         while (true) {
             try {
-                String line = reader.readLine();
-                System.out.println(line);
-                writer.write(line);
+                Request request = (Request) reader.readObject();
+                Response response = process(request);
+                send(response);
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
-
         }
     }
+
+    /**
+     * Interprets the request, and give a response
+     * @param request
+     * @return
+     */
+    private Response process(Request request) {
+        Response response = new NoResponse();
+        switch (request.getType()){
+            case ACCOUNT_CREATION:
+                // TODO: check the credentials of the account and create it
+                break;
+            // TODO: other request types
+        }
+        return response;
+    }
+
+    /**
+     * Sends the response to the client
+     * @param response
+     */
+    private void send(Response response) throws IOException {
+        if (! (response instanceof NoResponse))
+            writer.writeObject(response);
+    }
+
 
     //TODO: à la fermeture d'un socket, supprimer le client manager de la liste du server
 }

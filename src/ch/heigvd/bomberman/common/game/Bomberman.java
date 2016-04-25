@@ -1,7 +1,7 @@
-package ch.heigvd.bomberman.common.model;
+package ch.heigvd.bomberman.common.game;
 
 
-import ch.heigvd.bomberman.common.model.powerups.PowerUp;
+import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import javafx.geometry.Point2D;
 
 import java.util.List;
