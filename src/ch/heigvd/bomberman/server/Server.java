@@ -37,8 +37,18 @@ public class Server {
      * @param args {server port, ... }
      */
     public static void main(String... args){
-        //TODO: récupérer le port dans args
-        Server server = new Server(3737);
+        int port = 3737;
+        if (args.length == 1){
+            int parsed = Integer.parseInt(args[0]);
+            if (0 <= parsed && parsed <= 65535)
+                port = parsed;
+            else
+                throw new IllegalArgumentException("The port number must be between 0 and 65535.");
+        } else if (args.length > 1){
+            throw new IllegalArgumentException("Only one parameter, or none.");
+        }
+
+        Server server = new Server(port);
         server.loop();
     }
 }

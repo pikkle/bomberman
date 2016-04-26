@@ -38,7 +38,7 @@ public class RequestManager extends Thread {
     }
 
     /**
-     * Interprets the request, and give a response
+     * Interprets the request, and makes a response to it
      * @param request
      * @return
      */
@@ -58,10 +58,8 @@ public class RequestManager extends Thread {
      * @param response
      */
     private void send(Response response) throws IOException {
-        if (! (response instanceof NoResponse))
+        if (response.getType() != Response.Type.NO_RESPONSE)
             writer.writeObject(response);
     }
 
-
-    //TODO: à la fermeture d'un socket, supprimer le client manager de la liste du server
 }
