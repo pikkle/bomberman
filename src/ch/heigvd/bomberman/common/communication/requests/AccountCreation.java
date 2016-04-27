@@ -11,8 +11,12 @@ public final class AccountCreation extends Request {
      * @param password of the account
      */
     public AccountCreation(String username,  String password){
-        super(Type.ACCOUNT_CREATION);
         this.username = username;
         this.password = password;
+    }
+
+    @Override
+    public RequestType getType() {
+        return RequestType.ACCOUNT_CREATION;
     }
 }

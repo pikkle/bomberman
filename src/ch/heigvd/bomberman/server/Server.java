@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class Server {
     private int port;
+    private boolean running = true;
     private List<RequestManager> clients;
 
     public Server(int port){
@@ -21,15 +22,21 @@ public class Server {
     public void loop(){
         try {
             ServerSocket socket = new ServerSocket(port);
-            while (true) {
-                RequestManager client = new RequestManager(socket.accept()); // creates a manager for each client
-                client.start();
-                clients.add(client);
+            synchronized (this) {
+                while (running) {
+                    RequestManager client = new RequestManager(socket.accept()); // creates a manager for each client
+                    client.start();
+                    clients.add(client);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public synchronized void stop(){
+        running = false;
     }
 
     /**

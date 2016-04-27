@@ -6,7 +6,7 @@ package ch.heigvd.bomberman.common.communication.responses;
  */
 public class NoResponse extends Response {
     public NoResponse() {
-        super(Type.NO_RESPONSE, "");
+        super(ResponseType.NO_RESPONSE, "");
     }
 
 }

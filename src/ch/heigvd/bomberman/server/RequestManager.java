@@ -1,8 +1,12 @@
 package ch.heigvd.bomberman.server;
 
+import ch.heigvd.bomberman.common.communication.requests.AccountCreation;
+import ch.heigvd.bomberman.common.communication.requests.HelloRequest;
 import ch.heigvd.bomberman.common.communication.requests.Request;
+import ch.heigvd.bomberman.common.communication.responses.HelloResponse;
 import ch.heigvd.bomberman.common.communication.responses.NoResponse;
 import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.communication.responses.ResponseType;
 
 import java.io.*;
 import java.net.Socket;
@@ -42,15 +46,25 @@ public class RequestManager extends Thread {
      * @param request
      * @return
      */
-    private Response process(Request request) {
+
+    public Response process(Request request) {
         Response response = new NoResponse();
         switch (request.getType()){
             case ACCOUNT_CREATION:
-                // TODO: check the credentials of the account and create it
                 break;
+            case HELLO_REQUEST:
+                HelloRequest req = (HelloRequest) request;
+                System.out.println("Received message: ");
+                System.out.println(req.getMessage());
+                return new HelloResponse("Hello !");
             // TODO: other request types
         }
         return response;
+    }
+
+
+    private Response process(AccountCreation request) {
+        System.out.println("coucou");
     }
 
     /**
@@ -58,7 +72,7 @@ public class RequestManager extends Thread {
      * @param response
      */
     private void send(Response response) throws IOException {
-        if (response.getType() != Response.Type.NO_RESPONSE)
+        if (response.getType() != ResponseType.NO_RESPONSE)
             writer.writeObject(response);
     }
 
