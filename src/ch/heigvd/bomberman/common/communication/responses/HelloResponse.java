@@ -1,7 +1,12 @@
 package ch.heigvd.bomberman.common.communication.responses;
 
 public class HelloResponse extends Response {
-    public HelloResponse(String message) {
-        super(ResponseType.HELLO_RESPONSE, message);
-    }
+   String message;
+
+   public HelloResponse(String message) {
+	  super(ResponseType.HELLO_RESPONSE, message);
+	  this.message = message;
+   }
+
+   public String message() {return message;}
 }
