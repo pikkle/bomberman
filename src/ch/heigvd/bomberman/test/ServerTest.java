@@ -7,9 +7,5 @@ import static org.junit.Assert.*;
 
 public class ServerTest {
 
-    @Test
-    public void testDefaultMain() throws Exception {
-        Server.main();
-    }
 
 }

@@ -1,5 +1,6 @@
 package ch.heigvd.bomberman.server;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.LinkedList;
@@ -10,16 +11,21 @@ import java.util.List;
  * Runs on port 3737 by default
  */
 public class Server {
+    private static final int DEFAULT_PORT = 3737;
     private int port;
     private boolean running = true;
     private List<RequestManager> clients;
+
+    public Server(){
+        this(DEFAULT_PORT);
+    }
 
     public Server(int port){
         this.port = port;
         this.clients = new LinkedList<RequestManager>();
     }
 
-    public void loop(){
+    public void start(){
         try {
             ServerSocket socket = new ServerSocket(port);
             synchronized (this) {
@@ -44,18 +50,6 @@ public class Server {
      * @param args {server port, ... }
      */
     public static void main(String... args){
-        int port = 3737;
-        if (args.length == 1){
-            int parsed = Integer.parseInt(args[0]);
-            if (0 <= parsed && parsed <= 65535)
-                port = parsed;
-            else
-                throw new IllegalArgumentException("The port number must be between 0 and 65535.");
-        } else if (args.length > 1){
-            throw new IllegalArgumentException("Only one parameter, or none.");
-        }
-
-        Server server = new Server(port);
-        server.loop();
+        new Server().start();
     }
 }
