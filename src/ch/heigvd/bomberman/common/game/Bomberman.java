@@ -50,6 +50,7 @@ public class Bomberman extends DestructibleElement implements KeyListener {
    }
 
    public void dropBomb() {
+	  // TODO add the bomb to the map
 
    }
 
