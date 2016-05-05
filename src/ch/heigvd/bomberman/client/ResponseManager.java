@@ -61,6 +61,9 @@ public class ResponseManager {
 		 case HELLO_RESPONSE:
 			System.out.println(((HelloResponse)response).message());
 			break;
+		 case MOVE_RESPONSE:
+
+			break;
 	  }
 	  return response;
    }

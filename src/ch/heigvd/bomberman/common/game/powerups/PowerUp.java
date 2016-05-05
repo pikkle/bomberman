@@ -1,8 +1,14 @@
 package ch.heigvd.bomberman.common.game.powerups;
 
 import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.DestructibleElement;
+import javafx.geometry.Point2D;
 
-public abstract class PowerUp {
+public abstract class PowerUp extends DestructibleElement {
 
-    public abstract void apply(Bomberman bomberman);
+   public PowerUp(Point2D position) {
+	  super(position);
+   }
+
+   public abstract void apply(Bomberman bomberman);
 }
