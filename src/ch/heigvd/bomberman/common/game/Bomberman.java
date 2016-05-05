@@ -1,6 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
 
+import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import javafx.geometry.Point2D;
 

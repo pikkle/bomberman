@@ -1,9 +1,10 @@
-package ch.heigvd.bomberman.common.game;
+package ch.heigvd.bomberman.common.game.bombs;
 
 
+import ch.heigvd.bomberman.common.game.DestructibleElement;
 import javafx.geometry.Point2D;
 
-public abstract class Bomb extends DestructibleElement{
+public abstract class Bomb extends DestructibleElement {
     private int countdown;
     private int blastRange;
 
