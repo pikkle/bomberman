@@ -5,8 +5,6 @@ import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import javafx.geometry.Point2D;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,21 +31,22 @@ public class Bomberman extends DestructibleElement {
 
    /**
 	* Move the bomberman in the direction wanted
+	*
 	* @param direction the direction
 	*/
    public void move(Direction direction) { // TODO Add hitbox collision detection
 	  switch (direction) {
 		 case RIGHT:
-			position.add(speed, 0);
+			position = position.add(speed, 0);
 			break;
 		 case LEFT:
-			position.add(-speed, 0);
+			position = position.add(-speed, 0);
 			break;
 		 case UP:
-			position.add(0, speed);
+			position = position.add(0, speed);
 			break;
 		 case DOWN:
-			position.add(0, -speed);
+			position = position.add(0, -speed);
 			break;
 	  }
 
@@ -63,6 +62,7 @@ public class Bomberman extends DestructibleElement {
 
    /**
 	* Add a power to the bomberman and apply it.
+	*
 	* @param powerUp the power up
 	*/
    public void givePowerup(PowerUp powerUp) {
@@ -71,11 +71,14 @@ public class Bomberman extends DestructibleElement {
    }
 
    /**
-	*
 	* @return the bomb of the bomberman
 	*/
    public Bomb getBomb() {
 	  return bomb;
    }
+
+   public double getSpeed() {return speed;}
+
+   public void setSpeed(double speed) {this.speed = speed;}
 }
 

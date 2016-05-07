@@ -13,7 +13,9 @@ import java.util.Observable;
 public abstract class Element extends Observable {
    protected Point2D position;
 
-   public Element(Point2D point2D) {
-	  position = point2D;
+   public Element(Point2D position) {
+	  this.position = position;
    }
+
+   public Point2D getPosition() {return position;}
 }

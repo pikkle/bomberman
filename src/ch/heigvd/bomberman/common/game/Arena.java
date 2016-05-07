@@ -1,5 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
+import javafx.geometry.Point2D;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +12,10 @@ import java.util.List;
  * @author Adriano Ruberto
  */
 public class Arena {
-   List<Element> elements = new LinkedList<>();
+   private List<Element> elements = new LinkedList<>();
+
+   public Arena(){
+	  elements.add(new Bomberman(new Point2D(10, 10), Skin.SKIN1));
+   }
 
 }
