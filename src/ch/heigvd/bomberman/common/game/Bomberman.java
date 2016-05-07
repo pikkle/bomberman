@@ -31,8 +31,12 @@ public class Bomberman extends DestructibleElement implements KeyListener {
 	  this.skin = skin;
    }
 
-   public void move(Direction dir) {
-	  switch (dir) {
+   /**
+	* Move the bomberman in the direction wanted
+	* @param direction the direction
+	*/
+   public void move(Direction direction) { // TODO Add hitbox collision detection
+	  switch (direction) {
 		 case RIGHT:
 			position.add(speed, 0);
 			break;
@@ -49,16 +53,27 @@ public class Bomberman extends DestructibleElement implements KeyListener {
 
    }
 
+   /**
+	* Drop the bomb
+	*/
    public void dropBomb() {
 	  // TODO add the bomb to the map
 
    }
 
+   /**
+	* Add a power to the bomberman and apply it.
+	* @param powerUp the power up
+	*/
    public void givePowerup(PowerUp powerUp) {
 	  powerUps.add(powerUp);
 	  powerUp.apply(this);
    }
 
+   /**
+	*
+	* @return the bomb of the bomberman
+	*/
    public Bomb getBomb() {
 	  return bomb;
    }
@@ -67,10 +82,10 @@ public class Bomberman extends DestructibleElement implements KeyListener {
    public void keyTyped(KeyEvent e) {
 	  switch (e.getKeyCode()) {
 		 case KeyEvent.VK_A | KeyEvent.VK_LEFT:
-			move(Direction.RIGHT);
+			move(Direction.LEFT);
 			break;
 		 case KeyEvent.VK_D | KeyEvent.VK_RIGHT:
-			move(Direction.LEFT);
+			move(Direction.RIGHT);
 			break;
 		 case KeyEvent.VK_S | KeyEvent.VK_DOWN:
 			move(Direction.DOWN);
@@ -93,10 +108,6 @@ public class Bomberman extends DestructibleElement implements KeyListener {
    @Override
    public void keyReleased(KeyEvent e) {
 
-   }
-
-   private enum Direction {
-	  RIGHT, LEFT, UP, DOWN
    }
 }
 

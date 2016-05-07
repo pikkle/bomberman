@@ -5,8 +5,9 @@ package ch.heigvd.bomberman.common.communication.responses;
  * Nothing will be sent to the client.
  */
 public class NoResponse extends Response {
-    public NoResponse() {
-        super(ResponseType.NO_RESPONSE, "");
-    }
 
+   @Override
+   public ResponseType getType() {
+	  return ResponseType.NO_RESPONSE;
+   }
 }

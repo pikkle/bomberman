@@ -8,7 +8,8 @@ package ch.heigvd.bomberman.common.communication.responses;
  */
 public class MoveResponse extends Response {
 
-   public MoveResponse(ResponseType t, String message) {
-	  super(t, message);
+   @Override
+   public ResponseType getType() {
+	  return ResponseType.MOVE_RESPONSE;
    }
 }
