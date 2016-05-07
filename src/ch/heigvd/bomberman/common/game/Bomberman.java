@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Represents a bomberman character in-game
  */
-public class Bomberman extends DestructibleElement implements KeyListener {
+public class Bomberman extends DestructibleElement {
    private Skin skin;
    private Bomb bomb;
    private double speed = 1;
@@ -76,38 +76,6 @@ public class Bomberman extends DestructibleElement implements KeyListener {
 	*/
    public Bomb getBomb() {
 	  return bomb;
-   }
-
-   @Override
-   public void keyTyped(KeyEvent e) {
-	  switch (e.getKeyCode()) {
-		 case KeyEvent.VK_A | KeyEvent.VK_LEFT:
-			move(Direction.LEFT);
-			break;
-		 case KeyEvent.VK_D | KeyEvent.VK_RIGHT:
-			move(Direction.RIGHT);
-			break;
-		 case KeyEvent.VK_S | KeyEvent.VK_DOWN:
-			move(Direction.DOWN);
-			break;
-		 case KeyEvent.VK_W | KeyEvent.VK_UP:
-			move(Direction.UP);
-			break;
-		 case KeyEvent.VK_SPACE:
-			dropBomb();
-			break;
-	  }
-
-   }
-
-   @Override
-   public void keyPressed(KeyEvent e) {
-
-   }
-
-   @Override
-   public void keyReleased(KeyEvent e) {
-
    }
 }
 
