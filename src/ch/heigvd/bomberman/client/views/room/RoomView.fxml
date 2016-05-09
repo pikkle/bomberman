@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<AnchorPane fx:id="mainPane" prefHeight="203.0" prefWidth="365.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.room.RoomController" stylesheets="@RoomTheme.css">
+    <children>
+        <VBox alignment="CENTER" prefHeight="172.0" prefWidth="320.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+            <children>
+                <ImageView fx:id="imageView" disable="false" fitHeight="150.0" fitWidth="200.0" layoutX="69.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image
+                                url="/ch/heigvd/bomberman/client/img/room.jpg"
+                                backgroundLoading="true"
+                        />
+                    </image>
+                </ImageView>
+                <Label text="Salle 1" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
