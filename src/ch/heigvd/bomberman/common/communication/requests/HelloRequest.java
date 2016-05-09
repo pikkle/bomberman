@@ -7,7 +7,7 @@ public class HelloRequest extends Request {
     }
     @Override
     public RequestType getType() {
-        return RequestType.HELLO_REQUEST;
+        return RequestType.HELLO;
     }
 
     public String getMessage() {

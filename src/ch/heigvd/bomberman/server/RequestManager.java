@@ -1,12 +1,7 @@
 package ch.heigvd.bomberman.server;
 
-import ch.heigvd.bomberman.common.communication.requests.AccountCreation;
-import ch.heigvd.bomberman.common.communication.requests.HelloRequest;
-import ch.heigvd.bomberman.common.communication.requests.Request;
-import ch.heigvd.bomberman.common.communication.responses.HelloResponse;
-import ch.heigvd.bomberman.common.communication.responses.NoResponse;
-import ch.heigvd.bomberman.common.communication.responses.Response;
-import ch.heigvd.bomberman.common.communication.responses.ResponseType;
+import ch.heigvd.bomberman.common.communication.requests.*;
+import ch.heigvd.bomberman.common.communication.responses.*;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -19,6 +14,9 @@ public class RequestManager extends Thread {
     private ObjectOutputStream writer;
     private ObjectInputStream reader;
     public boolean running = true;
+	private PlayerSession player;
+	private Room room;
+
 
     public RequestManager(Socket socket) {
         this.socket = socket;
@@ -28,6 +26,11 @@ public class RequestManager extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+	    // TODO: remove the creation of a player session here. He is normally created when the client joins a room or creates one
+	    player = new PlayerSession();
+	    room = new Room("Test", "", 1);
+	    room.addPlayer(player);
     }
 
     @Override
@@ -59,20 +62,24 @@ public class RequestManager extends Thread {
         switch (request.getType()) {
             case ACCOUNT_CREATION:
                 break;
-            case HELLO_REQUEST:
-                HelloRequest req = (HelloRequest) request;
+            case HELLO:
+                HelloRequest helloReq = (HelloRequest) request;
                 System.out.println("Received message: ");
-                System.out.println(req.getMessage());
+                System.out.println(helloReq.getMessage());
                 return new HelloResponse("Hello !");
+	        case MOVE:
+		        MoveRequest moveReq = (MoveRequest) request;
+		        if (room.isRunning())
+					player.getBomberman().move(moveReq.getDirection());
+		        break;
+	        case READY:
+		        ReadyRequest readyReq = (ReadyRequest) request;
+		        player.ready(readyReq.getState());
+		        break;
+
             // TODO: other request types
         }
         return response;
-    }
-
-
-    private Response process(AccountCreation request) {
-        System.out.println("coucou");
-        return null;
     }
 
     /**

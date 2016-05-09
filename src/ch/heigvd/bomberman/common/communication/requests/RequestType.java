@@ -1,5 +1,5 @@
 package ch.heigvd.bomberman.common.communication.requests;
 
 public enum RequestType {
-    ACCOUNT_CREATION, HELLO_REQUEST, MOVE_REQUEST
+    ACCOUNT_CREATION, HELLO, MOVE, READY
 }

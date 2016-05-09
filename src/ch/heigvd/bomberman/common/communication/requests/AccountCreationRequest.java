@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.common.communication.requests;
 
 
-public final class AccountCreation extends Request {
+public final class AccountCreationRequest extends Request {
     private String username;
     private String password;
 
@@ -10,7 +10,7 @@ public final class AccountCreation extends Request {
      * @param username of the account
      * @param password of the account
      */
-    public AccountCreation(String username,  String password){
+    public AccountCreationRequest(String username, String password){
         this.username = username;
         this.password = password;
     }

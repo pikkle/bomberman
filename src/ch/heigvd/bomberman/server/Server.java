@@ -11,18 +11,22 @@ import java.util.List;
  * Runs on port 3737 by default
  */
 public class Server {
+    private static Server instance;
     private static final int DEFAULT_PORT = 3737;
     private int port;
     private boolean running = true;
     private List<RequestManager> clients;
 
-    public Server(){
-        this(DEFAULT_PORT);
-    }
-
-    public Server(int port){
+    private Server(int port){
         this.port = port;
         this.clients = new LinkedList<RequestManager>();
+    }
+
+
+    public static Server getInstance() {
+        if (instance == null)
+            instance = new Server(DEFAULT_PORT);
+        return instance;
     }
 
     public void start(){
@@ -50,6 +54,6 @@ public class Server {
      * @param args {server port, ... }
      */
     public static void main(String... args){
-        new Server().start();
+        getInstance().start();
     }
 }

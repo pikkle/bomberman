@@ -16,7 +16,7 @@ public class MoveRequest extends Request {
 
    @Override
    public RequestType getType() {
-	  return RequestType.MOVE_REQUEST;
+	  return RequestType.MOVE;
    }
 
    public Direction getDirection() {
