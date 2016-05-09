@@ -2,16 +2,16 @@ package ch.heigvd.bomberman.common.game;
 
 
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
-import javafx.geometry.Point2D;
+import javafx.scene.image.ImageView;
 
+import java.awt.*;
 import java.util.List;
 
 /**
  * Represents a bomberman character in-game
  */
-public class Bomberman {
+public class Bomberman extends DestructibleElement {
     private Skin skin;
-    private Point2D position;
     private Bomb bomb;
     private int maxBombs;
     private List<PowerUp> powerUps;
@@ -21,12 +21,12 @@ public class Bomberman {
      * @param position The position of the bomberman
      * @param skin The skin of the bomberman
      */
-    public Bomberman(Point2D position, Skin skin){
-
+    public Bomberman(Point position, Skin skin){
+        super(position, new ImageView(skin.getImage()));
     }
 
-    public void move(){
-
+    public void move(Point position){
+        this.position = position;
     }
 
     public void dropBomb(){

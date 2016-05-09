@@ -4,19 +4,15 @@ import ch.heigvd.bomberman.client.views.ClientMainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.Socket;
 
 /**
  * Client executable class
  */
 public class Client extends Application {
 
-   private ResponseManager rm;
+    private ResponseManager rm;
     private Stage primaryStage;
     private Pane mainLayout;
     private ClientMainController controller;
@@ -25,22 +21,21 @@ public class Client extends Application {
  /*  public Client(String ip, int port) throws IOException {
 	  rm = new ResponseManager(new Socket(ip, port));
    }
-
    public ResponseManager responseManager() {
 	  return rm;
    }
 */
 
-   /**
-	* Entry point of the client
-	*
-	* @param args Not used
-	*/
-   public static void main(String... args) {
-	  //TODO: lancer une fenêtre JavaFX
-       launch(args);
+    /**
+     * Entry point of the client
+     *
+     * @param args Not used
+     */
+    public static void main(String... args) {
+        //TODO: lancer une fenêtre JavaFX
+        launch(args);
 
-   }
+    }
 
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;

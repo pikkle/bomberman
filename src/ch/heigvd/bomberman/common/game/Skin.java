@@ -9,7 +9,12 @@ public enum Skin {
     SKIN4("lib/img/skins/skin4.png");
 
     private Image image;
+
+    public Image getImage(){
+        return image;
+    }
+
     private Skin(String s) {
-        // TODO: charger l'image
+        image = new Image("bomberman/bomberman.png");
     }
 }
