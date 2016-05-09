@@ -1,3 +1,5 @@
+package ch.heigvd.bomberman.server.database;
+
 /**
  * Created by matthieu.villard on 09.03.2016.
  */

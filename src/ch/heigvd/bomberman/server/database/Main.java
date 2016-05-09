@@ -1,3 +1,5 @@
+package ch.heigvd.bomberman.server.database;
+
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 

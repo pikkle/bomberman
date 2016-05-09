@@ -1,3 +1,5 @@
+package ch.heigvd.bomberman.server.database;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
