@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.client.views;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.views.auth.LoginViewController;
-import ch.heigvd.bomberman.client.views.room.RoomsController;
+import ch.heigvd.bomberman.client.views.room.NewViewController;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.SimpleArena;
 import ch.heigvd.bomberman.common.game.Skin;
@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -72,9 +73,9 @@ public class ClientMainController {
     private void room() throws Exception
     {
         Stage stage = new Stage();
-        GridPane pane;
-        RoomsController controller;
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/room/RoomsView.fxml"));
+        AnchorPane pane;
+        NewViewController controller;
+        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/room/NewView.fxml"));
 
         stage.setTitle("Salle");
         pane = loader.load();
