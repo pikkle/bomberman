@@ -38,5 +38,6 @@ public class Client extends Application {
         primaryStage.show();
 
         controller = loader.getController();
+        controller.setMainApp(this);
     }
 }

@@ -20,20 +20,32 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.Socket;
 
 public class ClientMainController {
+    private static final int DEFAULT_PORT = 3737;
+    private static final String DEFAULT_ADDRESS = "127.0.0.1";
+
     private ResponseManager rm;
     private Client client;
     private ObservableList<Room> rooms = FXCollections.observableArrayList();
+
+    public ClientMainController() {
+        this(DEFAULT_ADDRESS, DEFAULT_PORT);
+    }
+
+    public ClientMainController(String ip, int port) {
+        rm = new ResponseManager(ip, port);
+    }
+
+    public ResponseManager getRm(){
+        return rm;
+    }
 
     @FXML
     private TableView<Room> roomsTableView;
 
     @FXML
     private Pane tabsPane;
-
-
 
     public void setMainApp(Client client)
     {
@@ -46,9 +58,6 @@ public class ClientMainController {
 
     @FXML
     private void initialize() {
-
-        rm = new ResponseManager(new Socket());
-
         try {
             loginWindow();
         } catch (Exception e) {
@@ -140,5 +149,4 @@ public class ClientMainController {
         stage.setScene(new Scene(pane));
         stage.showAndWait();
     }
-
 }

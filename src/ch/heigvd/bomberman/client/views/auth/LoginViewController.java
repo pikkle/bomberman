@@ -2,11 +2,11 @@ package ch.heigvd.bomberman.client.views.auth;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.views.ClientMainController;
-import ch.heigvd.bomberman.common.communication.requests.AccountCreation;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -23,6 +23,9 @@ public class LoginViewController {
     private Pane mainPane;
 
     @FXML
+    private Label serverStatusLabel;
+
+    @FXML
     private TextField userId;
 
     @FXML
@@ -36,6 +39,7 @@ public class LoginViewController {
     public void setMainController(ClientMainController mainController)
     {
         this.mainController = mainController;
+        serverStatusLabel.setText(mainController.getRm().isConnected() ? "Connection accepted" : "Connection refused");
     }
 
     @FXML
