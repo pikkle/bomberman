@@ -5,7 +5,7 @@ import javafx.scene.image.ImageView;
 
 import java.awt.*;
 
-public abstract class Bomb extends DestructibleElement {
+public class Bomb extends DestructibleElement {
     private int countdown;
     private int blastRange;
 
@@ -15,7 +15,7 @@ public abstract class Bomb extends DestructibleElement {
         this.blastRange = blastRange;
     }
 
-    public abstract void explose();
+    public void explose(){}
 
     public boolean isInRange(Point position){ // TODO Gérer les collisions avec les murs
         return false;

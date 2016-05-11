@@ -26,12 +26,11 @@ public class Arena
         return height;
     }
 
-    public Bomberman addPlayer(Bomberman bomberman){
+    public Bomberman addPlayer(){
         for(int i = 0; i < 4; i++){
             Point position = new Point(1 + i / 2, 1 + i % 2);
             if(isEmpty(position)){
-                bomberman.move(position);
-                Bomberman bomberman1 = new Bomberman(position, Skin.values()[i]);
+                Bomberman bomberman = new Bomberman(position, Skin.values()[i], this);
                 elements.add(bomberman);
                 return bomberman;
             }

@@ -50,6 +50,14 @@ public class Room {
         this.password = password;
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public int getPlayerNumber(){
+        return players.size();
+    }
+
     public Arena getArena(){
         return arena;
     }

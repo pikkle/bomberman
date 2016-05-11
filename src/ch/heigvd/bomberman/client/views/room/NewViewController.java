@@ -1,11 +1,16 @@
 package ch.heigvd.bomberman.client.views.room;
 
+import ch.heigvd.bomberman.client.views.ClientMainController;
 import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.RandomArena;
+import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.common.game.SimpleArena;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 /**
  * Created by matthieu.villard on 10.05.2016.
@@ -14,15 +19,27 @@ public class NewViewController
 {
     private Arena[] arenas;
     private int selected = 0;
+    private ClientMainController mainController;
 
     @FXML
-    private AnchorPane anchorPane;
+    private AnchorPane mainPane;
 
     @FXML
     private GridPane gridPane;
 
+    @FXML
+    private Label lblRoom;
+
+    @FXML
+    private TextField roomName;
+
     public NewViewController() throws Exception {
         arenas = new Arena[]{new SimpleArena(), new RandomArena()};
+    }
+
+    public void setMainController(ClientMainController mainController)
+    {
+        this.mainController = mainController;
     }
 
     @FXML
@@ -35,8 +52,11 @@ public class NewViewController
     {
         if(selected < arenas.length - 1) {
             selected++;
-            refreshArena();
         }
+        else{
+            selected = 0;
+        }
+        refreshArena();
     }
 
     @FXML
@@ -44,14 +64,30 @@ public class NewViewController
     {
         if(selected > 0) {
             selected--;
-            refreshArena();
         }
+        else{
+            selected = arenas.length -1;
+        }
+        refreshArena();
+    }
+
+    @FXML
+    private void save(){
+        mainController.addRoom(new Room(roomName.getText(), arenas[selected]));
+        close();
+    }
+
+    @FXML
+    private void close(){
+        ( (Stage)mainPane.getScene().getWindow() ).close();
     }
 
     private void refreshArena(){
         gridPane.getChildren().clear();
         gridPane.getColumnConstraints().clear();
         gridPane.getRowConstraints().clear();
+
+        lblRoom.setText(selected + 1 + " / " + arenas.length);
 
         for (int i = 0; i < arenas[selected].getWidth(); i++) {
             ColumnConstraints column = new ColumnConstraints(15);

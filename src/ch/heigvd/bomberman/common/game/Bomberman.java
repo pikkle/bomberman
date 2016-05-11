@@ -13,9 +13,10 @@ import java.util.List;
  * Represents a bomberman character in-game
  */
 public class Bomberman extends DestructibleElement {
+    private Arena arena;
     private Bomb bomb;
     private int maxBombs = 1;
-    private List<PowerUp> powerUps = new LinkedList<>();;
+    private List<PowerUp> powerUps = new LinkedList<>();
 
     /**
      * Constructs a Bomberman at a given position and a given skin
@@ -23,14 +24,9 @@ public class Bomberman extends DestructibleElement {
      * @param position The position of the bomberman
      * @param skin     The skin of the bomberman
      */
-    public Bomberman(Point position, Skin skin){
+    public Bomberman(Point position, Skin skin, Arena arena){
         super(position, new ImageView(skin.getImage()));
-    }
-
-    public void move(Point position){
-        this.position = position;
-        setChanged();
-        notifyObservers();
+        this.arena = arena;
     }
 
     /**
@@ -39,21 +35,26 @@ public class Bomberman extends DestructibleElement {
      * @param direction the direction
      */
     public void move(Direction direction) { // TODO Add hitbox collision detection
+        Point position = (Point)getPosition().clone();
         switch (direction) {
             case RIGHT:
-                position.move(1, 0);
+                position.move(position.x + 1, position.y);
                 break;
             case LEFT:
-                position.move(-1, 0);
+                position.move(position.x - 1, position.y);
                 break;
             case UP:
-                position.move(0, -1);
+                position.move(position.x, position.y - 1);
                 break;
             case DOWN:
-                position.move(0, 1);
+                position.move(position.x, position.y + 1);
                 break;
         }
-
+        if(arena.isEmpty(position) && position.x < arena.getWidth() && position.x >= 0 && position.y < arena.getHeight() && position.y >= 0){
+            this.position = position;
+            setChanged();
+            notifyObservers();
+        }
     }
 
     /**
@@ -61,7 +62,18 @@ public class Bomberman extends DestructibleElement {
      */
     public void dropBomb() {
         // TODO add the bomb to the map
-
+        for(int i = -1; i < 2; i++){
+            for(int j = -1; j < 2; j++){
+                Point position = (Point)getPosition().clone();
+                position.x = position.x + i;
+                position.y = position.y + j;
+                if(i != j && arena.isEmpty(position) && position.x < arena.getWidth() && position.x >= 0 && position.y < arena.getHeight() && position.y >= 0){
+                    bomb = new Bomb((Point)position.clone(), 10, 1);
+                    arena.getElements().add(bomb);
+                    return;
+                }
+            }
+        }
     }
 
     /**

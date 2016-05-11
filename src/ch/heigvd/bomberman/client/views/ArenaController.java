@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.client.views;
 
 import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Element;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,10 +26,9 @@ public class ArenaController implements Observer
     @FXML
     private GridPane gridPane;
 
-    public ArenaController(Arena arena, Bomberman bomberman) {
+    public ArenaController(Arena arena) {
         this.arena = arena;
-        this.bomberman = bomberman;
-        arena.addPlayer(bomberman);
+        this.bomberman = arena.addPlayer();
     }
 
     @FXML
@@ -45,10 +45,7 @@ public class ArenaController implements Observer
         }
 
         arena.getElements().stream().forEach(element -> {
-            ImageView sprite = element.render();
-            sprite.setFitHeight(50);
-            sprite.setFitWidth(50);
-            gridPane.add(sprite, element.getPosition().x, element.getPosition().y);
+            displayElement(element);
             element.addObserver(this);
         });
 
@@ -56,24 +53,26 @@ public class ArenaController implements Observer
             @Override
             public void handle(KeyEvent key) {
                 Point position = (Point)bomberman.getPosition().clone();
-                if (key.getCode().equals(KeyCode.RIGHT) && bomberman.getPosition().x < arena.getWidth()) {
-                    position.x = position.x + 1;
+                if (key.getCode().equals(KeyCode.RIGHT)) {
+                    bomberman.move(Direction.RIGHT);
                     key.consume();
                 }
-                else if(key.getCode().equals(KeyCode.LEFT) && bomberman.getPosition().x > 0){
-                    position.x = position.x - 1;
+                else if(key.getCode().equals(KeyCode.LEFT)){
+                    bomberman.move(Direction.LEFT);
                     key.consume();
                 }
-                else if(key.getCode().equals(KeyCode.DOWN) && bomberman.getPosition().y < arena.getHeight()){
-                    position.y = position.y + 1;
+                else if(key.getCode().equals(KeyCode.DOWN)){
+                    bomberman.move(Direction.DOWN);
                     key.consume();
                 }
-                else if(key.getCode().equals(KeyCode.UP) && bomberman.getPosition().y > 0){
-                    position.y = position.y - 1;
+                else if(key.getCode().equals(KeyCode.UP)){
+                    bomberman.move(Direction.UP);
                     key.consume();
                 }
-                if(!position.equals(bomberman.getPosition()) && arena.isEmpty(position))
-                    bomberman.move(position);
+                else if(key.getCode().equals(KeyCode.SPACE)){
+                    bomberman.dropBomb();
+                    displayElement(bomberman.getBomb());
+                }
             }
         });
         bomberman.render().setFocusTraversable(true);
@@ -81,8 +80,15 @@ public class ArenaController implements Observer
 
     @Override
     public void update(Observable o, Object arg) {
-        Element element = (Element)o;
-        gridPane.getChildren().remove(element.render());
-        gridPane.add(element.render(),element.getPosition().x , element.getPosition().y);
+        displayElement((Element)o);
+    }
+
+    private void displayElement(Element element){
+        if(gridPane.getChildren().contains(element.render()))
+            gridPane.getChildren().remove(element.render());
+        ImageView sprite = element.render();
+        sprite.setFitHeight(50);
+        sprite.setFitWidth(50);
+        gridPane.add(sprite, element.getPosition().x, element.getPosition().y);
     }
 }
