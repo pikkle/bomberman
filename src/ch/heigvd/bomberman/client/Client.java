@@ -12,19 +12,10 @@ import javafx.stage.Stage;
  */
 public class Client extends Application {
 
-    private ResponseManager rm;
+
     private Stage primaryStage;
     private Pane mainLayout;
     private ClientMainController controller;
-
-
- /*  public Client(String ip, int port) throws IOException {
-	  rm = new ResponseManager(new Socket(ip, port));
-   }
-   public ResponseManager responseManager() {
-	  return rm;
-   }
-*/
 
     /**
      * Entry point of the client
@@ -32,9 +23,7 @@ public class Client extends Application {
      * @param args Not used
      */
     public static void main(String... args) {
-        //TODO: lancer une fenêtre JavaFX
         launch(args);
-
     }
 
     public void start(Stage primaryStage) throws Exception {
