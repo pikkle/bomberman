@@ -9,6 +9,7 @@ import ch.heigvd.bomberman.common.game.Skin;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -17,9 +18,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class ClientMainController {
     private Client client;
+
+
+    @FXML private Pane tabsPane;
 
     public void setMainApp(Client client)
     {
@@ -34,6 +39,17 @@ public class ClientMainController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/UserTabsView.fxml"));
+
+        try
+        {
+            tabsPane.getChildren().setAll((Node)loader.load());
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
