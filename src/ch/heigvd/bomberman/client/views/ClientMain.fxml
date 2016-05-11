@@ -12,8 +12,8 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Close" />
                         <MenuItem mnemonicParsing="false" onAction="#arena" text="Carte" />
+                        <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Quit" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Rooms">
