@@ -37,13 +37,13 @@
                     <children>
                         <Label text="User id" />
                         <Label text="Password" GridPane.rowIndex="1" />
-                        <TextField prefHeight="27.0" prefWidth="155.0" GridPane.columnIndex="1" />
-                        <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="userId" prefHeight="27.0" prefWidth="155.0" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="mdp" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     </children>
                 </GridPane>
                 <ButtonBar prefHeight="34.0" prefWidth="335.0">
                     <buttons>
-                        <Button mnemonicParsing="false" text="Login" />
+                        <Button mnemonicParsing="false" onAction="#login" text="Login" />
                         <Button mnemonicParsing="false" onAction="#closeWindow" text="Exit" />
                     </buttons>
                 </ButtonBar>

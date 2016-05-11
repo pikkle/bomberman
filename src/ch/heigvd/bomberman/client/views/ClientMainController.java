@@ -50,7 +50,7 @@ public class ClientMainController {
         rm = new ResponseManager(new Socket());
 
         try {
-            login();
+            loginWindow();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,7 +118,7 @@ public class ClientMainController {
         stage.showAndWait();
     }
 
-    private void login() throws Exception
+    private void loginWindow() throws Exception
     {
         Stage stage = new Stage();
         Pane pane;
@@ -140,4 +140,5 @@ public class ClientMainController {
         stage.setScene(new Scene(pane));
         stage.showAndWait();
     }
+
 }

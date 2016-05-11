@@ -2,10 +2,13 @@ package ch.heigvd.bomberman.client.views.auth;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.views.ClientMainController;
+import ch.heigvd.bomberman.common.communication.requests.AccountCreation;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -20,6 +23,12 @@ public class LoginViewController {
     private Pane mainPane;
 
     @FXML
+    private TextField userId;
+
+    @FXML
+    private PasswordField mdp;
+
+    @FXML
     private void initialize() {
 
     }
@@ -27,6 +36,13 @@ public class LoginViewController {
     public void setMainController(ClientMainController mainController)
     {
         this.mainController = mainController;
+    }
+
+    @FXML
+    private void login()
+    {
+        String hashPasswd = mdp.getText();
+
     }
 
     @FXML
