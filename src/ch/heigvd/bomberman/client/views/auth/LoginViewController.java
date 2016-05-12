@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.client.views.auth;
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.views.ClientMainController;
 import ch.heigvd.bomberman.common.communication.requests.LoginRequest;
+import ch.heigvd.bomberman.common.communication.responses.Response;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,12 +16,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
+import java.util.function.Consumer;
 
 /**
  * Created by julien on 08.05.16.
  */
 public class LoginViewController {
     ClientMainController mainController;
+    private static final int DEFAULT_PORT = 3737;
+    private static final String DEFAULT_ADDRESS = "127.0.0.1";
 
     @FXML
     private Pane mainPane;
@@ -43,6 +49,7 @@ public class LoginViewController {
 
     @FXML
     private void initialize() {
+
         serverStatusLabel.setText("");
         serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
     }
@@ -56,13 +63,20 @@ public class LoginViewController {
     private void login()
     {
         String hashPasswd = mdp.getText();
-        LoginRequest loginRequest = new LoginRequest(userId.getText(), hashPasswd);
-        loginRequest.getID();
-        mainController.getRm().send(loginRequest);
+        mainController.getRm().loginRequest(userId.getText(), hashPasswd, aBoolean -> {
+            if (aBoolean)
+            {
+                System.out.println("ok");
+            }
+            else
+            {
+                System.out.println("not ok");
+            }
 
-
-
+        });
     }
+
+
 
     @FXML
     private void closeWindow()

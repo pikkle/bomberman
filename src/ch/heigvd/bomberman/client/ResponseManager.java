@@ -27,7 +27,7 @@ public class ResponseManager {
 		responses = new HashMap<>();
 	}
 
-	public ResponseManager getInstance(){
+	public static ResponseManager getInstance(){
 		if (instance == null)
 			instance = new ResponseManager();
 		return instance;
@@ -54,6 +54,7 @@ public class ResponseManager {
 					}
 				}
 			});
+			receiver.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -82,6 +83,7 @@ public class ResponseManager {
 				}
 			});
 			threads.put(r.getID(), sender);
+			sender.start();
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -23,6 +23,7 @@ import java.io.IOException;
 
 public class ClientMainController {
 
+
     private static final int DEFAULT_PORT = 3737;
     private static final String DEFAULT_ADDRESS = "127.0.0.1";
 
@@ -56,7 +57,8 @@ public class ClientMainController {
     @FXML
     private void initialize() {
 
-        rm = new ResponseManager(DEFAULT_ADDRESS, DEFAULT_PORT);
+        rm = ResponseManager.getInstance();
+        rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
 
         try {
             loginWindow();
