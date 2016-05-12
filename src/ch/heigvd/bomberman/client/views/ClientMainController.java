@@ -56,6 +56,8 @@ public class ClientMainController {
     @FXML
     private void initialize() {
 
+        rm = new ResponseManager(DEFAULT_ADDRESS, DEFAULT_PORT);
+
         try {
             loginWindow();
         } catch (Exception e) {

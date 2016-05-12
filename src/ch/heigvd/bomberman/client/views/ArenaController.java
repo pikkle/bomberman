@@ -6,6 +6,7 @@ import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Element;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -14,7 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 
-import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -52,7 +52,7 @@ public class ArenaController implements Observer
         bomberman.render().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent key) {
-                Point position = (Point)bomberman.getPosition().clone();
+                Point2D position = bomberman.getPosition();
                 if (key.getCode().equals(KeyCode.RIGHT)) {
                     bomberman.move(Direction.RIGHT);
                     key.consume();
@@ -89,6 +89,6 @@ public class ArenaController implements Observer
         ImageView sprite = element.render();
         sprite.setFitHeight(50);
         sprite.setFitWidth(50);
-        gridPane.add(sprite, element.getPosition().x, element.getPosition().y);
+        gridPane.add(sprite, (int)element.getPosition().getX(), (int)element.getPosition().getY());
     }
 }

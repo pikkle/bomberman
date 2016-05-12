@@ -104,7 +104,7 @@ public class NewViewController
             ImageView sprite = element.render();
             sprite.setFitHeight(15);
             sprite.setFitWidth(15);
-            gridPane.add(sprite, element.getPosition().x, element.getPosition().y);
+            gridPane.add(sprite, (int)element.getPosition().getX(), (int)element.getPosition().getY());
         });
     }
 }

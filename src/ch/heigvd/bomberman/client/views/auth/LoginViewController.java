@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.client.views.auth;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.views.ClientMainController;
+import ch.heigvd.bomberman.common.communication.requests.LoginRequest;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -55,7 +56,11 @@ public class LoginViewController {
     private void login()
     {
         String hashPasswd = mdp.getText();
-        
+        LoginRequest loginRequest = new LoginRequest(userId.getText(), hashPasswd);
+        mainController.getRm().send(loginRequest);
+
+
+
     }
 
     @FXML

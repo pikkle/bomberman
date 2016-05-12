@@ -7,7 +7,7 @@ import javafx.geometry.Point2D;
 public abstract class PowerUp extends DestructibleElement {
 
    public PowerUp(Point2D position) {
-	  super(position);
+	  super(position, null);
    }
 
    public abstract void apply(Bomberman bomberman);
