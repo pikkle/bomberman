@@ -2,63 +2,88 @@ package ch.heigvd.bomberman.client;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
+import javafx.util.Callback;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 
 public class ResponseManager {
-   	private ObjectOutputStream writer;
-   	private ObjectInputStream reader;
-   	private boolean run = true;
-	private boolean isConnected = false;
+	private static ResponseManager instance;
+	private Socket socket;
+	private ObjectOutputStream writer;
+	private ObjectInputStream reader;
+	private Map<UUID, Thread> threads;
+	private Map<UUID, Response> responses;
 
-   class ResponseReceiver extends Thread {
-	  @Override
-	  public void run() {
-		 synchronized (ResponseManager.this) {
-			while (run) {
-			   try {
-				  Response response = (Response) reader.readObject();
-				   response.getID();
-				  response.accept(ResponseProcessor.getInstance());
-			   } catch (IOException | ClassNotFoundException e) {
-				  e.printStackTrace();
-			   }
-			}
-		 }
-	  }
-   }
-
-   public ResponseManager(String ip, int port) {
-	  try {
-		  Socket socket = new Socket(ip, port);
-		  isConnected = socket.isConnected();
-		  writer = new ObjectOutputStream(socket.getOutputStream());
-		  reader = new ObjectInputStream(socket.getInputStream());
-	  } catch (IOException e) {
-		  e.printStackTrace();
-	  }
-	  new ResponseReceiver().start();
-   }
-
-   public void stop() {
-	  run = false;
-   }
-
-   public void send(Request request) {
-	  try {
-		 writer.writeObject(request);
-	  } catch (IOException e) {
-		 e.printStackTrace();
-	  }
-   }
-
-   public void process(Response response) {
-
-   }
-
-	public boolean isConnected(){
-		return isConnected;
+	private ResponseManager() {
+		threads = new HashMap<>();
+		responses = new HashMap<>();
 	}
+
+	public ResponseManager getInstance(){
+		if (instance == null)
+			instance = new ResponseManager();
+		return instance;
+	}
+
+	public void connect(String address, int port) {
+		try {
+			socket = new Socket(address, port);
+			writer = new ObjectOutputStream(socket.getOutputStream());
+			reader = new ObjectInputStream(socket.getInputStream());
+
+			Thread receiver = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while(true) {
+						try {
+							Response response = (Response) reader.readObject();
+							responses.put(response.getID(), response);
+							threads.get(response.getID()).notify();
+							response.accept(ResponseProcessor.getInstance());
+						} catch (IOException | ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public boolean isConnected() {
+		return socket != null && socket.isConnected();
+	}
+
+	public void loginRequest(String username, String password, Callback<Response, Boolean> callback) {
+		LoginRequest r = new LoginRequest(username, password);
+		send(r, callback);
+	}
+
+	private void send(Request r, Callback<Response, ?> callback) {
+		try {
+			writer.writeObject(r);
+			Thread sender = new Thread(() -> {
+				try {
+					wait();
+					Response response = responses.get(r.getID());
+					callback.call(response);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+			threads.put(r.getID(), sender);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
