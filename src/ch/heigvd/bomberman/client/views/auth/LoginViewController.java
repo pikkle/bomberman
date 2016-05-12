@@ -57,6 +57,7 @@ public class LoginViewController {
     {
         String hashPasswd = mdp.getText();
         LoginRequest loginRequest = new LoginRequest(userId.getText(), hashPasswd);
+        loginRequest.getID();
         mainController.getRm().send(loginRequest);
 
 

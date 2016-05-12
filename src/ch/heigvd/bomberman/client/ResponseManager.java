@@ -20,6 +20,7 @@ public class ResponseManager {
 			while (run) {
 			   try {
 				  Response response = (Response) reader.readObject();
+				   response.getID();
 				  response.accept(ResponseProcessor.getInstance());
 			   } catch (IOException | ClassNotFoundException e) {
 				  e.printStackTrace();
