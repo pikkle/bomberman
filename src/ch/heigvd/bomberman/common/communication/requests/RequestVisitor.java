@@ -8,5 +8,5 @@ public interface RequestVisitor {
 	Response visit(MoveRequest request);
 	Response visit(ReadyRequest request);
 	Response visit(AccountCreationRequest request);
-
+	Response visit(LoginRequest loginRequest);
 }

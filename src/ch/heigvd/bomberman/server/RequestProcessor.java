@@ -4,6 +4,7 @@ import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.HelloResponse;
 import ch.heigvd.bomberman.common.communication.responses.NoResponse;
 import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.communication.responses.SuccessResponse;
 
 public class RequestProcessor implements RequestVisitor {
 	private static RequestProcessor instance = new RequestProcessor();
@@ -34,6 +35,14 @@ public class RequestProcessor implements RequestVisitor {
 	@Override
 	public Response visit(AccountCreationRequest request) {
 		return null;
+	}
+
+	@Override
+	public Response visit(LoginRequest loginRequest) {
+		System.out.println("Connection from user");
+		System.out.println("Username: " + loginRequest.getUsername());
+		System.out.println("Password: " + loginRequest.getPassword());
+		return new SuccessResponse("Connection successful");
 	}
 
 }
