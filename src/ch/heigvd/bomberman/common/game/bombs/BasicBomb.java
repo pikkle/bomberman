@@ -12,12 +12,12 @@ import javafx.geometry.Point2D;
  */
 public class BasicBomb extends Bomb {
 
-   public BasicBomb(Point2D position, int countdown, int blastRange, Arena arena) {
-	  super(position, countdown, blastRange, arena);
-   }
+	public BasicBomb(Point2D position, int countdown, int blastRange, Arena arena) {
+		super(position, countdown, blastRange, arena);
+	}
 
-   @Override
-   public boolean isInRange(Element e) {
-	  return false;
-   }
+	@Override
+	public boolean isInRange(Element e) {
+		return false;
+	}
 }
