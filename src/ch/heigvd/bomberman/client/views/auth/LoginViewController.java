@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,21 +34,27 @@ public class LoginViewController {
     private PasswordField mdp;
 
     @FXML
-    private void initialize() {
+    private ImageView serverStatusIcon;
 
+    /***********
+     * Methodes*
+     ***********/
+
+    @FXML
+    private void initialize() {
+        serverStatusLabel.setText("");
+        serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
     }
 
     public void setMainController(ClientMainController mainController)
     {
         this.mainController = mainController;
-        serverStatusLabel.setText(mainController.getRm().isConnected() ? "Connection accepted" : "Connection refused");
     }
 
     @FXML
     private void login()
     {
         String hashPasswd = mdp.getText();
-
     }
 
     @FXML
