@@ -6,11 +6,13 @@ import ch.heigvd.bomberman.common.game.Element;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 
+import java.util.List;
+
 
 public abstract class Bomb extends DestructibleElement {
-	private int countdown;
-	private int blastRange;
-	private Arena arena;
+	protected int countdown;
+	protected int blastRange;
+	protected Arena arena;
 
 	public Bomb(Point2D position, int countdown, int blastRange, Arena arena) {
 		super(position, new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/bomb.png")));
@@ -20,23 +22,13 @@ public abstract class Bomb extends DestructibleElement {
 	}
 
 	public void explose() {
-		int y = (int) position.getY();
-		int x = (int) position.getX();
-
+		getElementInRange().forEach(e -> arena.getElements().remove(e));
 	}
 
-	public abstract boolean isInRange(Element e); // TODO Gérer les collisions avec les murs
-
-	public int getBlastRange() {
-		return blastRange;
-	}
+	public abstract List<Element> getElementInRange();
 
 	public void setBlastRange(int blastRange) {
 		this.blastRange = blastRange;
-	}
-
-	public int getCountdown() {
-		return countdown;
 	}
 
 	public void setCountdown(int countdown) {

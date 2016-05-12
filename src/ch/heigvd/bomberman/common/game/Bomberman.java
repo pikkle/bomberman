@@ -2,8 +2,9 @@ package ch.heigvd.bomberman.common.game;
 
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.bombs.BasicBomb;
+import ch.heigvd.bomberman.common.game.bombs.BasicBombFactory;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
+import ch.heigvd.bomberman.common.game.bombs.BombFactory;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class Bomberman extends DestructibleElement {
 	private Arena arena;
-	private Bomb bomb;
+	private BombFactory bombFactory = new BasicBombFactory(10, 1, arena);
 	private int maxBombs = 1;
 	private List<PowerUp> powerUps = new LinkedList<>();
 
@@ -53,7 +54,7 @@ public class Bomberman extends DestructibleElement {
 				break;
 		}
 		if (arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 &&
-		    position.getY() < arena.getHeight() && position.getY() >= 0) {
+				position.getY() < arena.getHeight() && position.getY() >= 0) {
 			this.position = position;
 			setChanged();
 			notifyObservers();
@@ -63,13 +64,10 @@ public class Bomberman extends DestructibleElement {
 	/**
 	 * Drop the bomb
 	 */
-	public void dropBomb() {
-		try {
-			bomb = new BasicBomb(getPosition(), 10, 1, arena);
-			arena.add(bomb);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public Bomb dropBomb() throws Exception {
+		Bomb b = bombFactory.create(position);
+		arena.add(b);
+		return b;
 	}
 
 	/**
@@ -82,12 +80,12 @@ public class Bomberman extends DestructibleElement {
 		powerUp.apply(this);
 	}
 
-	/**
-	 * @return the bomb of the bomberman
-	 */
-	public Bomb getBomb() {
-		return bomb;
+	public void changeBombFactory(BombFactory bombFactory) {
+		this.bombFactory = bombFactory;
 	}
 
+	public void addMaxBomb(int n) {
+		maxBombs += n;
+	}
 }
 

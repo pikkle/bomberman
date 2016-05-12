@@ -55,23 +55,7 @@ public class Player implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_A | KeyEvent.VK_LEFT:
-				bomberman.move(Direction.LEFT);
-				break;
-			case KeyEvent.VK_D | KeyEvent.VK_RIGHT:
-				bomberman.move(Direction.RIGHT);
-				break;
-			case KeyEvent.VK_S | KeyEvent.VK_DOWN:
-				bomberman.move(Direction.DOWN);
-				break;
-			case KeyEvent.VK_W | KeyEvent.VK_UP:
-				bomberman.move(Direction.UP);
-				break;
-			case KeyEvent.VK_SPACE:
-				bomberman.dropBomb();
-				break;
-		}
+
 
 	}
 

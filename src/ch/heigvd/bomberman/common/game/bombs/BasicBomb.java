@@ -4,6 +4,9 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Element;
 import javafx.geometry.Point2D;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Projet : GEN_Projet
  * Créé le 12.05.2016.
@@ -17,7 +20,8 @@ public class BasicBomb extends Bomb {
 	}
 
 	@Override
-	public boolean isInRange(Element e) {
-		return false;
+	public List<Element> getElementInRange() {
+		// Todo add element in the range
+		return new LinkedList<>();
 	}
 }

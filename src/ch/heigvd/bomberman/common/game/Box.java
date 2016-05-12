@@ -1,6 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
+import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
@@ -22,17 +23,13 @@ public class Box extends DestructibleElement implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (o instanceof Bomb) { // Une bombe à explosé
-			Bomb b = (Bomb) o;
-			if (b.isInRange(this)) {
-				open(); // TODO add the power up to the map
-			}
-
+		if (o instanceof Bomb) { // Une bombe à explosé // TODO Notifier uniquement les observateur dans la range
+			open();
 		}
 	}
 
 	public PowerUp open() {
 		// TODO return random powerup
-		return null;
+		return new AddBombPowerUp(position);
 	}
 }

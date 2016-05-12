@@ -52,9 +52,14 @@ public class Arena {
 
 	public void add(Element element) throws Exception {
 		Point2D position = element.getPosition();
-		if (!isEmpty(position)) {
+		/*if (!isEmpty(position)) {
 			throw new Exception("Cell already occupied!");
-		}
+		}*/
 		elements.add(element);
+	}
+
+	public void remove(Element e) {
+		// TODO end the element (kill the player, explose the box)
+		elements.remove(e);
 	}
 }
