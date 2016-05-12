@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 
 public class ResponseManager {
@@ -19,7 +20,7 @@ public class ResponseManager {
 	private ObjectOutputStream writer;
 	private ObjectInputStream reader;
 	private Map<UUID, Thread> threads;
-	private Map<UUID, Response> responses;
+	private Map<UUID, Response<?>> responses;
 
 	private ResponseManager() {
 		threads = new HashMap<>();
@@ -62,19 +63,20 @@ public class ResponseManager {
 		return socket != null && socket.isConnected();
 	}
 
-	public void loginRequest(String username, String password, Callback<Response, Boolean> callback) {
+	public void loginRequest(String username, String password, Consumer<Boolean> callback) {
 		LoginRequest r = new LoginRequest(username, password);
 		send(r, callback);
 	}
 
-	private void send(Request r, Callback<Response, ?> callback) {
+	private <T> void send(Request<T> r, Consumer<? super T> callback) {
 		try {
 			writer.writeObject(r);
 			Thread sender = new Thread(() -> {
 				try {
 					wait();
-					Response response = responses.get(r.getID());
-					callback.call(response);
+					Response<T> response = (Response<T>) responses.get(r.getID());
+					callback.accept(response.accept(ResponseProcessor.getInstance()));
+
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

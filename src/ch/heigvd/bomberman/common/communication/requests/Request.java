@@ -5,7 +5,7 @@ import ch.heigvd.bomberman.common.communication.responses.Response;
 import java.io.Serializable;
 import java.util.UUID;
 
-public abstract class Request implements Serializable {
+public abstract class Request<T> implements Serializable {
     private UUID uuid = UUID.randomUUID();
     public abstract Response accept(RequestVisitor visitor);
 

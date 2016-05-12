@@ -1,5 +1,7 @@
 package ch.heigvd.bomberman.common.communication.responses;
 
+import ch.heigvd.bomberman.common.game.Direction;
+
 import java.util.UUID;
 
 /**
@@ -15,7 +17,7 @@ public class MoveResponse extends Response {
 	}
 
 	@Override
-	public void accept(ResponseVisitor visitor) {
-		visitor.visit(this);
+	public Direction accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
 	}
 }

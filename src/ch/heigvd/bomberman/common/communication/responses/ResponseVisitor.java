@@ -1,8 +1,10 @@
 package ch.heigvd.bomberman.common.communication.responses;
 
+import ch.heigvd.bomberman.common.game.Direction;
+
 public interface ResponseVisitor {
-	void visit(NoResponse noResponse);
-	void visit(MoveResponse moveResponse);
-	void visit(SuccessResponse successResponse);
-	void visit(HelloResponse helloResponse);
+	Object visit(NoResponse noResponse);
+	Direction visit(MoveResponse moveResponse);
+	Boolean visit(SuccessResponse successResponse);
+	String visit(HelloResponse helloResponse);
 }
