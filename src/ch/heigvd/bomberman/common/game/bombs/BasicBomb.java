@@ -20,7 +20,7 @@ public class BasicBomb extends Bomb {
 	}
 
 	@Override
-	public List<Element> getElementInRange() {
+	public List<Element> getElementsInRange() {
 		// Todo add element in the range
 		return new LinkedList<>();
 	}

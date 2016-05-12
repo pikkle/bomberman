@@ -21,17 +21,15 @@ public abstract class Bomb extends DestructibleElement {
 		this.arena = arena;
 	}
 
+	/**
+	 * To call when the bomb explose, will remove all the element in range
+	 */
 	public void explose() {
-		getElementInRange().forEach(e -> arena.getElements().remove(e));
+		getElementsInRange().forEach(e -> arena.remove(e));
 	}
 
-	public abstract List<Element> getElementInRange();
-
-	public void setBlastRange(int blastRange) {
-		this.blastRange = blastRange;
-	}
-
-	public void setCountdown(int countdown) {
-		this.countdown = countdown;
-	}
+	/**
+	 * @return the elements in range of the blastRange
+	 */
+	public abstract List<Element> getElementsInRange();
 }

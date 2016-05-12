@@ -44,18 +44,35 @@ public class Arena {
 		return null;
 	}
 
+	/**
+	 * @param position the position
+	 * @return true if nothing is at the position given
+	 */
 	public boolean isEmpty(Point2D position) {
 		return elements.stream().noneMatch(element -> element.getPosition().equals(position));
 	}
 
+	/**
+	 * @return all the elements
+	 */
 	public List<Element> getElements() {
 		return elements;
 	}
 
+	/**
+	 * @param position the position
+	 * @return All the elements at the position
+	 */
 	public List<Element> getElements(Point2D position) {
 		return elements.stream().filter(e -> e.getPosition().equals(position)).collect(Collectors.toList());
 	}
 
+	/**
+	 * Add the element to the arena
+	 *
+	 * @param element The element to add
+	 * @throws Exception if the cell is already occuped
+	 */
 	public void add(Element element) throws Exception {
 		if (getElements(element.getPosition()).stream().noneMatch(e -> e instanceof Bomb)) { // Pas de bombe déjà posée
 			elements.add(element);
