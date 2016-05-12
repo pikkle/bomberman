@@ -59,11 +59,7 @@ public class ArenaController implements Observer {
 					bomberman.move(Direction.UP);
 					break;
 				case SPACE:
-					try {
-						displayElement(bomberman.dropBomb());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					bomberman.dropBomb().ifPresent(this::displayElement);
 					break;
 				default:
 					return;

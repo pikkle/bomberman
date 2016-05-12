@@ -4,10 +4,12 @@ package ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Skin;
+import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import javafx.geometry.Point2D;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by matthieu.villard on 09.05.2016.
@@ -50,12 +52,16 @@ public class Arena {
 		return elements;
 	}
 
+	public List<Element> getElements(Point2D position) {
+		return elements.stream().filter(e -> e.getPosition().equals(position)).collect(Collectors.toList());
+	}
+
 	public void add(Element element) throws Exception {
-		Point2D position = element.getPosition();
-		/*if (!isEmpty(position)) {
-			throw new Exception("Cell already occupied!");
-		}*/
-		elements.add(element);
+		if (getElements(element.getPosition()).stream().noneMatch(e -> e instanceof Bomb)) { // Pas de bombe déjà posée
+			elements.add(element);
+		} else {
+			throw new Exception("Cell already occuped");
+		}
 	}
 
 	public void remove(Element e) {

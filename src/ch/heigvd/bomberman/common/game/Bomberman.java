@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a bomberman character in-game
@@ -64,10 +65,14 @@ public class Bomberman extends DestructibleElement {
 	/**
 	 * Drop the bomb
 	 */
-	public Bomb dropBomb() throws Exception {
+	public Optional<Bomb> dropBomb() {
 		Bomb b = bombFactory.create(position);
-		arena.add(b);
-		return b;
+		try {
+			arena.add(b);
+			return Optional.of(b);
+		} catch (Exception ignored) {
+			return Optional.empty();
+		}
 	}
 
 	/**
