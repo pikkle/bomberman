@@ -1,5 +1,7 @@
-package ch.heigvd.bomberman.common.game;
+package ch.heigvd.bomberman.common.game.Arena;
 
+import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Wall;
 import javafx.geometry.Point2D;
 
 import java.util.Random;

@@ -1,6 +1,9 @@
-package ch.heigvd.bomberman.common.game;
+package ch.heigvd.bomberman.common.game.Arena;
 
 
+import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.Skin;
 import javafx.geometry.Point2D;
 
 import java.util.LinkedList;
