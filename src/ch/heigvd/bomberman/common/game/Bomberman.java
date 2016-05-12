@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.common.game;
 
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.bombs.BasicBomb;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import javafx.geometry.Point2D;
@@ -64,6 +65,7 @@ public class Bomberman extends DestructibleElement {
 	*/
    public void dropBomb() {
 	  try {
+		  bomb = new BasicBomb(getPosition(), 10, 1, arena);
 		 arena.add(bomb);
 	  } catch (Exception e) {
 		 e.printStackTrace();

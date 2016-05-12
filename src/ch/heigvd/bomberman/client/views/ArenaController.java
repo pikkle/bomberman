@@ -59,6 +59,7 @@ public class ArenaController implements Observer {
 			   break;
 			case SPACE:
 			   bomberman.dropBomb();
+				displayElement(bomberman.getBomb());
 			   break;
 			default:
 			   return;

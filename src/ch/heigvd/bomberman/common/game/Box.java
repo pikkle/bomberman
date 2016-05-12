@@ -24,7 +24,7 @@ public class Box extends DestructibleElement implements Observer {
     public void update(Observable o, Object arg) {
         if(o instanceof Bomb){ // Une bombe à explosé
             Bomb b = (Bomb)o;
-            if(b.isInRange(position)){
+            if(b.isInRange(this)){
                 open(); // TODO add the power up to the map
             }
 
