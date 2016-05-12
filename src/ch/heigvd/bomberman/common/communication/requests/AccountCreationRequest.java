@@ -1,6 +1,8 @@
 package ch.heigvd.bomberman.common.communication.requests;
 
 
+import ch.heigvd.bomberman.common.communication.responses.Response;
+
 public final class AccountCreationRequest extends Request {
     private String username;
     private String password;
@@ -16,7 +18,7 @@ public final class AccountCreationRequest extends Request {
     }
 
     @Override
-    public RequestType getType() {
-        return RequestType.ACCOUNT_CREATION;
+    public Response accept(RequestVisitor visitor) {
+        return visitor.visit(this);
     }
 }

@@ -3,5 +3,8 @@ package ch.heigvd.bomberman.common.communication.responses;
 import java.io.Serializable;
 
 public abstract class Response implements Serializable {
-    public abstract ResponseType getType();
+    public boolean isSendable() {
+        return true;
+    }
+    public abstract void accept(ResponseVisitor visitor);
 }

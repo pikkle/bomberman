@@ -1,5 +1,6 @@
 package ch.heigvd.bomberman.common.communication.requests;
 
+import ch.heigvd.bomberman.common.communication.responses.Response;
 import ch.heigvd.bomberman.common.game.Direction;
 
 /**
@@ -9,17 +10,16 @@ import ch.heigvd.bomberman.common.game.Direction;
  * @author Adriano Ruberto
  */
 public class MoveRequest extends Request {
+	private Direction direction;
 
-   private Direction direction;
+	public MoveRequest(Direction direction) {this.direction = direction;}
 
-   public MoveRequest(Direction direction) {this.direction = direction;}
-
-   @Override
-   public RequestType getType() {
-	  return RequestType.MOVE;
-   }
-
-   public Direction getDirection() {
+	public Direction getDirection() {
 	  return direction;
    }
+
+	@Override
+	public Response accept(RequestVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

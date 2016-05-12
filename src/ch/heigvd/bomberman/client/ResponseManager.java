@@ -1,9 +1,7 @@
 package ch.heigvd.bomberman.client;
 
-import ch.heigvd.bomberman.common.communication.requests.HelloRequest;
-import ch.heigvd.bomberman.common.communication.requests.Request;
-import ch.heigvd.bomberman.common.communication.responses.HelloResponse;
-import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.communication.requests.*;
+import ch.heigvd.bomberman.common.communication.responses.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,8 +20,7 @@ public class ResponseManager {
 			while (run) {
 			   try {
 				  Response response = (Response) reader.readObject();
-				  // TODO check server responses
-				  ResponseManager.this.process(response);
+				  response.accept(ResponseProcessor.getInstance());
 			   } catch (IOException | ClassNotFoundException e) {
 				  e.printStackTrace();
 			   }
@@ -54,17 +51,7 @@ public class ResponseManager {
 	  }
    }
 
-   public Response process(Response response) {
-	  switch (response.getType()){
-		 case NO_RESPONSE:
-			break;
-		 case HELLO_RESPONSE:
-			System.out.println(((HelloResponse)response).message());
-			break;
-		 case MOVE_RESPONSE:
+   public void process(Response response) {
 
-			break;
-	  }
-	  return response;
    }
 }

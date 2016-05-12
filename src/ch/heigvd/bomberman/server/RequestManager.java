@@ -38,8 +38,8 @@ public class RequestManager extends Thread {
         while (running) {
             try {
                 Request request = (Request) reader.readObject();
-                Response response = process(request);
-                send(response);
+                Response response = request.accept(RequestProcessor.getInstance());
+                if (response.isSendable()) writer.writeObject(response);
             } catch (EOFException e) {
                 System.out.println("Client closed the connection");
                 running = false;
@@ -49,46 +49,6 @@ public class RequestManager extends Thread {
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * Interprets the request, and makes a response to it
-     *
-     * @param request
-     * @return
-     */
-    public Response process(Request request) {
-        Response response = new NoResponse();
-        switch (request.getType()) {
-            case ACCOUNT_CREATION:
-                break;
-            case HELLO:
-                HelloRequest helloReq = (HelloRequest) request;
-                System.out.println("Received message: ");
-                System.out.println(helloReq.getMessage());
-                return new HelloResponse("Hello !");
-	        case MOVE:
-		        MoveRequest moveReq = (MoveRequest) request;
-		        if (room.isRunning())
-					player.getBomberman().move(moveReq.getDirection());
-		        break;
-	        case READY:
-		        ReadyRequest readyReq = (ReadyRequest) request;
-		        player.ready(readyReq.getState());
-		        break;
-
-            // TODO: other request types
-        }
-        return response;
-    }
-
-    /**
-     * Sends the response to the client
-     *
-     * @param response
-     */
-    private void send(Response response) throws IOException {
-        if (response.getType() != ResponseType.NO_RESPONSE) writer.writeObject(response);
     }
 
 }

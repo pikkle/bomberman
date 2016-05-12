@@ -9,8 +9,8 @@ public class HelloResponse extends Response {
 
    public String message() {return message;}
 
-   @Override
-   public ResponseType getType() {
-	  return ResponseType.HELLO_RESPONSE;
-   }
+	@Override
+	public void accept(ResponseVisitor visitor) {
+		visitor.visit(this);
+	}
 }
