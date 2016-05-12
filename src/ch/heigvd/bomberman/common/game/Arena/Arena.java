@@ -51,7 +51,7 @@ public class Arena
         return elements;
     }
 
-    protected void add(Element element) throws Exception {
+    public void add(Element element) throws Exception {
         Point2D position = element.getPosition();
         if(!isEmpty(position)){
             throw new Exception("Cell already occupied!");

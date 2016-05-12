@@ -63,7 +63,11 @@ public class Bomberman extends DestructibleElement {
 	* Drop the bomb
 	*/
    public void dropBomb() {
-	  arena.getElements().add(new Bomb(getPosition(), 10, 1));
+	  try {
+		 arena.add(bomb);
+	  } catch (Exception e) {
+		 e.printStackTrace();
+	  }
    }
 
    /**
