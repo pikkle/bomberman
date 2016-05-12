@@ -17,7 +17,6 @@ import java.util.Optional;
  * Represents a bomberman character in-game
  */
 public class Bomberman extends DestructibleElement {
-	private Arena arena;
 	private BombFactory bombFactory = new BasicBombFactory(10, 1, arena);
 	private int maxBombs = 1;
 	private List<PowerUp> powerUps = new LinkedList<>();
@@ -29,8 +28,7 @@ public class Bomberman extends DestructibleElement {
 	 * @param skin     The skin of the bomberman
 	 */
 	public Bomberman(Point2D position, Skin skin, Arena arena) {
-		super(position, new ImageView(skin.getImage()));
-		this.arena = arena;
+		super(position, new ImageView(skin.getImage()), arena);
 	}
 
 	/**
@@ -38,7 +36,7 @@ public class Bomberman extends DestructibleElement {
 	 *
 	 * @param direction the direction
 	 */
-	public void move(Direction direction) { // TODO Add hitbox collision detection
+	public void move(Direction direction) {
 		Point2D position = getPosition();
 		switch (direction) {
 			case RIGHT:
@@ -70,7 +68,7 @@ public class Bomberman extends DestructibleElement {
 			Bomb b = bombFactory.create(position);
 			arena.add(b);
 			return Optional.of(b);
-		} catch (Exception ignored) {
+		} catch (RuntimeException ignored) {
 			return Optional.empty();
 		}
 	}

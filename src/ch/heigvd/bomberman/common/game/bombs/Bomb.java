@@ -12,13 +12,11 @@ import java.util.List;
 public abstract class Bomb extends DestructibleElement {
 	protected int countdown;
 	protected int blastRange;
-	protected Arena arena;
 
 	public Bomb(Point2D position, int countdown, int blastRange, Arena arena, ImageView imageView) {
-		super(position, imageView);
+		super(position, imageView, arena);
 		this.countdown = countdown;
 		this.blastRange = blastRange;
-		this.arena = arena;
 	}
 
 	/**

@@ -71,13 +71,13 @@ public class Arena {
 	 * Add the element to the arena
 	 *
 	 * @param element The element to add
-	 * @throws Exception if the cell is already occuped
+	 * @throws RuntimeException if the cell is already occuped
 	 */
-	public void add(Element element) throws Exception {
+	public void add(Element element) throws RuntimeException {
 		if (getElements(element.getPosition()).stream().noneMatch(e -> e instanceof Bomb)) { // Pas de bombe déjà posée
 			elements.add(element);
 		} else {
-			throw new Exception("Cell already occuped");
+			throw new RuntimeException("Cell already occuped");
 		}
 	}
 
