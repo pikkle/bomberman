@@ -14,8 +14,8 @@ public class RequestManager extends Thread {
     private ObjectOutputStream writer;
     private ObjectInputStream reader;
     public boolean running = true;
-	private PlayerSession player;
-	private Room room;
+    private PlayerSession player;
+    private Room room;
 
 
     public RequestManager(Socket socket) {
@@ -27,10 +27,10 @@ public class RequestManager extends Thread {
             e.printStackTrace();
         }
 
-	    // TODO: remove the creation of a player session here. He is normally created when the client joins a room or creates one
-	    player = new PlayerSession();
-	    room = new Room("Test", "", 1);
-	    room.addPlayer(player);
+        // TODO: remove the creation of a player session here. He is normally created when the client joins a room or creates one
+        player = new PlayerSession();
+        room = new Room("Test", "", 1);
+        room.addPlayer(player);
     }
 
     @Override
@@ -50,5 +50,4 @@ public class RequestManager extends Thread {
             }
         }
     }
-
 }

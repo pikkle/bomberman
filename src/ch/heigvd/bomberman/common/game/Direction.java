@@ -7,5 +7,5 @@ package ch.heigvd.bomberman.common.game;
  * @author Adriano Ruberto
  */
 public enum Direction {
-	  RIGHT, LEFT, UP, DOWN
+    RIGHT, LEFT, UP, DOWN
 }

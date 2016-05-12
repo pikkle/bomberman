@@ -2,16 +2,16 @@ package ch.heigvd.bomberman.client;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ResponseManager {
-   private ObjectOutputStream writer;
-   private ObjectInputStream reader;
-   private boolean run = true;
+   	private ObjectOutputStream writer;
+   	private ObjectInputStream reader;
+   	private boolean run = true;
+	private boolean isConnected = false;
 
    class ResponseReceiver extends Thread {
 	  @Override
@@ -29,12 +29,14 @@ public class ResponseManager {
 	  }
    }
 
-   public ResponseManager(Socket socket) {
+   public ResponseManager(String ip, int port) {
 	  try {
-		 writer = new ObjectOutputStream(socket.getOutputStream());
-		 reader = new ObjectInputStream(socket.getInputStream());
+		  Socket socket = new Socket(ip, port);
+		  isConnected = socket.isConnected();
+		  writer = new ObjectOutputStream(socket.getOutputStream());
+		  reader = new ObjectInputStream(socket.getInputStream());
 	  } catch (IOException e) {
-		 e.printStackTrace();
+		  e.printStackTrace();
 	  }
 	  new ResponseReceiver().start();
    }
@@ -54,4 +56,8 @@ public class ResponseManager {
    public void process(Response response) {
 
    }
+
+	public boolean isConnected(){
+		return isConnected;
+	}
 }
