@@ -3,7 +3,7 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.responses.Response;
 
-public final class AccountCreationRequest extends Request {
+public final class AccountCreationRequest extends Request<Boolean> {
     private String username;
     private String password;
 
