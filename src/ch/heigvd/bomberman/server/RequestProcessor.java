@@ -19,7 +19,7 @@ public class RequestProcessor implements RequestVisitor {
 		HelloRequest request = (HelloRequest) r;
 		System.out.println("Received message: ");
 		System.out.println(request.getMessage());
-		return new HelloResponse("Hello !");
+		return new HelloResponse(r.getID(), "Hello !");
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class RequestProcessor implements RequestVisitor {
 		System.out.println("Connection from user");
 		System.out.println("Username: " + loginRequest.getUsername());
 		System.out.println("Password: " + loginRequest.getPassword());
-		return new SuccessResponse("Connection successful");
+		return new SuccessResponse(loginRequest.getID(), "Connection successful");
 	}
 
 }
