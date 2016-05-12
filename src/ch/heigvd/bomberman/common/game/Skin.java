@@ -9,7 +9,7 @@ public enum Skin {
     SKIN4("lib/img/skins/skin4.png");
 
     private Image image;
-    private Skin(String s) {
+    Skin(String s) {
         // TODO: charger l'image
     }
 }
