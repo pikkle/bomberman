@@ -38,16 +38,16 @@ public class Bomberman extends DestructibleElement {
         Point2D position = getPosition();
         switch (direction) {
             case RIGHT:
-                position.add(1, 0);
+                position = position.add(1, 0);
                 break;
             case LEFT:
-                position.add(-1, 0);
+                position = position.add(-1, 0);
                 break;
             case UP:
-                position.add(0, -1);
+                position = position.add(0, -1);
                 break;
             case DOWN:
-                position.add(0, 1);
+                position = position.add(0, 1);
                 break;
         }
         if(arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 && position.getY() < arena.getHeight() && position.getY() >= 0){
