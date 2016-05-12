@@ -14,8 +14,8 @@ public abstract class Bomb extends DestructibleElement {
 	protected int blastRange;
 	protected Arena arena;
 
-	public Bomb(Point2D position, int countdown, int blastRange, Arena arena) {
-		super(position, new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/bomb.png")));
+	public Bomb(Point2D position, int countdown, int blastRange, Arena arena, ImageView imageView) {
+		super(position, imageView);
 		this.countdown = countdown;
 		this.blastRange = blastRange;
 		this.arena = arena;

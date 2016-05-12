@@ -66,8 +66,8 @@ public class Bomberman extends DestructibleElement {
 	 * Drop the bomb
 	 */
 	public Optional<Bomb> dropBomb() {
-		Bomb b = bombFactory.create(position);
 		try {
+			Bomb b = bombFactory.create(position);
 			arena.add(b);
 			return Optional.of(b);
 		} catch (Exception ignored) {
