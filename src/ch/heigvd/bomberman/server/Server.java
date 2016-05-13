@@ -1,5 +1,7 @@
 package ch.heigvd.bomberman.server;
 
+import javafx.scene.image.Image;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.LinkedList;
@@ -29,6 +31,7 @@ public class Server {
     }
 
     public void start(){
+        new Image("ch/heigvd/bomberman/client/img/wall.png");
         try {
             ServerSocket socket = new ServerSocket(port);
             synchronized (this) {

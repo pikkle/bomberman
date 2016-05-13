@@ -1,15 +1,11 @@
 package ch.heigvd.bomberman.client.views;
 
-import ch.heigvd.bomberman.common.game.Arena;
+import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Element;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -18,8 +14,7 @@ import javafx.scene.layout.RowConstraints;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ArenaController implements Observer
-{
+public class ArenaController implements Observer {
     private Arena arena;
     private Bomberman bomberman;
 
@@ -28,7 +23,11 @@ public class ArenaController implements Observer
 
     public ArenaController(Arena arena) {
         this.arena = arena;
-        this.bomberman = arena.addPlayer();
+        try {
+            this.bomberman = arena.putBomberman();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -49,46 +48,41 @@ public class ArenaController implements Observer
             element.addObserver(this);
         });
 
-        bomberman.render().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent key) {
-                Point2D position = bomberman.getPosition();
-                if (key.getCode().equals(KeyCode.RIGHT)) {
+        bomberman.render().setOnKeyPressed(key -> {
+            switch (key.getCode()) {
+                case RIGHT:
                     bomberman.move(Direction.RIGHT);
-                    key.consume();
-                }
-                else if(key.getCode().equals(KeyCode.LEFT)){
+                    break;
+                case LEFT:
                     bomberman.move(Direction.LEFT);
-                    key.consume();
-                }
-                else if(key.getCode().equals(KeyCode.DOWN)){
+                    break;
+                case DOWN:
                     bomberman.move(Direction.DOWN);
-                    key.consume();
-                }
-                else if(key.getCode().equals(KeyCode.UP)){
+                    break;
+                case UP:
                     bomberman.move(Direction.UP);
-                    key.consume();
-                }
-                else if(key.getCode().equals(KeyCode.SPACE)){
-                    bomberman.dropBomb();
-                    displayElement(bomberman.getBomb());
-                }
+                    break;
+                case SPACE:
+                    bomberman.dropBomb().ifPresent(this::displayElement);
+                    break;
+                default:
+                    return;
             }
+            key.consume();
         });
         bomberman.render().setFocusTraversable(true);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        displayElement((Element)o);
+        displayElement((Element) o);
     }
 
-    private void displayElement(Element element){
-        if(gridPane.getChildren().contains(element.render()))
-            gridPane.getChildren().remove(element.render());
+    private void displayElement(Element element) {
+        if (gridPane.getChildren().contains(element.render())) gridPane.getChildren().remove(element.render());
         ImageView sprite = element.render();
         sprite.setFitHeight(50);
         sprite.setFitWidth(50);
-        gridPane.add(sprite, (int)element.getPosition().getX(), (int)element.getPosition().getY());
+        gridPane.add(sprite, (int) element.getPosition().getX(), (int) element.getPosition().getY());
     }
 }

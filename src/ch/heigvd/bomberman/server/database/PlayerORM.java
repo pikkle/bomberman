@@ -12,31 +12,36 @@ import java.util.List;
  */
 public class PlayerORM extends MainORM
 {
-    public void createPlayer(Player player) throws SQLException {
-        Dao<Player, Long> playerDao = initDao(Player.class);
-        playerDao.create(player);
+    private Dao<Player, Long> dao;
+
+    public PlayerORM() throws SQLException {
+        super();
+        createTable();
+        dao = initDao();
     }
 
-    @SuppressWarnings("unchecked")
-    public List<Player> getPlayers() throws SQLException  {
-        Dao<Player, Long> playerDao = initDao(Player.class);
-        List<Player> players = playerDao.queryForAll();
-        doFinally();
+    public void create(Player player) throws SQLException {
+        dao.create(player);
+    }
+
+    public List<Player> findAll() throws SQLException  {
+        List<Player> players = dao.queryForAll();
         return players;
     }
 
-    public Player getPlayer(long playerId) throws SQLException {
-        Dao<Player, Long> playerDao = initDao(Player.class);
-        Player player = playerDao.queryForId(playerId);
-        doFinally();
+    public Player find(long id) throws SQLException {
+        Player player = dao.queryForId(id);
         return player;
     }
 
     public Player finByPseudo(String pseudo) throws SQLException  {
-        Dao<Player, String> playerDao = initDao(Player.class);
-        QueryBuilder querybuilder = playerDao.queryBuilder();
+        QueryBuilder querybuilder = dao.queryBuilder();
         Player player = (Player)querybuilder.where().eq("pseudo", pseudo).queryForFirst();
-        doFinally();
         return player;
+    }
+
+    @Override
+    protected Class getTableClass() {
+        return Player.class;
     }
 }

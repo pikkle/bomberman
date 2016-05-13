@@ -1,6 +1,6 @@
 package ch.heigvd.bomberman.server;
 
-import ch.heigvd.bomberman.common.game.Arena;
+import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Skin;
 import javafx.geometry.Point2D;

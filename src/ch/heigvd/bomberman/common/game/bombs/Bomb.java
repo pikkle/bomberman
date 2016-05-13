@@ -1,39 +1,32 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
+import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.DestructibleElement;
+import ch.heigvd.bomberman.common.game.Element;
 import javafx.geometry.Point2D;
-import javafx.scene.image.ImageView;
+
+import java.util.List;
 
 
-public class Bomb extends DestructibleElement {
-    private int countdown;
-    private int blastRange;
+public abstract class Bomb extends DestructibleElement {
+    protected int countdown;
+    protected int blastRange;
 
-    public Bomb(Point2D position, int countdown, int blastRange) {
-        super(position, new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/bomb.png")));
+    public Bomb(Point2D position, int countdown, int blastRange, Arena arena) {
+        super(position, arena);
         this.countdown = countdown;
         this.blastRange = blastRange;
     }
 
-    public void explose(){}
-
-    public boolean isInRange(Point2D position){ // TODO Gérer les collisions avec les murs
-        return false;
+    /**
+     * To call when the bomb explose, will remove all the element in range
+     */
+    public void explose() {
+        getElementsInRange().forEach(e -> arena.remove(e));
     }
 
-    public int getBlastRange() {
-        return blastRange;
-    }
-
-    public void setBlastRange(int blastRange) {
-        this.blastRange = blastRange;
-    }
-
-    public int getCountdown() {
-        return countdown;
-    }
-
-    public void setCountdown(int countdown) {
-        this.countdown = countdown;
-    }
+    /**
+     * @return the elements in range of the blastRange
+     */
+    public abstract List<Element> getElementsInRange();
 }

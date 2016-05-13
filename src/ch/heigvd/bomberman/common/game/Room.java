@@ -1,5 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
+import ch.heigvd.bomberman.common.game.Arena.Arena;
+
 import java.util.LinkedList;
 import java.util.List;
 

@@ -5,7 +5,7 @@ import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.auth.LoginViewController;
 import ch.heigvd.bomberman.client.views.room.NewViewController;
 import ch.heigvd.bomberman.common.game.Room;
-import ch.heigvd.bomberman.common.game.SimpleArena;
+import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

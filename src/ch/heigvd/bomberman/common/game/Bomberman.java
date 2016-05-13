@@ -1,22 +1,26 @@
 package ch.heigvd.bomberman.common.game;
 
 
+import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.bombs.BasicBombFactory;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
+import ch.heigvd.bomberman.common.game.bombs.BombFactory;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a bomberman character in-game
  */
 public class Bomberman extends DestructibleElement {
-    private Arena arena;
-    private Bomb bomb;
+    private BombFactory bombFactory = new BasicBombFactory(10, 1, arena);
     private int maxBombs = 1;
     private List<PowerUp> powerUps = new LinkedList<>();
+    private Skin skin;
 
     /**
      * Constructs a Bomberman at a given position and a given skin
@@ -24,9 +28,9 @@ public class Bomberman extends DestructibleElement {
      * @param position The position of the bomberman
      * @param skin     The skin of the bomberman
      */
-    public Bomberman(Point2D position, Skin skin, Arena arena){
-        super(position, new ImageView(skin.getImage()));
-        this.arena = arena;
+    public Bomberman(Point2D position, Skin skin, Arena arena) {
+        super(position, arena);
+        this.skin = skin;
     }
 
     /**
@@ -34,7 +38,7 @@ public class Bomberman extends DestructibleElement {
      *
      * @param direction the direction
      */
-    public void move(Direction direction) { // TODO Add hitbox collision detection
+    public void move(Direction direction) {
         Point2D position = getPosition();
         switch (direction) {
             case RIGHT:
@@ -50,7 +54,8 @@ public class Bomberman extends DestructibleElement {
                 position = position.add(0, 1);
                 break;
         }
-        if(arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 && position.getY() < arena.getHeight() && position.getY() >= 0){
+        if (arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 &&
+                position.getY() < arena.getHeight() && position.getY() >= 0) {
             this.position = position;
             setChanged();
             notifyObservers();
@@ -60,19 +65,13 @@ public class Bomberman extends DestructibleElement {
     /**
      * Drop the bomb
      */
-    public void dropBomb() {
-        // TODO: add the bomb to the map
-        for(int i = -1; i < 2; i++){
-            for(int j = -1; j < 2; j++){
-                Point2D position = new Point2D(getPosition().getX(), getPosition().getY());
-	            //TODO: refaire les positions avec javafx
-                position.add(i, j);
-                if(i != j && arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 && position.getY() < arena.getHeight() && position.getY() >= 0){
-                    bomb = new Bomb(position, 10, 1);
-                    arena.getElements().add(bomb);
-                    return;
-                }
-            }
+    public Optional<Bomb> dropBomb() {
+        try {
+            Bomb b = bombFactory.create(position);
+            arena.add(b);
+            return Optional.of(b);
+        } catch (RuntimeException ignored) {
+            return Optional.empty();
         }
     }
 
@@ -86,12 +85,16 @@ public class Bomberman extends DestructibleElement {
         powerUp.apply(this);
     }
 
-    /**
-     * @return the bomb of the bomberman
-     */
-    public Bomb getBomb() {
-        return bomb;
+    public void changeBombFactory(BombFactory bombFactory) {
+        this.bombFactory = bombFactory;
     }
 
-}
+    public void addMaxBomb(int n) {
+        maxBombs += n;
+    }
 
+    @Override
+    public ImageView render() {
+        return new ImageView(skin.getImage());
+    }
+}
