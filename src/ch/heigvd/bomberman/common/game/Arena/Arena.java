@@ -101,12 +101,18 @@ public class Arena {
 		}
 	}
 
+	/**
+	 * Add a bomb to the arena
+	 *
+	 * @param bomb
+	 * @throws RuntimeException
+	 */
 	public void add(Bomb bomb) throws RuntimeException {
-		if (getElements(bomb.getPosition()).stream().noneMatch(e -> e instanceof Bomb)) { // Pas de bombe déjà posée
+		if (bombs.stream().noneMatch(b -> b.getPosition().equals(bomb.getPosition()))) {
 			bombs.add(bomb);
 			elements.add(bomb);
 		} else {
-			throw new RuntimeException("Cell already occuped");
+			throw new RuntimeException("Already a bomb");
 		}
 
 	}
