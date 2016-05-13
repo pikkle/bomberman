@@ -32,10 +32,12 @@ public abstract class Bomb extends DestructibleElement {
 	 */
 	public void explose() {
 		getElementsInRange().forEach(e -> arena.remove(e));
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
 	 * @return the elements in range of the blastRange
 	 */
-	public abstract List<Element> getElementsInRange();
+	public abstract List<DestructibleElement> getElementsInRange();
 }

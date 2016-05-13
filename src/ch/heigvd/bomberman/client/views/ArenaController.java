@@ -4,6 +4,7 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -18,8 +19,7 @@ public class ArenaController implements Observer {
 	private Arena arena;
 	private Bomberman bomberman;
 
-	@FXML
-	private GridPane gridPane;
+	@FXML private GridPane gridPane;
 
 	public ArenaController(Arena arena) {
 		this.arena = arena;
@@ -59,7 +59,10 @@ public class ArenaController implements Observer {
 					bomberman.move(Direction.UP);
 					break;
 				case SPACE:
-					bomberman.dropBomb().ifPresent(this::displayElement);
+					bomberman.dropBomb().ifPresent(b -> {
+						displayElement(b);
+						b.addObserver(this);
+					});
 					break;
 				default:
 					return;
@@ -71,7 +74,8 @@ public class ArenaController implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		displayElement((Element) o);
+		if (o instanceof Bomb) gridPane.getChildren().remove(((Element) o).render());
+		else displayElement((Element) o);
 	}
 
 	private void displayElement(Element element) {

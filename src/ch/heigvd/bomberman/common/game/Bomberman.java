@@ -17,7 +17,7 @@ import java.util.Optional;
  * Represents a bomberman character in-game
  */
 public class Bomberman extends DestructibleElement {
-	private BombFactory bombFactory = new BasicBombFactory(10, 1, arena);
+	private BombFactory bombFactory = new BasicBombFactory(3, 1, arena);
 	private int maxBombs = 1;
 	private List<PowerUp> powerUps = new LinkedList<>();
 
