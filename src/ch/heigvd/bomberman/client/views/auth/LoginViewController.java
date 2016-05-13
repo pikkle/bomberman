@@ -18,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 
 /**
@@ -83,6 +84,14 @@ public class LoginViewController {
     {
         Platform.exit();
         ( (Stage)mainPane.getScene().getWindow() ).close();
+        try
+        {
+            mainController.getRm().disconnect();
+
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @FXML
