@@ -9,7 +9,6 @@ import javafx.geometry.Point2D;
  */
 public class AddBombPowerUp extends PowerUp {
 
-
 	public AddBombPowerUp(Point2D position, Arena arena) {
 		super(position, null, arena);
 	}

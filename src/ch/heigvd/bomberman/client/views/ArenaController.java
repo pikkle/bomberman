@@ -75,7 +75,8 @@ public class ArenaController implements Observer {
 	}
 
 	private void displayElement(Element element) {
-		if (gridPane.getChildren().contains(element.render())) gridPane.getChildren().remove(element.render());
+		gridPane.getChildren().remove(element.render());
+		//if (gridPane.getChildren().contains(element.render())) gridPane.getChildren().remove(element.render());
 		ImageView sprite = element.render();
 		sprite.setFitHeight(50);
 		sprite.setFitWidth(50);

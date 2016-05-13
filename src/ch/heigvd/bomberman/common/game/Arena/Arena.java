@@ -5,10 +5,16 @@ import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Skin;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
+import javafx.util.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 /**
@@ -17,11 +23,25 @@ import java.util.stream.Collectors;
 public class Arena {
 	private int width;
 	private int height;
-	private List<Element> elements = new LinkedList<Element>();
+	private Queue<Bomb> bombs = new ConcurrentLinkedQueue<>();
+	private List<Element> elements = new LinkedList<>();
 
 	public Arena(int width, int height) {
 		this.width = width;
 		this.height = height;
+
+		new Thread(() -> {
+			Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> bombs.forEach(b -> {
+				b.decreaseCountdown();
+				if (b.getCountdown() <= 0) {
+					b.explose();
+					elements.remove(b);
+					bombs.remove(b);
+				}
+			})));
+			timeline.setCycleCount(Animation.INDEFINITE);
+			timeline.play();
+		}).start();
 	}
 
 	public int getWidth() {
@@ -74,11 +94,21 @@ public class Arena {
 	 * @throws RuntimeException if the cell is already occuped
 	 */
 	public void add(Element element) throws RuntimeException {
-		if (getElements(element.getPosition()).stream().noneMatch(e -> e instanceof Bomb)) { // Pas de bombe déjà posée
+		if (isEmpty(element.getPosition())) {
 			elements.add(element);
 		} else {
 			throw new RuntimeException("Cell already occuped");
 		}
+	}
+
+	public void add(Bomb bomb) throws RuntimeException {
+		if (getElements(bomb.getPosition()).stream().noneMatch(e -> e instanceof Bomb)) { // Pas de bombe déjà posée
+			bombs.add(bomb);
+			elements.add(bomb);
+		} else {
+			throw new RuntimeException("Cell already occuped");
+		}
+
 	}
 
 	public void remove(Element e) {

@@ -19,6 +19,14 @@ public abstract class Bomb extends DestructibleElement {
 		this.blastRange = blastRange;
 	}
 
+	public int getCountdown() {
+		return countdown;
+	}
+
+	public void decreaseCountdown() {
+		countdown--;
+	}
+
 	/**
 	 * To call when the bomb explose, will remove all the element in range
 	 */
