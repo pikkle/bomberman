@@ -7,12 +7,18 @@ import javafx.geometry.Point2D;
  * Created by Adriano on 12.05.2016.
  */
 public class BasicBombFactory extends BombFactory {
-	public BasicBombFactory(int countdown, int blastRange, Arena arena) {
-		super(countdown, blastRange, arena);
+	public BasicBombFactory(Arena arena) {
+		super(3, 1, arena, 1);
 	}
 
 	@Override
 	public BasicBomb create(Point2D position) {
-		return new BasicBomb(position, countdown, blastRange, arena);
+		if (nbBomb <= 0) throw new RuntimeException("Can't drop a bomb");
+
+		BasicBomb b = new BasicBomb(position, countdown, blastRange, arena);
+		b.addObserver(this);
+		nbBomb--;
+		return b;
 	}
+
 }

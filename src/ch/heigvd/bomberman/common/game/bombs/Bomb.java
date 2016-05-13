@@ -2,7 +2,6 @@ package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.DestructibleElement;
-import ch.heigvd.bomberman.common.game.Element;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 

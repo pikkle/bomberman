@@ -17,7 +17,7 @@ import java.util.Optional;
  * Represents a bomberman character in-game
  */
 public class Bomberman extends DestructibleElement {
-	private BombFactory bombFactory = new BasicBombFactory(3, 1, arena);
+	private BombFactory bombFactory = new BasicBombFactory(arena);
 	private int maxBombs = 1;
 	private List<PowerUp> powerUps = new LinkedList<>();
 
@@ -53,7 +53,7 @@ public class Bomberman extends DestructibleElement {
 				break;
 		}
 		if (arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 &&
-				position.getY() < arena.getHeight() && position.getY() >= 0) {
+		    position.getY() < arena.getHeight() && position.getY() >= 0) {
 			this.position = position;
 			setChanged();
 			notifyObservers();
@@ -68,7 +68,7 @@ public class Bomberman extends DestructibleElement {
 			Bomb b = bombFactory.create(position);
 			arena.add(b);
 			return Optional.of(b);
-		} catch (RuntimeException ignored) {
+		} catch (RuntimeException e) {
 			return Optional.empty();
 		}
 	}
