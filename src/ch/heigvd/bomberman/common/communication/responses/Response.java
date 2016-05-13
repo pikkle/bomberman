@@ -14,7 +14,9 @@ public abstract class Response<T> implements Serializable {
     public boolean isSendable() {
         return true;
     }
+
     public abstract T accept(ResponseVisitor visitor);
+
     public UUID getID() {
         return uuid;
     }

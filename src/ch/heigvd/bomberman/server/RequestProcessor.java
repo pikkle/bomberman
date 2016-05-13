@@ -15,11 +15,10 @@ public class RequestProcessor implements RequestVisitor {
 		return instance;
 	}
 
-	public Response visit(HelloRequest r){
-		HelloRequest request = (HelloRequest) r;
+	public Response visit(HelloRequest request){
 		System.out.println("Received message: ");
 		System.out.println(request.getMessage());
-		return new HelloResponse(r.getID(), "Hello !");
+		return new HelloResponse(request.getID(), "Hello !");
 	}
 
 	@Override

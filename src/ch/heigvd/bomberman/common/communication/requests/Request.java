@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public abstract class Request<T> implements Serializable {
     private UUID uuid = UUID.randomUUID();
-    public abstract Response accept(RequestVisitor visitor);
+    public abstract Response<T> accept(RequestVisitor visitor);
 
 
     public UUID getID() {

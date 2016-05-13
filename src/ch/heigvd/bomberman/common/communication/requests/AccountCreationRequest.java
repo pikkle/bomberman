@@ -18,7 +18,7 @@ public final class AccountCreationRequest extends Request<Boolean> {
     }
 
     @Override
-    public Response accept(RequestVisitor visitor) {
+    public Response<Boolean> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
 }

@@ -39,18 +39,20 @@ public class ResponseManager {
 			writer = new ObjectOutputStream(socket.getOutputStream());
 			reader = new ObjectInputStream(socket.getInputStream());
 
-			Thread receiver = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					while(true) {
-						try {
-							Response response = (Response) reader.readObject();
-							responses.put(response.getID(), response);
-							threads.get(response.getID()).notify();
-							response.accept(ResponseProcessor.getInstance());
-						} catch (IOException | ClassNotFoundException e) {
-							e.printStackTrace();
+			Thread receiver = new Thread(() -> {
+				while(true) {
+					try {
+						Object o = reader.readObject();
+						Response response = (Response) o;
+						responses.put(response.getID(), response);
+						Thread t = threads.get(response.getID());
+						threads.remove(t);
+						synchronized (this) {
+							this.notify();
 						}
+						response.accept(ResponseProcessor.getInstance());
+					} catch (IOException | ClassNotFoundException e) {
+						e.printStackTrace();
 					}
 				}
 			});
@@ -74,8 +76,12 @@ public class ResponseManager {
 			writer.writeObject(r);
 			Thread sender = new Thread(() -> {
 				try {
-					wait();
+					synchronized (this) {
+						this.wait();
+					}
+					System.out.println("Hello world");
 					Response<T> response = (Response<T>) responses.get(r.getID());
+					responses.remove(response);
 					callback.accept(response.accept(ResponseProcessor.getInstance()));
 
 				} catch (InterruptedException e) {

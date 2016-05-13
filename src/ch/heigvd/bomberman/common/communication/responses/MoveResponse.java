@@ -10,7 +10,7 @@ import java.util.UUID;
  *
  * @author Adriano Ruberto
  */
-public class MoveResponse extends Response {
+public class MoveResponse extends Response<Direction> {
 
 	public MoveResponse(UUID uuid) {
 		super(uuid);

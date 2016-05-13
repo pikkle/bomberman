@@ -4,7 +4,7 @@ import ch.heigvd.bomberman.common.game.Direction;
 
 import java.util.UUID;
 
-public class SuccessResponse extends Response {
+public class SuccessResponse extends Response<Boolean> {
 	private String message;
 	public SuccessResponse(UUID uuid, String message) {
 		super(uuid);
@@ -12,9 +12,8 @@ public class SuccessResponse extends Response {
 	}
 
 	@Override
-	public Direction accept(ResponseVisitor visitor) {
-		visitor.visit(this);
-		return null;
+	public Boolean accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
 	}
 
 }
