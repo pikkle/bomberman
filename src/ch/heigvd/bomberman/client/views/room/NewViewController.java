@@ -1,10 +1,10 @@
 package ch.heigvd.bomberman.client.views.room;
 
 import ch.heigvd.bomberman.client.views.ClientMainController;
-import ch.heigvd.bomberman.common.game.Arena;
-import ch.heigvd.bomberman.common.game.RandomArena;
+import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena.RandomArena;
 import ch.heigvd.bomberman.common.game.Room;
-import ch.heigvd.bomberman.common.game.SimpleArena;
+import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
