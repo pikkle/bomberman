@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.test;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
-import ch.heigvd.bomberman.server.database.ArenaORM;
+import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import org.junit.Test;
 
 public class ServerTest {
@@ -14,7 +14,13 @@ public class ServerTest {
 		orm.create(arena);
 
 		orm.findAll().forEach(storedArena -> {
-			System.out.println(storedArena.getElements().size());
+			System.out.println("arena : ");
+			storedArena.getElements().forEach(element -> {
+				System.out.println("  Element:");
+				System.out.println("    type : " + element.getClass().getSimpleName());
+				System.out.println("    x : " + element.getPosition().getX());
+				System.out.println("    y : " + element.getPosition().getY());
+			});
 		});
 	}
 

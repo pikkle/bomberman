@@ -43,9 +43,9 @@ public class ArenaController implements Observer {
             gridPane.getRowConstraints().add(rowConstraints);
         }
 
+        //arena.addObserver(this);
         arena.getElements().stream().forEach(element -> {
             displayElement(element);
-            element.addObserver(this);
         });
 
         bomberman.render().setOnKeyPressed(key -> {
@@ -75,7 +75,7 @@ public class ArenaController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        displayElement((Element) o);
+        //displayElement((Element) o);
     }
 
     private void displayElement(Element element) {

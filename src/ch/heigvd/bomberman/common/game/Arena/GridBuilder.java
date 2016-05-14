@@ -60,7 +60,7 @@ public class GridBuilder implements Observer
 
 	@Override
 	public void update(Observable o, Object arg) {
-		displayElement((Element)o);
+		//displayElement((Element)o);
 	}
 
 	private void buildGrid(Arena arena){
@@ -77,7 +77,7 @@ public class GridBuilder implements Observer
 
 		arena.getElements().stream().forEach(element -> {
 			displayElement(element);
-			element.addObserver(this);
+			//element.addObserver(this);
 		});
 	}
 

@@ -1,6 +1,7 @@
-package ch.heigvd.bomberman.server.database;
+package ch.heigvd.bomberman.server.database.arena;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.server.database.MainORM;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class ArenaORM extends MainORM
 		dao.create(arena);
 		arena.getElements().forEach(element -> {
 			try {
-				ElementORM orm = new ElementORM(element.getClass());
+				ElementORM orm = new ElementORM();
 				orm.create(element);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -36,7 +37,7 @@ public class ArenaORM extends MainORM
 	}
 
 	public Arena find(long id) throws SQLException {
-		return dao.queryForId(id);
+		return  dao.queryForId(id);
 	}
 
 	@Override

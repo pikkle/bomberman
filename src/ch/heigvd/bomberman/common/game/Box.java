@@ -3,6 +3,8 @@ package ch.heigvd.bomberman.common.game;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
+import ch.heigvd.bomberman.server.database.arena.ElementDao;
+import com.j256.ormlite.table.DatabaseTable;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 
@@ -14,7 +16,12 @@ import java.util.Optional;
  *
  * @author Adriano Ruberto
  */
+@DatabaseTable(tableName = "wall", daoClass = ElementDao.class)
 public class Box extends DestructibleElement {
+
+    public Box() {
+        super();
+    }
 
     public Box(Point2D position, Arena arena) {
         super(position, arena);

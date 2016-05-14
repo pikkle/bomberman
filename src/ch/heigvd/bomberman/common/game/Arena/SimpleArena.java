@@ -1,5 +1,6 @@
 package ch.heigvd.bomberman.common.game.Arena;
 
+import ch.heigvd.bomberman.common.game.Box;
 import ch.heigvd.bomberman.common.game.Wall;
 import javafx.geometry.Point2D;
 
@@ -24,5 +25,7 @@ public class SimpleArena extends Arena {
         for (int i = 2; i < getHeight() - 2; i++) {
             add(new Wall(new Point2D(getWidth() / 2, i), this));
         }
+
+        add(new Box(new Point2D(10, 3), this));
     }
 }

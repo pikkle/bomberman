@@ -1,7 +1,10 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.server.database.arena.ElementDao;
+import ch.heigvd.bomberman.server.database.arena.PositionConverter;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 
@@ -10,34 +13,37 @@ import java.util.Observable;
 /**
  * Created by matthieu.villard on 09.05.2016.
  */
+@DatabaseTable(tableName = "element", daoClass = ElementDao.class)
 public abstract class Element extends Observable {
     @DatabaseField(generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = "x", canBeNull = false)
-    private int x;
+    @DatabaseField(columnName = "discr", canBeNull = false)
+    private String discr;
 
-    @DatabaseField(columnName = "y", canBeNull = false)
-    private int y;
-
+    @DatabaseField(columnName = "position", canBeNull = false, persisterClass = PositionConverter.class)
     protected Point2D position;
 
     @DatabaseField (foreign = true, foreignAutoRefresh = true, columnName = "arena")
     protected Arena arena;
 
     public Element() {
-
+        discr = getClass().getName();
+        position = new Point2D(0, 0);
     }
 
     public Element(Point2D position, Arena arena) {
+        this();
         this.position = position;
-        x = (int)position.getX();
-        y = (int)position.getY();
         this.arena = arena;
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getDiscr(){
+        return discr;
     }
 
     public Point2D getPosition() {
