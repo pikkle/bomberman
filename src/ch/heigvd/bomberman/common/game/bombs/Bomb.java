@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.common.game.bombs;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.DestructibleElement;
 import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.ElementVisitor;
 import javafx.geometry.Point2D;
 
 import java.util.List;
@@ -29,4 +30,9 @@ public abstract class Bomb extends DestructibleElement {
      * @return the elements in range of the blastRange
      */
     public abstract List<Element> getElementsInRange();
+
+    @Override
+    public void accept(ElementVisitor visitor) {
+        visitor.visit(this);
+    }
 }

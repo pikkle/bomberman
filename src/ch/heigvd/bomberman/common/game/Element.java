@@ -6,7 +6,6 @@ import ch.heigvd.bomberman.server.database.arena.elements.PositionConverter;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import javafx.geometry.Point2D;
-import javafx.scene.image.ImageView;
 
 import java.util.Observable;
 
@@ -55,8 +54,6 @@ public abstract class Element extends Observable {
         return position;
     }
 
-    public abstract ImageView render();
-
     @Override
     public boolean equals(Object obj) {
         if(this == obj)
@@ -65,4 +62,6 @@ public abstract class Element extends Observable {
             return true;
         return false;
     }
+
+    public abstract void accept(ElementVisitor visitor);
 }

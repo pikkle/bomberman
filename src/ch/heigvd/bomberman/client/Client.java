@@ -12,7 +12,6 @@ import javafx.stage.Stage;
  */
 public class Client extends Application {
 
-
     private Stage primaryStage;
     private Pane mainLayout;
     private ClientMainController controller;

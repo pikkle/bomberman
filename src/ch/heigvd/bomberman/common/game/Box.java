@@ -6,7 +6,6 @@ import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
 import com.j256.ormlite.table.DatabaseTable;
 import javafx.geometry.Point2D;
-import javafx.scene.image.ImageView;
 
 import java.util.Optional;
 
@@ -27,13 +26,13 @@ public class Box extends DestructibleElement {
         super(position, arena);
     }
 
-    @Override
-    public ImageView render() {
-        return new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/box.png"));
-    }
-
     public Optional<PowerUp> open() {
         // TODO return random powerup
         return Optional.of(new AddBombPowerUp(position, arena));
+    }
+
+    @Override
+    public void accept(ElementVisitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class ElementFactory<T extends Element> implements ObjectFactory<T>
 {
 
-	private Class clazz;
+	private Class<T> clazz;
 
 	public ElementFactory(Class<T> clazz){
 		this.clazz = clazz;

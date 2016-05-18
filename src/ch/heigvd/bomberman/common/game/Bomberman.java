@@ -7,7 +7,6 @@ import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.bombs.BombFactory;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import javafx.geometry.Point2D;
-import javafx.scene.image.ImageView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +30,10 @@ public class Bomberman extends DestructibleElement {
     public Bomberman(Point2D position, Skin skin, Arena arena) {
         super(position, arena);
         this.skin = skin;
+    }
+
+    public Skin getSkin(){
+        return skin;
     }
 
     /**
@@ -94,7 +97,7 @@ public class Bomberman extends DestructibleElement {
     }
 
     @Override
-    public ImageView render() {
-        return new ImageView(skin.getImage());
+    public void accept(ElementVisitor visitor) {
+        visitor.visit(this);
     }
 }

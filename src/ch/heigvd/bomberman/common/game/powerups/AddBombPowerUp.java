@@ -2,8 +2,8 @@ package ch.heigvd.bomberman.common.game.powerups;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.ElementVisitor;
 import javafx.geometry.Point2D;
-import javafx.scene.image.ImageView;
 
 /**
  * Created by Adriano on 12.05.2016.
@@ -16,8 +16,8 @@ public class AddBombPowerUp extends PowerUp {
 	}
 
 	@Override
-	public ImageView render() {
-		return null;
+	public void accept(ElementVisitor visitor) {
+
 	}
 
 	@Override

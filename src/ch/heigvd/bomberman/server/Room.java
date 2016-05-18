@@ -41,7 +41,7 @@ public class Room {
 
 	public synchronized void start() {
 		for (PlayerSession player : players) {
-			player.setBomberman(new Bomberman(new Point2D(0,0), Skin.SKIN1, null));
+			player.setBomberman(new Bomberman(new Point2D(0,0), Skin.skin1, null));
 		}
 		running = true;
 	}
