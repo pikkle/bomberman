@@ -40,7 +40,7 @@ public class ElementTest {
 
 	@Test
 	public void testFind() throws Exception {
-		List<Element> all = elementOrm.findOneByArena(arena);
+		List<Element> all = elementOrm.findByArena(arena);
 		assertEquals(all.size(), 69);
 		all.forEach(element -> assertEquals(element.getArena().getId(), arena.getId()));
 	}
@@ -50,17 +50,17 @@ public class ElementTest {
 		Element element = new Wall(new Point2D(13, 6), arena);
 		elementOrm.create(element);
 		assertNotNull(element.getId());
-		List<Element> all = elementOrm.findOneByArena(arena);
+		List<Element> all = elementOrm.findByArena(arena);
 		assertEquals(all.size(), 70);
 		assertTrue(arena.getElements().contains(element));
 	}
 
 	@Test
 	public void testDelete() throws Exception {
-		Element element = elementOrm.findOneByArena(arena).get(0);
+		Element element = elementOrm.findOneByArena(arena);
 		elementOrm.delete(element);
 		assertNull(elementOrm.find(element.getId()));
-		List<Element> all = elementOrm.findOneByArena(arena);
+		List<Element> all = elementOrm.findByArena(arena);
 		assertEquals(all.size(), 68);
 		assertFalse(arena.getElements().contains(element));
 	}

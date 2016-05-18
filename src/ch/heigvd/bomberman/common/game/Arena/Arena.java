@@ -12,7 +12,6 @@ import javafx.geometry.Point2D;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -85,7 +84,7 @@ public class Arena
      * @param position the position
      * @return All the elements at the position
      */
-    public List<Element> getElements(Point2D position) {
+    public Collection<Element> getElements(Point2D position) {
         return elements.stream().filter(e -> e.getPosition().equals(position)).collect(Collectors.toList());
     }
 

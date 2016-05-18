@@ -55,7 +55,18 @@ public class ArenaTest {
 		orm.delete(arena);
 		Arena after = orm.find(arena.getId());
 		assertNull(after);
-		List<Element> all = new ElementORM<Element>().findOneByArena(arena);
+		List<Element> all = new ElementORM<Element>().findByArena(arena);
 		assertTrue(all.isEmpty());
+	}
+
+	@Test
+	public void testUpdate() throws Exception {
+		Arena arena = new SimpleArena();
+		orm.create(arena);
+		arena.remove(arena.getElements().stream().findFirst().get());
+		orm.update(arena);
+
+		Arena after = orm.find(arena.getId());
+		assertEquals(68, after.getElements().size());
 	}
 }

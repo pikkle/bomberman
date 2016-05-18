@@ -39,6 +39,10 @@ public abstract class MainORM<T> {
         return dao.delete(object);
     }
 
+    public int update(T object) throws SQLException {
+        return dao.update(object);
+    }
+
     public List<T> findAll() throws SQLException  {
         List<T> objects = dao.queryForAll();
         return objects;

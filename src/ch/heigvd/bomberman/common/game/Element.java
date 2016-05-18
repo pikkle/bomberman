@@ -56,4 +56,13 @@ public abstract class Element extends Observable {
     }
 
     public abstract ImageView render();
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+        if(obj instanceof Element && ((Element) obj).getId() == getId() )
+            return true;
+        return false;
+    }
 }
