@@ -1,4 +1,4 @@
-package ch.heigvd.bomberman.server.database.arena;
+package ch.heigvd.bomberman.server.database.arena.elements;
 
 import com.google.gson.Gson;
 import com.j256.ormlite.field.FieldType;

@@ -2,46 +2,44 @@ package ch.heigvd.bomberman.server.database.arena;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.server.database.MainORM;
-import com.j256.ormlite.dao.Dao;
+import ch.heigvd.bomberman.server.database.arena.elements.ElementORM;
 
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by matthieu.villard on 13.05.2016.
  */
-public class ArenaORM extends MainORM
+public class ArenaORM extends MainORM<Arena>
 {
-	private Dao<Arena, Long> dao;
-
 	public ArenaORM() throws SQLException {
-		super();
+		super(Arena.class);
 		createTable();
-		dao = initDao();
 	}
 
-	public void create(Arena arena) throws SQLException {
-		dao.create(arena);
+	@Override
+	public int create(Arena arena) throws SQLException {
+		int id = super.create(arena);
+		ElementORM orm = new ElementORM();
 		arena.getElements().forEach(element -> {
 			try {
-				ElementORM orm = new ElementORM();
 				orm.create(element);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		});
-	}
-
-	public List<Arena> findAll() throws SQLException  {
-		return dao.queryForAll();
-	}
-
-	public Arena find(long id) throws SQLException {
-		return  dao.queryForId(id);
+		return id;
 	}
 
 	@Override
-	protected Class getTableClass() {
-		return Arena.class;
+	public int delete(Arena arena) throws SQLException {
+		ElementORM orm = new ElementORM();
+		arena.getElements().forEach(element -> {
+			try {
+				orm.delete(element);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
+		return super.delete(arena);
 	}
 }

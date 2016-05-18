@@ -1,8 +1,8 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.server.database.arena.ElementDao;
-import ch.heigvd.bomberman.server.database.arena.PositionConverter;
+import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
+import ch.heigvd.bomberman.server.database.arena.elements.PositionConverter;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import javafx.geometry.Point2D;
@@ -33,9 +33,10 @@ public abstract class Element extends Observable {
     }
 
     public Element(Point2D position, Arena arena) {
-        this();
+        discr = getClass().getName();
         this.position = position;
         this.arena = arena;
+        arena.add(this);
     }
 
     public int getId() {
@@ -44,6 +45,10 @@ public abstract class Element extends Observable {
 
     public String getDiscr(){
         return discr;
+    }
+
+    public Arena getArena(){
+        return arena;
     }
 
     public Point2D getPosition() {

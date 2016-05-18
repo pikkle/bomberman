@@ -57,8 +57,8 @@ public class Bomberman extends DestructibleElement {
         if (arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 &&
                 position.getY() < arena.getHeight() && position.getY() >= 0) {
             this.position = position;
-            //setChanged();
-            //notifyObservers();
+            setChanged();
+            notifyObservers();
         }
     }
 

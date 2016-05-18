@@ -1,4 +1,4 @@
-package ch.heigvd.bomberman.server.database.arena;
+package ch.heigvd.bomberman.server.database.arena.elements;
 
 import ch.heigvd.bomberman.common.game.Element;
 import com.j256.ormlite.dao.BaseDaoImpl;

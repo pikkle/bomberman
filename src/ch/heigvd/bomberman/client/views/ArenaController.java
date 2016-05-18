@@ -43,8 +43,8 @@ public class ArenaController implements Observer {
             gridPane.getRowConstraints().add(rowConstraints);
         }
 
-        //arena.addObserver(this);
         arena.getElements().stream().forEach(element -> {
+            element.addObserver(this);
             displayElement(element);
         });
 
@@ -75,7 +75,8 @@ public class ArenaController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        //displayElement((Element) o);
+        System.out.println("knj");
+        displayElement((Element) o);
     }
 
     private void displayElement(Element element) {
