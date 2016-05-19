@@ -7,4 +7,5 @@ public interface ResponseVisitor {
 	Direction visit(MoveResponse moveResponse);
 	Boolean visit(SuccessResponse successResponse);
 	String visit(HelloResponse helloResponse);
+	Boolean visit(ErrorResponse errorResponse);
 }

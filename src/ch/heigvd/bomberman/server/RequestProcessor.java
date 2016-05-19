@@ -1,12 +1,15 @@
 package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
-import ch.heigvd.bomberman.common.communication.responses.HelloResponse;
-import ch.heigvd.bomberman.common.communication.responses.Response;
-import ch.heigvd.bomberman.common.communication.responses.SuccessResponse;
+import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.game.Player;
+import ch.heigvd.bomberman.server.database.PlayerORM;
+
+import java.sql.SQLException;
 
 public class RequestProcessor implements RequestVisitor {
 	private static RequestProcessor instance = new RequestProcessor();
+	private static Server server = Server.getInstance();
 
 	private RequestProcessor(){	}
 
@@ -32,7 +35,21 @@ public class RequestProcessor implements RequestVisitor {
 
 	@Override
 	public Response visit(AccountCreationRequest request) {
-		return null;
+		try {
+			PlayerORM db = PlayerORM.getInstance();
+			Player p = db.findOneByPseudo(request.getUsername());
+			if (p == null){
+				System.out.println("Creating a new entry in db");
+				p = new Player(request.getUsername(), request.getPassword());
+				db.create(p);
+				return new SuccessResponse(request.getID(), "Successfully created a new account !");
+			} else {
+				return new ErrorResponse(request.getID(), "Account name already exists !");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new ErrorResponse(request.getID(), "Error with the server database !");
 	}
 
 	@Override

@@ -1,7 +1,10 @@
 package ch.heigvd.bomberman.server;
 
+import ch.heigvd.bomberman.server.database.PlayerORM;
+
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,12 +18,18 @@ public class Server {
     private int port;
     private boolean running = true;
     private List<RequestManager> clients;
+    private PlayerORM database;
 
     private Server(int port){
         this.port = port;
         this.clients = new LinkedList<RequestManager>();
+        try {
+            database = PlayerORM.getInstance();
+        } catch (SQLException e) {
+            System.out.println("Database error:");
+            e.printStackTrace();
+        }
     }
-
 
     public static Server getInstance() {
         if (instance == null)
@@ -44,8 +53,12 @@ public class Server {
 
     }
 
-    public synchronized void stop(){
+    public synchronized void stop() {
         running = false;
+    }
+
+    public PlayerORM getDatabase() {
+        return database;
     }
 
     /**
