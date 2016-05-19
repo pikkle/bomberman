@@ -1,6 +1,7 @@
 package ch.heigvd.bomberman.client;
 
 import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.game.Direction;
 
 public class ResponseProcessor implements ResponseVisitor {
 	private static ResponseProcessor instance = new ResponseProcessor();
@@ -14,22 +15,22 @@ public class ResponseProcessor implements ResponseVisitor {
 
 	// TODO: implement processing of responses
 	@Override
-	public void visit(NoResponse noResponse) {
-
+	public Object visit(NoResponse noResponse) {
+		return null;
 	}
 
 	@Override
-	public void visit(MoveResponse moveResponse) {
-
+	public Direction visit(MoveResponse moveResponse) {
+		return null;
 	}
 
 	@Override
-	public void visit(SuccessResponse successResponse) {
-
+	public Boolean visit(SuccessResponse successResponse) {
+		return true;
 	}
 
 	@Override
-	public void visit(HelloResponse helloResponse) {
-
+	public String visit(HelloResponse helloResponse) {
+		return null;
 	}
 }

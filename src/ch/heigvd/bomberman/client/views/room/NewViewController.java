@@ -1,15 +1,16 @@
 package ch.heigvd.bomberman.client.views.room;
 
 import ch.heigvd.bomberman.client.views.ClientMainController;
+import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Arena.RandomArena;
-import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
+import ch.heigvd.bomberman.common.game.Room;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -25,7 +26,7 @@ public class NewViewController
     private AnchorPane mainPane;
 
     @FXML
-    private GridPane gridPane;
+    private StackPane arenaContainer;
 
     @FXML
     private Label lblRoom;
@@ -83,28 +84,8 @@ public class NewViewController
     }
 
     private void refreshArena(){
-        gridPane.getChildren().clear();
-        gridPane.getColumnConstraints().clear();
-        gridPane.getRowConstraints().clear();
-
+        arenaContainer.getChildren().clear();
+        arenaContainer.getChildren().add( new ArenaRenderer(arenas[selected], 225, 225).render());
         lblRoom.setText(selected + 1 + " / " + arenas.length);
-
-        for (int i = 0; i < arenas[selected].getWidth(); i++) {
-            ColumnConstraints column = new ColumnConstraints(15);
-            column.setHgrow(Priority.SOMETIMES);
-            gridPane.getColumnConstraints().add(column);
-        }
-        for (int i = 0; i < arenas[selected].getHeight(); i++) {
-            RowConstraints rowConstraints = new RowConstraints(15);
-            rowConstraints.setVgrow(Priority.SOMETIMES);
-            gridPane.getRowConstraints().add(rowConstraints);
-        }
-
-        arenas[selected].getElements().stream().forEach(element -> {
-            ImageView sprite = element.render();
-            sprite.setFitHeight(15);
-            sprite.setFitWidth(15);
-            gridPane.add(sprite, (int)element.getPosition().getX(), (int)element.getPosition().getY());
-        });
     }
 }

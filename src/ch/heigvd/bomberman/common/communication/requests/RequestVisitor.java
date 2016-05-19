@@ -1,7 +1,6 @@
 package ch.heigvd.bomberman.common.communication.requests;
 
-import ch.heigvd.bomberman.common.communication.requests.*;
-import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.communication.responses.Response;
 
 public interface RequestVisitor {
 	Response visit(HelloRequest request);

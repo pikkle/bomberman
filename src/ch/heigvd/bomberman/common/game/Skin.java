@@ -1,20 +1,20 @@
 package ch.heigvd.bomberman.common.game;
 
-import javafx.scene.image.Image;
+/*public enum Skin {
+    SKIN1("img/skins/skin1.png"),
+    SKIN2("img/skins/skin2.png"),
+    SKIN3("img/skins/skin3.png"),
+    SKIN4("img/skins/skin4.png");
 
-public enum Skin {
-	SKIN1("img/skins/skin1.png"),
-	SKIN2("img/skins/skin2.png"),
-	SKIN3("img/skins/skin3.png"),
-	SKIN4("img/skins/skin4.png");
+    private String path;
 
-	private Image image;
+    private Skin(String s) {
+        path = "ch/heigvd/bomberman/client/" + s;
+    }
 
-	Skin(String s) {
-		image = new Image("ch/heigvd/bomberman/client/" + s);
-	}
+    public String path(){
+        return path;
+    }
+}*/
 
-	public Image getImage() {
-		return image;
-	}
-}
+public enum Skin{SKIN1, SKIN2, SKIN3, SKIN4};
