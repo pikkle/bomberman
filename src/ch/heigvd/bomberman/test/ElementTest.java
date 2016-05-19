@@ -7,7 +7,6 @@ import ch.heigvd.bomberman.common.game.Point;
 import ch.heigvd.bomberman.common.game.Wall;
 import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementORM;
-import javafx.geometry.Point2D;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

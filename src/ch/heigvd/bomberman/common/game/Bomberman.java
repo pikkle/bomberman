@@ -60,8 +60,7 @@ public class Bomberman extends Element {
         if (arena.isEmpty(position) && position.x() < arena.getWidth() && position.x() >= 0 &&
                 position.x() < arena.getHeight() && position.x() >= 0) {
             this.position = position;
-            setChanged();
-            notifyObservers();
+            arena.change(this);
         }
     }
 
@@ -78,15 +77,15 @@ public class Bomberman extends Element {
         }
     }
 
-	/**
-	 * Add a power to the bomberman and apply it.
-	 *
-	 * @param powerUp the power up
-	 */
-	public void givePowerup(PowerUp powerUp) {
-		powerUps.add(powerUp);
-		powerUp.apply(this);
-	}
+    /**
+     * Add a power to the bomberman and apply it.
+     *
+     * @param powerUp the power up
+     */
+    public void givePowerup(PowerUp powerUp) {
+        powerUps.add(powerUp);
+        powerUp.apply(this);
+    }
 
     public void changeBombFactory(BombFactory bombFactory) {
         this.bombFactory = bombFactory;

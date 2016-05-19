@@ -30,8 +30,7 @@ public abstract class Bomb extends Element {
      */
     public void explose() {
         getElementsInRange().forEach(e -> arena.remove(e));
-        setChanged();
-        notifyObservers();
+        arena.remove(this);
     }
 
     /**

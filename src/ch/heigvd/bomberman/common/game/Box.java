@@ -25,7 +25,7 @@ public class Box extends Element {
         super(position, arena);
         arena.add(this);
     }
-    
+
     public Optional<PowerUp> open() {
         // TODO return random powerup
         return Optional.of(new AddBombPowerUp(position, arena));

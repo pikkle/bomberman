@@ -6,15 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by matthieu.villard on 18.05.2016.
  */
-public class ElementRenderer implements ElementVisitor, Observer
+public class ElementRenderer implements ElementVisitor
 {
-	private static HashMap<Element, ImageView> rendered = new HashMap<>();
+	private HashMap<Element, ImageView> rendered = new HashMap<>();
 	private ArenaRenderer renderer;
 
 	public ElementRenderer(ArenaRenderer renderer){
@@ -25,21 +23,18 @@ public class ElementRenderer implements ElementVisitor, Observer
 	public void visit(Wall wall) {
 		if(!rendered.containsKey(wall))
 			rendered.put(wall, new ImageView(new Image("ch/heigvd/bomberman/client/img/wall.png")));
-		render(wall);
 	}
 
 	@Override
 	public void visit(Box box) {
 		if(!rendered.containsKey(box))
 			rendered.put(box, new ImageView(new Image("ch/heigvd/bomberman/client/img/box.png")));
-		render(box);
 	}
 
 	@Override
 	public void visit(Bomb bomb) {
 		if(!rendered.containsKey(bomb))
 			rendered.put(bomb, new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/bomb.png")));
-		render(bomb);
 	}
 
 	@Override
@@ -62,11 +57,7 @@ public class ElementRenderer implements ElementVisitor, Observer
 						bomberman.move(Direction.UP);
 						break;
 					case SPACE:
-						System.out.println("drop");
-						bomberman.dropBomb().ifPresent(b -> {
-							visit(b);
-							b.addObserver(this);
-						});
+						bomberman.dropBomb();
 						break;
 					default:
 						return;
@@ -77,17 +68,11 @@ public class ElementRenderer implements ElementVisitor, Observer
 
 			rendered.put(bomberman, sprite);
 		}
-		render(bomberman);
 	}
 
-	private void render(Element element){
-		renderer.renderElement(rendered.get(element), element.x(), element.y());
-	}
-
-	@Override
-	public void update(Observable o, Object arg)
-	{
-		if (o instanceof Bomb) renderer.destroyElement(rendered.get(o));
-		else ((Element) o).accept(this);
+	public ImageView getSprite(Element element){
+		if(!rendered.containsKey(element))
+			return null;
+		return rendered.get(element);
 	}
 }
