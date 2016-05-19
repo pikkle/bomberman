@@ -5,7 +5,6 @@ import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
 import com.j256.ormlite.table.DatabaseTable;
-import javafx.geometry.Point2D;
 
 import java.util.Optional;
 
@@ -22,7 +21,7 @@ public class Box extends Element {
         super();
     }
 
-    public Box(Point2D position, Arena arena) {
+    public Box(Point position, Arena arena) {
         super(position, arena);
         arena.add(this);
     }

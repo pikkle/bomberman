@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Element;
-import javafx.geometry.Point2D;
+import ch.heigvd.bomberman.common.game.Point;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public abstract class Bomb extends Element {
     protected int countdown;
     protected int blastRange;
 
-    public Bomb(Point2D position, int countdown, int blastRange, Arena arena) {
+    public Bomb(Point position, int countdown, int blastRange, Arena arena) {
         super(position, arena);
         this.countdown = countdown;
         this.blastRange = blastRange;

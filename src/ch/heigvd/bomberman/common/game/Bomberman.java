@@ -6,7 +6,6 @@ import ch.heigvd.bomberman.common.game.bombs.BasicBombFactory;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.bombs.BombFactory;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
-import javafx.geometry.Point2D;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class Bomberman extends Element {
      * @param position The position of the bomberman
      * @param skin     The skin of the bomberman
      */
-    public Bomberman(Point2D position, Skin skin, Arena arena) {
+    public Bomberman(Point position, Skin skin, Arena arena) {
         super(position, arena);
         this.skin = skin;
         arena.add(this);
@@ -43,7 +42,7 @@ public class Bomberman extends Element {
      * @param direction the direction
      */
     public void move(Direction direction) {
-        Point2D position = getPosition();
+        Point position = position();
         switch (direction) {
             case RIGHT:
                 position = position.add(1, 0);
@@ -58,8 +57,8 @@ public class Bomberman extends Element {
                 position = position.add(0, 1);
                 break;
         }
-        if (arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 &&
-                position.getY() < arena.getHeight() && position.getY() >= 0) {
+        if (arena.isEmpty(position) && position.x() < arena.getWidth() && position.x() >= 0 &&
+                position.x() < arena.getHeight() && position.x() >= 0) {
             this.position = position;
             setChanged();
             notifyObservers();

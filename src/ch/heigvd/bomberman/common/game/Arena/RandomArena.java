@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.common.game.Arena;
 
+import ch.heigvd.bomberman.common.game.Point;
 import ch.heigvd.bomberman.common.game.Wall;
-import javafx.geometry.Point2D;
 
 import java.util.Random;
 
@@ -13,18 +13,18 @@ public class RandomArena extends Arena {
         super(15, 15);
 
         for (int i = 0; i < getWidth(); i++) {
-            new Wall(new Point2D(i, 0), this);
-            new Wall(new Point2D(i, getHeight() - 1), this);
+            new Wall(new Point(i, 0), this);
+            new Wall(new Point(i, getHeight() - 1), this);
         }
 
         for (int i = 1; i < getHeight() - 1; i++) {
-            new Wall(new Point2D(0, i), this);
-            new Wall(new Point2D(getWidth() - 1, i), this);
+            new Wall(new Point(0, i), this);
+            new Wall(new Point(getWidth() - 1, i), this);
         }
 
         for (int i = 0; i < 10; ) {
             Random rand = new Random();
-            Point2D position = new Point2D(rand.nextInt(getWidth()), rand.nextInt(getHeight()));
+            Point position = new Point(rand.nextInt(getWidth()), rand.nextInt(getHeight()));
             if (isEmpty(position)) {
                 new Wall(position, this);
                 i++;

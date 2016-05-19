@@ -3,7 +3,7 @@ package ch.heigvd.bomberman.common.game.bombs;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.ElementVisitor;
-import javafx.geometry.Point2D;
+import ch.heigvd.bomberman.common.game.Point;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -19,36 +19,36 @@ import java.util.stream.Stream;
  */
 public class BasicBomb extends Bomb {
 
-	public BasicBomb(Point2D position, int countdown, int blastRange, Arena arena) {
+	public BasicBomb(Point position, int countdown, int blastRange, Arena arena) {
 		super(position, countdown, blastRange, arena);
 		arena.add(this);
 	}
 
 	@Override
 	public List<Element> getElementsInRange() {
-		int x = (int) position.getX();
-		int y = (int) position.getY();
+		int x = (int) position.x();
+		int y = (int) position.y();
 
 		List<Element> up = new ArrayList<>(),
 				left = new ArrayList<>(),
 				right = new ArrayList<>(),
 				down = new ArrayList<>();
 
-		Function<Element, Double> distanceFromBomb = e -> Math.pow(e.getPosition().getX() - x, 2) +
-		                                                  Math.pow(e.getPosition().getY() - y, 2);
+		Function<Element, Double> distanceFromBomb = e -> Math.pow(e.x() - x, 2) +
+		                                                  Math.pow(e.y() - y, 2);
 
 		arena.getElements()
 		     .stream()
-		     .filter(e -> (e.getPosition().getX() == x || e.getPosition().getY() == y) && e != this)
+		     .filter(e -> (e.x() == x || e.y() == y) && e != this)
 		     .filter(e -> {
-			     double pos = (e.getPosition().getX() == x) ? e.getPosition().getY() : e.getPosition().getX();
-			     double ref = (e.getPosition().getX() == x) ? y : x;
+			     double pos = (e.x() == x) ? e.y() : e.x();
+			     double ref = (e.x() == x) ? y : x;
 			     return Math.abs(ref - pos) <= blastRange;
 		     })
 		     .sorted((a, b) -> (int) (distanceFromBomb.apply(a) - distanceFromBomb.apply(b)))
 		     .forEach(e -> {
-			     double ex = e.getPosition().getX();
-			     double ey = e.getPosition().getY();
+			     double ex = e.x();
+			     double ey = e.y();
 			     ((ex == x) ? (ey >= y ? down : up) : (ex > x ? right : left)).add(e);
 		     });
 

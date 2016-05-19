@@ -81,7 +81,7 @@ public class ElementRenderer implements ElementVisitor, Observer
 	}
 
 	private void render(Element element){
-		renderer.renderElement(rendered.get(element), (int)element.getPosition().getX(), (int)element.getPosition().getY());
+		renderer.renderElement(rendered.get(element), element.x(), element.y());
 	}
 
 	@Override
