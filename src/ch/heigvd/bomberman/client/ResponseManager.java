@@ -2,7 +2,6 @@ package ch.heigvd.bomberman.client;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -20,14 +19,12 @@ public class ResponseManager
     private Socket socket;
     private ObjectOutputStream writer;
     private ObjectInputStream reader;
-    private Map<UUID, Thread> threads;
-    private Map<UUID, Response<?>> responses;
+    private Map<UUID, Consumer> callbacks;
     private Thread receiver;
 
     private ResponseManager()
     {
-        threads = new HashMap<>();
-        responses = new HashMap<>();
+        callbacks = new HashMap<>();
     }
 
     public static ResponseManager getInstance()
@@ -37,99 +34,57 @@ public class ResponseManager
         return instance;
     }
 
-    public void connect(String address, int port)
-    {
-        try
-        {
+    public void connect(String address, int port) {
+        try {
             socket = new Socket(address, port);
             writer = new ObjectOutputStream(socket.getOutputStream());
             reader = new ObjectInputStream(socket.getInputStream());
 
-            receiver = new Thread()
-            {
-
+            receiver = new Thread() {
                 @Override
-                public void run()
-                {
-                    while (!this.isInterrupted())
-                    {
-                        try
-                        {
+                public void run() {
+                    while (!this.isInterrupted()) {
+                        try {
                             Response response = (Response) reader.readObject();
-                            responses.put(response.getID(), response);
-                            Thread t = threads.get(response.getID());
-                            threads.remove(t);
-                            synchronized (t)
-                            {
-                                t.notify();
-                            }
-                            response.accept(ResponseProcessor.getInstance());
-                        } catch (IOException | ClassNotFoundException e)
-                        {
+
+                            Consumer callback = callbacks.get(response.getID());
+                            new Thread(() -> {
+                                callback.accept(response.accept(ResponseProcessor.getInstance()));
+                            }).start();
+                        } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
                     }
                 }
             };
             receiver.start();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void disconnect() throws IOException
-    {
+    public void disconnect() throws IOException {
         receiver.interrupt();
         writer.close();
         reader.close();
         socket.close();
     }
 
-    public boolean isConnected()
-    {
+    public boolean isConnected() {
         return socket != null && socket.isConnected();
     }
 
-    public void loginRequest(String username, String password, Consumer<Boolean> callback)
-    {
+    public void loginRequest(String username, String password, Consumer<Boolean> callback) {
         LoginRequest r = new LoginRequest(username, password);
         send(r, callback);
     }
 
-    private <T> void send(Request<T> r, Consumer<? super T> callback)
-    {
-        try
-        {
+    private <T> void send(Request<T> r, Consumer<? super T> callback) {
+        try {
             writer.writeObject(r);
-
-            Thread sender = new Thread()
-            {
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        synchronized (this)
-                        {
-                            this.wait();
-                        }
-                        System.out.println("Hello world");
-                        Response<T> response = (Response<T>) responses.get(r.getID());
-                        responses.remove(response);
-                        callback.accept(response.accept(ResponseProcessor.getInstance()));
-
-                    } catch (InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            threads.put(r.getID(), sender);
-            sender.start();
-
-        } catch (IOException e)
-        {
+	        if (callback != null)
+                callbacks.put(r.getID(), callback);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
