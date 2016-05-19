@@ -13,9 +13,17 @@ import java.util.List;
  */
 public class ArenaORM extends MainORM<Arena>
 {
-	public ArenaORM() throws SQLException {
+	private static ArenaORM instance;
+
+	private ArenaORM() throws SQLException {
 		super(Arena.class);
 		createTable();
+	}
+
+	public static synchronized ArenaORM getInstance() throws SQLException {
+		if (instance  == null)
+			instance  = new ArenaORM();
+		return instance;
 	}
 
 	@Override
@@ -27,7 +35,7 @@ public class ArenaORM extends MainORM<Arena>
 
 	@Override
 	public int delete(Arena arena) throws SQLException {
-		ElementORM orm = new ElementORM();
+		ElementORM orm = ElementORM.getInstance();
 		List<Element> elements = orm.findByArena(arena);
 		elements.forEach(element -> {
 			try {
@@ -47,7 +55,7 @@ public class ArenaORM extends MainORM<Arena>
 	}
 
 	private void updateElements(Arena arena) throws SQLException{
-		ElementORM<Element> orm = new ElementORM();
+		ElementORM<Element> orm = ElementORM.getInstance();
 		List<Element> elements = orm.findByArena(arena);
 
 		// delete elements removed

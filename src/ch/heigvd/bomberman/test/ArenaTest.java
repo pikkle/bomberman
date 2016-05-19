@@ -22,7 +22,7 @@ public class ArenaTest {
 
 	@Before
 	public void setUp() throws Exception {
-		orm = new ArenaORM();
+		orm = ArenaORM.getInstance();
 	}
 
 	@After
@@ -55,7 +55,7 @@ public class ArenaTest {
 		orm.delete(arena);
 		Arena after = orm.find(arena.getId());
 		assertNull(after);
-		List<Element> all = new ElementORM<Element>().findByArena(arena);
+		List<Element> all = ElementORM.getInstance().findByArena(arena);
 		assertTrue(all.isEmpty());
 	}
 

@@ -9,7 +9,15 @@ import java.sql.SQLException;
  */
 public class BoxORM extends ElementORM<Box>
 {
-	public BoxORM() throws SQLException {
+	private static BoxORM instance;
+
+	private BoxORM() throws SQLException {
 		super(Box.class);
+	}
+
+	public static synchronized ElementORM getInstance() throws SQLException {
+		if (instance  == null)
+			instance  = new BoxORM();
+		return instance;
 	}
 }
