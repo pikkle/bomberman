@@ -33,4 +33,10 @@ public class ResponseProcessor implements ResponseVisitor {
 	public String visit(HelloResponse helloResponse) {
 		return null;
 	}
+
+	@Override
+	public Boolean visit(ErrorResponse errorResponse)
+	{
+		return null;
+	}
 }

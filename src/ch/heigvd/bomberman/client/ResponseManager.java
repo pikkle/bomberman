@@ -2,6 +2,12 @@ package ch.heigvd.bomberman.client;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -48,9 +54,16 @@ public class ResponseManager
                             Response response = (Response) reader.readObject();
 
                             Consumer callback = callbacks.get(response.getID());
-                            new Thread(() -> {
-                                callback.accept(response.accept(ResponseProcessor.getInstance()));
-                            }).start();
+                            Platform.runLater(new Runnable()
+                                              {
+                                                  @Override
+                                                  public void run()
+                                                  {
+                                                      callback.accept(response.accept(ResponseProcessor.getInstance()));
+                                                  }
+                                              });
+
+
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -76,6 +89,11 @@ public class ResponseManager
 
     public void loginRequest(String username, String password, Consumer<Boolean> callback) {
         LoginRequest r = new LoginRequest(username, password);
+        send(r, callback);
+    }
+
+    public void newAccountRequest(String username, String pwd, Consumer<Boolean> callback){
+        AccountCreationRequest r = new AccountCreationRequest(username, pwd);
         send(r, callback);
     }
 
