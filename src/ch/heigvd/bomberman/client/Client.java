@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * Client executable class
  */
@@ -33,10 +35,21 @@ public class Client extends Application {
         loader.setLocation(Client.class.getResource("views/ClientMain.fxml"));
         mainLayout = loader.load();
 
+        controller = loader.getController();
+        controller.setMainApp(this);
+
+        primaryStage.setOnCloseRequest(event -> {
+            try {
+                controller.getRm().disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+
         primaryStage.setScene(new Scene(mainLayout));
         primaryStage.show();
 
-        controller = loader.getController();
-        controller.setMainApp(this);
     }
 }

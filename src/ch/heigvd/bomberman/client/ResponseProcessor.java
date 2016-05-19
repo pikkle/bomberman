@@ -36,6 +36,6 @@ public class ResponseProcessor implements ResponseVisitor {
 
 	@Override
 	public Boolean visit(ErrorResponse errorResponse) {
-		return null;
+		return false;
 	}
 }

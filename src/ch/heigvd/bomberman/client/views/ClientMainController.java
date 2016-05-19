@@ -58,6 +58,7 @@ public class ClientMainController {
     @FXML
     private void initialize() {
 
+
         rm = ResponseManager.getInstance();
         rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
 
@@ -76,6 +77,8 @@ public class ClientMainController {
         {
             e.printStackTrace();
         }
+
+
     }
 
     @FXML
@@ -138,10 +141,10 @@ public class ClientMainController {
         controller = loader.getController();
         controller.setMainController(this);
 
-        /*stage.setOnCloseRequest(event -> {
+        stage.setOnCloseRequest(event -> {
             Platform.exit();
             stage.close();
-        });*/
+        });
 
         stage.initModality(Modality.APPLICATION_MODAL);
 

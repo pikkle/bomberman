@@ -24,8 +24,8 @@ public class NewViewController {
     @FXML
     private Pane mainPane;
 
-    @FXML private TextField userId;
-    @FXML private PasswordField pwd;
+    @FXML private TextField userId, email;
+    @FXML private PasswordField pwd, pwdc;
 
     @FXML
     private void initialize()
@@ -41,10 +41,52 @@ public class NewViewController {
     @FXML
     private void confirm()
     {
-        mainController.getRm().newAccountRequest(userId.getText(), pwd.getText(), aBoolean -> {
-            test();
+        if (userId.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The user name is empty");
+            alert.showAndWait();
+        }
 
-        });
+        else if (email.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The email is empty");
+            alert.showAndWait();
+        }
+
+        else if (pwd.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The password name is empty");
+            alert.showAndWait();
+        }
+
+        else if (!pwd.getText().equals(pwdc.getText())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The two password are not the same");
+            alert.showAndWait();
+        }
+
+        else {
+            mainController.getRm().newAccountRequest(userId.getText(), pwd.getText(), aBoolean -> {
+                if (aBoolean) {
+                    creationSucces();
+                } else {
+                    creationFailure();
+                }
+            });
+        }
+    }
+
+    private void creationSucces(){
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setContentText("Your acount has been created");
+        alert.showAndWait();
+        ((Stage)mainPane.getScene().getWindow()).close();
+    }
+
+    private void creationFailure(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("An error uccured while creating your acount");
+        alert.showAndWait();
     }
 
     @FXML
@@ -53,10 +95,4 @@ public class NewViewController {
         ((Stage)mainPane.getScene().getWindow()).close();
     }
 
-    public void test()
-    {
-        System.out.println("yolo");
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.showAndWait();
-    }
 }

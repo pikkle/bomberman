@@ -35,10 +35,10 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label text="User id:" />
+                        <Label text="User name" />
                         <Label text="Password:" GridPane.rowIndex="1" />
                         <TextField fx:id="userId" prefHeight="27.0" prefWidth="155.0" GridPane.columnIndex="1" />
-                        <PasswordField fx:id="mdp" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="pwd" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     </children>
                 </GridPane>
                 <ButtonBar prefHeight="34.0" prefWidth="335.0">

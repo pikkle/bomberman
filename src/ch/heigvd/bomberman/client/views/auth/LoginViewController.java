@@ -8,9 +8,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -41,7 +39,7 @@ public class LoginViewController {
     private TextField userId;
 
     @FXML
-    private PasswordField mdp;
+    private PasswordField pwd;
 
     @FXML
     private ImageView serverStatusIcon;
@@ -65,18 +63,40 @@ public class LoginViewController {
     @FXML
     private void login()
     {
-        String hashPasswd = mdp.getText();
-        mainController.getRm().loginRequest(userId.getText(), hashPasswd, aBoolean -> {
-            if (aBoolean)
-            {
-                System.out.println("ok");
-            }
-            else
-            {
-                System.out.println("not ok");
-            }
+        if (userId.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The user name is empty");
+            alert.showAndWait();
+        }
+        else if (pwd.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The password name is empty");
+            alert.showAndWait();
+        }
+        else {
+            String hashPasswd = pwd.getText();
+            mainController.getRm().loginRequest(userId.getText(), hashPasswd, aBoolean -> {
+                if (aBoolean) {
+                    loginSucces();
+                } else {
+                    loginFailure();
+                }
+            });
+        }
+    }
 
-        });
+    private void loginSucces(){
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setContentText("Your have been loged in");
+        alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        alert.showAndWait();
+        ((Stage)mainPane.getScene().getWindow()).close();
+    }
+
+    private void loginFailure(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("An error uccured while loging in");
+        alert.showAndWait();
     }
 
 

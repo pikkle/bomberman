@@ -54,14 +54,7 @@ public class ResponseManager
                             Response response = (Response) reader.readObject();
 
                             Consumer callback = callbacks.get(response.getID());
-                            Platform.runLater(new Runnable()
-                                              {
-                                                  @Override
-                                                  public void run()
-                                                  {
-                                                      callback.accept(response.accept(ResponseProcessor.getInstance()));
-                                                  }
-                                              });
+                            Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
 
 
                         } catch (IOException | ClassNotFoundException e) {
