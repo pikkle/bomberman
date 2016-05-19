@@ -1,5 +1,6 @@
 package ch.heigvd.bomberman.server.database.arena.elements;
 
+import ch.heigvd.bomberman.common.game.Point;
 import com.google.gson.Gson;
 import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.field.SqlType;
@@ -25,7 +26,7 @@ public class PositionsConverter extends StringType
 
     @Override
     public Object javaToSqlArg(FieldType fieldType, Object javaObject) {
-        Collection<Point2D> positions = (Collection) javaObject;
+        Collection<Point> positions = (Collection) javaObject;
         return positions != null ? getJsonFromMyFieldClass(positions) : null;
     }
 
@@ -34,12 +35,12 @@ public class PositionsConverter extends StringType
         return sqlArg != null ? getMyFieldClassFromJson((String) sqlArg) : null;
     }
 
-    private String getJsonFromMyFieldClass(Collection<Point2D> positions) {
+    private String getJsonFromMyFieldClass(Collection<Point> positions) {
         Gson gson = new Gson();
         return gson.toJson(positions);
     }
 
-    private Collection<Point2D> getMyFieldClassFromJson(String json) {
+    private Collection<Point> getMyFieldClassFromJson(String json) {
         Gson gson = new Gson();
         return gson.fromJson(json, Collection.class);
     }
