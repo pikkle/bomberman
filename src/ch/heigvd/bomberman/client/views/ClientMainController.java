@@ -6,6 +6,7 @@ import ch.heigvd.bomberman.client.views.auth.LoginViewController;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.client.views.room.NewViewController;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena.BasicArena;
 import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
@@ -98,7 +99,7 @@ public class ClientMainController {
         stage.initModality(Modality.APPLICATION_MODAL);
 
         try {
-            Arena arena = new SimpleArena();
+            Arena arena = new BasicArena(15, 15);
             arena.putBomberman();
             stage.setScene(new Scene(new ArenaRenderer(arena, 750, 750).render()));
         } catch (Exception e) {
