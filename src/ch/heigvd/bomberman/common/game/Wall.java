@@ -26,4 +26,19 @@ public class Wall extends Element
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
     }
+
+    @Override
+    public boolean isDestructible() {
+        return false;
+    }
+
+    @Override
+    public boolean isBlastAbsorber() {
+        return true;
+    }
+
+    @Override
+    public boolean isTraversable() {
+        return false;
+    }
 }

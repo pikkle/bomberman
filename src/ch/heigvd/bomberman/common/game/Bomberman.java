@@ -15,11 +15,11 @@ import java.util.Optional;
 /**
  * Represents a bomberman character in-game
  */
-public class Bomberman extends DestructibleElement {
+public class Bomberman extends Element {
     private BombFactory bombFactory = new BasicBombFactory(arena);
-    private int maxBombs = 1;
     private List<PowerUp> powerUps = new LinkedList<>();
     private Skin skin;
+    private int maxBombs = 0;
 
     /**
      * Constructs a Bomberman at a given position and a given skin
@@ -100,5 +100,20 @@ public class Bomberman extends DestructibleElement {
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean isDestructible() {
+        return true;
+    }
+
+    @Override
+    public boolean isBlastAbsorber() {
+        return false;
+    }
+
+    @Override
+    public boolean isTraversable() {
+        return true;
     }
 }

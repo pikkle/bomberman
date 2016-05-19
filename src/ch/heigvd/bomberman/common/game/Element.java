@@ -27,8 +27,7 @@ public abstract class Element extends Observable {
     protected Arena arena;
 
     public Element() {
-        discr = getClass().getName();
-        position = new Point2D(0, 0);
+        this(Point2D.ZERO, null);
     }
 
     public Element(Point2D position, Arena arena) {
@@ -55,12 +54,12 @@ public abstract class Element extends Observable {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj)
-            return true;
-        if(obj instanceof Element && getId() != 0 && ((Element) obj).getId() == getId() )
-            return true;
-        return false;
+	    return this == obj || (obj instanceof Element && getId() != 0 && ((Element) obj).getId() == getId());
     }
 
     public abstract void accept(ElementVisitor visitor);
+
+    public abstract boolean isDestructible();
+    public abstract boolean isBlastAbsorber();
+    public abstract boolean isTraversable();
 }

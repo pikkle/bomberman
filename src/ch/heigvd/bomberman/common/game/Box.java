@@ -16,7 +16,7 @@ import java.util.Optional;
  * @author Adriano Ruberto
  */
 @DatabaseTable(tableName = "wall", daoClass = ElementDao.class)
-public class Box extends DestructibleElement {
+public class Box extends Element {
 
     public Box() {
         super();
@@ -35,5 +35,20 @@ public class Box extends DestructibleElement {
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean isDestructible() {
+        return true;
+    }
+
+    @Override
+    public boolean isBlastAbsorber() {
+        return true;
+    }
+
+    @Override
+    public boolean isTraversable() {
+        return false;
     }
 }

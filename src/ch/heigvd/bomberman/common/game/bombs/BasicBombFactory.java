@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
  */
 public class BasicBombFactory extends BombFactory {
 	public BasicBombFactory(Arena arena) {
-		super(3, 1, arena, 1);
+		super(3, 10, arena, 1);
 	}
 
 	@Override
