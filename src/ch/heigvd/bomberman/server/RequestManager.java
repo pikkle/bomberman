@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.game.Player;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -14,12 +15,16 @@ public class RequestManager extends Thread {
     private ObjectOutputStream writer;
     private ObjectInputStream reader;
     public boolean running = true;
-    private PlayerSession player;
+    private PlayerSession playerSession;
+	private Player player;
     private Room room;
+    private RequestProcessor requestProcessor;
+    private boolean loggedIn = false;
 
 
     public RequestManager(Socket socket) {
         this.socket = socket;
+        this.requestProcessor = new RequestProcessor(this);
         try {
             this.writer = new ObjectOutputStream(socket.getOutputStream());
             this.reader = new ObjectInputStream(socket.getInputStream());
@@ -27,10 +32,6 @@ public class RequestManager extends Thread {
             e.printStackTrace();
         }
 
-        // TODO: remove the creation of a player session here. He is normally created when the client joins a room or creates one
-        player = new PlayerSession();
-        room = new Room("Test", "", 1);
-        room.addPlayer(player);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class RequestManager extends Thread {
         while (running) {
             try {
                 Request request = (Request) reader.readObject();
-                Response response = request.accept(RequestProcessor.getInstance());
+                Response response = request.accept(requestProcessor);
                 if (response.isSendable()) writer.writeObject(response);
             } catch (EOFException e) {
                 System.out.println("Client closed the connection");
@@ -50,4 +51,16 @@ public class RequestManager extends Thread {
             }
         }
     }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean newState) {
+        loggedIn = newState;
+    }
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 }
