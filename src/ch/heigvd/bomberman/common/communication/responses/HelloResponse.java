@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public class HelloResponse extends Response<String> {
 	private String message;
-
 	public HelloResponse(UUID uuid, String message) {
 		super(uuid);
 		this.message = message;
