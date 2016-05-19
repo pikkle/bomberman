@@ -50,7 +50,6 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public synchronized void stop() {

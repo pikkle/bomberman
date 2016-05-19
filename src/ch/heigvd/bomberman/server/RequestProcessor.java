@@ -8,13 +8,12 @@ import ch.heigvd.bomberman.server.database.PlayerORM;
 import java.sql.SQLException;
 
 public class RequestProcessor implements RequestVisitor {
-	private static RequestProcessor instance = new RequestProcessor();
+	private RequestManager requestManager;
 	private static Server server = Server.getInstance();
+	private static PlayerORM db = server.getDatabase();
 
-	private RequestProcessor(){	}
-
-	public static RequestVisitor getInstance() {
-		return instance;
+	public RequestProcessor(RequestManager requestManager){
+		this.requestManager = requestManager;
 	}
 
 	public Response visit(HelloRequest request){
@@ -35,11 +34,14 @@ public class RequestProcessor implements RequestVisitor {
 
 	@Override
 	public Response visit(AccountCreationRequest request) {
+		if (requestManager.isLoggedIn())
+			return new ErrorResponse(request.getID(), "Already logged in");
 		try {
-			PlayerORM db = PlayerORM.getInstance();
 			Player p = db.findOneByPseudo(request.getUsername());
 			if (p == null){
 				System.out.println("Creating a new entry in db");
+				System.out.println("Username: " + request.getUsername());
+				System.out.println("Password: " + request.getPassword());
 				p = new Player(request.getUsername(), request.getPassword());
 				db.create(p);
 				return new SuccessResponse(request.getID(), "Successfully created a new account !");
@@ -53,11 +55,23 @@ public class RequestProcessor implements RequestVisitor {
 	}
 
 	@Override
-	public Response visit(LoginRequest loginRequest) {
+	public Response visit(LoginRequest request) {
+		if (requestManager.isLoggedIn())
+			return new ErrorResponse(request.getID(), "Already logged in");
 		System.out.println("Connection from user");
-		System.out.println("Username: " + loginRequest.getUsername());
-		System.out.println("Password: " + loginRequest.getPassword());
-		return new SuccessResponse(loginRequest.getID(), "Connection successful");
+		System.out.println("Username: " + request.getUsername());
+		System.out.println("Password: " + request.getPassword());
+		try {
+			Player p = db.findOneByPseudo(request.getUsername());
+			if (p.getPassword().equals(request.getPassword())){
+				requestManager.setLoggedIn(true);
+				requestManager.setPlayer(p);
+				return new SuccessResponse(request.getID(), "Successfully logged in !");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new ErrorResponse(request.getID(), "Wrong credentials");
 	}
 
 }
