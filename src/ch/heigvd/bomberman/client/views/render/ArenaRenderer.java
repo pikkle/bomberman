@@ -1,6 +1,7 @@
 package ch.heigvd.bomberman.client.views.render;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Element;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -8,31 +9,39 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  * Created by matthieu.villard on 18.05.2016.
  */
-public class ArenaRenderer
+public class ArenaRenderer implements Observer
 {
 	private Arena arena;
 	private GridPane gridPane;
 	private double cellWidth;
 	private double cellHeight;
+	private ElementRenderer elementRenderer;
 
 	public ArenaRenderer(Arena arena, double totalWidth, double totalHeight) {
 		this.arena = arena;
+		arena.addObserver(this);
 		cellHeight = totalHeight / arena.getHeight();
 		cellWidth = totalWidth / arena.getWidth();
+		elementRenderer = new ElementRenderer(this);
 	}
 
-	public void renderElement(ImageView sprite, int x, int y){
-		if (gridPane.getChildren().contains(sprite)) gridPane.getChildren().remove(sprite);
-		sprite.setFitHeight(cellHeight);
-		sprite.setFitWidth(cellWidth);
-		gridPane.add(sprite, x, y);
-	}
-
-	public void destroyElement(ImageView sprite){
-		gridPane.getChildren().remove(sprite);
+	public void renderElement(Element element){
+		if(elementRenderer.getSprite(element) != null && gridPane.getChildren().contains(elementRenderer.getSprite(element))){
+			gridPane.getChildren().remove(elementRenderer.getSprite(element));
+		}
+		if(arena.getElements().contains(element)){
+			element.accept(elementRenderer);
+			ImageView sprite = elementRenderer.getSprite(element);
+			sprite.setFitHeight(cellHeight);
+			sprite.setFitWidth(cellWidth);
+			gridPane.add(sprite, element.x(), (int)element.y());
+		}
 	}
 
 	public GridPane render(){
@@ -52,11 +61,15 @@ public class ArenaRenderer
 			gridPane.getRowConstraints().add(rowConstraints);
 		}
 
-		ElementRenderer elementRenderer = new ElementRenderer(this);
 		arena.getElements().stream().forEach(element -> {
-			element.addObserver(elementRenderer);
-			element.accept(elementRenderer);
+			renderElement(element);
 		});
 		return gridPane;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		Element element = (Element)arg;
+		renderElement(element);
 	}
 }

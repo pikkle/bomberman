@@ -6,7 +6,6 @@ import ch.heigvd.bomberman.common.game.bombs.BasicBombFactory;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.bombs.BombFactory;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
-import javafx.geometry.Point2D;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,11 +14,11 @@ import java.util.Optional;
 /**
  * Represents a bomberman character in-game
  */
-public class Bomberman extends DestructibleElement {
+public class Bomberman extends Element {
     private BombFactory bombFactory = new BasicBombFactory(arena);
-    private int maxBombs = 1;
     private List<PowerUp> powerUps = new LinkedList<>();
     private Skin skin;
+    private int maxBombs = 0;
 
     /**
      * Constructs a Bomberman at a given position and a given skin
@@ -27,7 +26,7 @@ public class Bomberman extends DestructibleElement {
      * @param position The position of the bomberman
      * @param skin     The skin of the bomberman
      */
-    public Bomberman(Point2D position, Skin skin, Arena arena) {
+    public Bomberman(Point position, Skin skin, Arena arena) {
         super(position, arena);
         this.skin = skin;
         arena.add(this);
@@ -43,7 +42,7 @@ public class Bomberman extends DestructibleElement {
      * @param direction the direction
      */
     public void move(Direction direction) {
-        Point2D position = getPosition();
+        Point position = position();
         switch (direction) {
             case RIGHT:
                 position = position.add(1, 0);
@@ -58,11 +57,10 @@ public class Bomberman extends DestructibleElement {
                 position = position.add(0, 1);
                 break;
         }
-        if (arena.isEmpty(position) && position.getX() < arena.getWidth() && position.getX() >= 0 &&
-                position.getY() < arena.getHeight() && position.getY() >= 0) {
+        if (arena.isEmpty(position) && position.x() < arena.getWidth() && position.x() >= 0 &&
+                position.x() < arena.getHeight() && position.x() >= 0) {
             this.position = position;
-            setChanged();
-            notifyObservers();
+            arena.change(this);
         }
     }
 
@@ -79,15 +77,15 @@ public class Bomberman extends DestructibleElement {
         }
     }
 
-	/**
-	 * Add a power to the bomberman and apply it.
-	 *
-	 * @param powerUp the power up
-	 */
-	public void givePowerup(PowerUp powerUp) {
-		powerUps.add(powerUp);
-		powerUp.apply(this);
-	}
+    /**
+     * Add a power to the bomberman and apply it.
+     *
+     * @param powerUp the power up
+     */
+    public void givePowerup(PowerUp powerUp) {
+        powerUps.add(powerUp);
+        powerUp.apply(this);
+    }
 
     public void changeBombFactory(BombFactory bombFactory) {
         this.bombFactory = bombFactory;
@@ -100,5 +98,20 @@ public class Bomberman extends DestructibleElement {
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean isDestructible() {
+        return true;
+    }
+
+    @Override
+    public boolean isBlastAbsorber() {
+        return false;
+    }
+
+    @Override
+    public boolean isTraversable() {
+        return true;
     }
 }

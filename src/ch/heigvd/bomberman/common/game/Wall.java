@@ -3,7 +3,6 @@ package ch.heigvd.bomberman.common.game;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
 import com.j256.ormlite.table.DatabaseTable;
-import javafx.geometry.Point2D;
 
 import java.net.URISyntaxException;
 
@@ -17,7 +16,7 @@ public class Wall extends Element
         super();
     }
 
-    public Wall(Point2D position, Arena arena) throws URISyntaxException {
+    public Wall(Point position, Arena arena) throws URISyntaxException {
         super(position, arena);
         arena.add(this);
     }
@@ -25,5 +24,20 @@ public class Wall extends Element
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean isDestructible() {
+        return false;
+    }
+
+    @Override
+    public boolean isBlastAbsorber() {
+        return true;
+    }
+
+    @Override
+    public boolean isTraversable() {
+        return false;
     }
 }

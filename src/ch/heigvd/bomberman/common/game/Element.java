@@ -5,7 +5,6 @@ import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
 import ch.heigvd.bomberman.server.database.arena.elements.PositionConverter;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import javafx.geometry.Point2D;
 
 import java.util.Observable;
 
@@ -21,17 +20,16 @@ public abstract class Element extends Observable {
     private String discr;
 
     @DatabaseField(columnName = "position", canBeNull = false, persisterClass = PositionConverter.class)
-    protected Point2D position;
+    protected Point position;
 
     @DatabaseField (foreign = true, foreignAutoRefresh = true, columnName = "arena")
     protected Arena arena;
 
     public Element() {
-        discr = getClass().getName();
-        position = new Point2D(0, 0);
+        this(new Point(), null);
     }
 
-    public Element(Point2D position, Arena arena) {
+    public Element(Point position, Arena arena) {
         discr = getClass().getName();
         this.position = position;
         this.arena = arena;
@@ -49,18 +47,20 @@ public abstract class Element extends Observable {
         return arena;
     }
 
-    public Point2D getPosition() {
-        return position;
-    }
+    public int x() {return position.x();}
+
+    public int y() {return position.y();}
+
+    public Point position() {return position;}
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj)
-            return true;
-        if(obj instanceof Element && getId() != 0 && ((Element) obj).getId() == getId() )
-            return true;
-        return false;
+        return this == obj || (obj instanceof Element && getId() != 0 && ((Element) obj).getId() == getId());
     }
 
     public abstract void accept(ElementVisitor visitor);
+
+    public abstract boolean isDestructible();
+    public abstract boolean isBlastAbsorber();
+    public abstract boolean isTraversable();
 }

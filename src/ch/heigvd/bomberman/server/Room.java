@@ -2,8 +2,8 @@ package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Point;
 import ch.heigvd.bomberman.common.game.Skin;
-import javafx.geometry.Point2D;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class Room {
 
 	public synchronized void start() {
 		for (PlayerSession player : players) {
-			player.setBomberman(new Bomberman(new Point2D(0,0), Skin.SKIN1, null));
+			player.setBomberman(new Bomberman(new Point(0, 0), Skin.SKIN1, null));
 		}
 		running = true;
 	}

@@ -6,12 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Room {
-	private String name;
-	private String password;
-	private int minPlayer;
-	private Arena arena;
-	private boolean running = false;
-	private List<Player> players = new LinkedList<Player>();
+    private String name;
+    private String password;
+    private int minPlayer;
+    private Arena arena;
+    private boolean running = false;
+    private List<Player> players = new LinkedList<Player>();
 
     public Room(String name, Arena arena) {
         this.name = name;
@@ -66,11 +66,11 @@ public class Room {
         return arena;
     }
 
-	public synchronized void addPlayer(Player player) {
-		players.add(player);
-	}
+    public synchronized void addPlayer(Player player) {
+        players.add(player);
+    }
 
-	public synchronized void removePlayer(Player player) {
-		players.remove(player);
-	}
+    public synchronized void removePlayer(Player player) {
+        players.remove(player);
+    }
 }

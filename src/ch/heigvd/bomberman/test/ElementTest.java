@@ -3,10 +3,10 @@ package ch.heigvd.bomberman.test;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
 import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.Point;
 import ch.heigvd.bomberman.common.game.Wall;
 import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementORM;
-import javafx.geometry.Point2D;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class ElementTest {
 
 	@Test
 	public void testCreate() throws Exception {
-		Element element = new Wall(new Point2D(13, 6), arena);
+		Element element = new Wall(new Point(13, 6), arena);
 		elementOrm.create(element);
 		assertNotNull(element.getId());
 		List<Element> all = elementOrm.findByArena(arena);

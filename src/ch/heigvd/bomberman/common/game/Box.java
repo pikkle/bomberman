@@ -5,7 +5,6 @@ import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
 import com.j256.ormlite.table.DatabaseTable;
-import javafx.geometry.Point2D;
 
 import java.util.Optional;
 
@@ -16,17 +15,17 @@ import java.util.Optional;
  * @author Adriano Ruberto
  */
 @DatabaseTable(tableName = "wall", daoClass = ElementDao.class)
-public class Box extends DestructibleElement {
+public class Box extends Element {
 
     public Box() {
         super();
     }
 
-    public Box(Point2D position, Arena arena) {
+    public Box(Point position, Arena arena) {
         super(position, arena);
         arena.add(this);
     }
-    
+
     public Optional<PowerUp> open() {
         // TODO return random powerup
         return Optional.of(new AddBombPowerUp(position, arena));
@@ -35,5 +34,20 @@ public class Box extends DestructibleElement {
     @Override
     public void accept(ElementVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean isDestructible() {
+        return true;
+    }
+
+    @Override
+    public boolean isBlastAbsorber() {
+        return true;
+    }
+
+    @Override
+    public boolean isTraversable() {
+        return false;
     }
 }

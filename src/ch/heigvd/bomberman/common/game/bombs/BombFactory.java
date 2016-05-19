@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import javafx.geometry.Point2D;
+import ch.heigvd.bomberman.common.game.Point;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -28,7 +28,7 @@ public abstract class BombFactory implements Observer {
 	 * @param position the position
 	 * @return the new bomb
 	 */
-	public abstract Bomb create(Point2D position);
+	public abstract Bomb create(Point position);
 
 
 	@Override

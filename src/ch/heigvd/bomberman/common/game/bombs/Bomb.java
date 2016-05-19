@@ -1,17 +1,17 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.DestructibleElement;
-import javafx.geometry.Point2D;
+import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.Point;
 
 import java.util.List;
 
 
-public abstract class Bomb extends DestructibleElement {
+public abstract class Bomb extends Element {
     protected int countdown;
     protected int blastRange;
 
-    public Bomb(Point2D position, int countdown, int blastRange, Arena arena) {
+    public Bomb(Point position, int countdown, int blastRange, Arena arena) {
         super(position, arena);
         this.countdown = countdown;
         this.blastRange = blastRange;
@@ -30,12 +30,26 @@ public abstract class Bomb extends DestructibleElement {
      */
     public void explose() {
         getElementsInRange().forEach(e -> arena.remove(e));
-        setChanged();
-        notifyObservers();
+        arena.remove(this);
     }
 
     /**
      * @return the elements in range of the blastRange
      */
-    public abstract List<DestructibleElement> getElementsInRange();
+    public abstract List<Element> getElementsInRange();
+
+    @Override
+    public boolean isDestructible() {
+        return true;
+    }
+
+    @Override
+    public boolean isBlastAbsorber() {
+        return true;
+    }
+
+    @Override
+    public boolean isTraversable() {
+        return false;
+    }
 }
