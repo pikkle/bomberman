@@ -17,4 +17,4 @@ package ch.heigvd.bomberman.common.game;
     }
 }*/
 
-public enum Skin{skin1, skin2, skin3, skin4};
+public enum Skin{SKIN1, SKIN2, SKIN3, SKIN4};

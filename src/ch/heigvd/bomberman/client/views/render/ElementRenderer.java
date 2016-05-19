@@ -62,7 +62,11 @@ public class ElementRenderer implements ElementVisitor, Observer
 						bomberman.move(Direction.UP);
 						break;
 					case SPACE:
-						//bomberman.dropBomb().ifPresent(this::visit);
+						System.out.println("drop");
+						bomberman.dropBomb().ifPresent(b -> {
+							visit(b);
+							b.addObserver(this);
+						});
 						break;
 					default:
 						return;
@@ -81,7 +85,9 @@ public class ElementRenderer implements ElementVisitor, Observer
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		((Element) o).accept(this);
+	public void update(Observable o, Object arg)
+	{
+		if (o instanceof Bomb) renderer.destroyElement(rendered.get(o));
+		else ((Element) o).accept(this);
 	}
 }

@@ -19,6 +19,7 @@ public class Wall extends Element
 
     public Wall(Point2D position, Arena arena) throws URISyntaxException {
         super(position, arena);
+        arena.add(this);
     }
 
     @Override

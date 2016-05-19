@@ -31,6 +31,10 @@ public class ArenaRenderer
 		gridPane.add(sprite, x, y);
 	}
 
+	public void destroyElement(ImageView sprite){
+		gridPane.getChildren().remove(sprite);
+	}
+
 	public GridPane render(){
 		gridPane = new GridPane();
 		gridPane.setAlignment(Pos.CENTER);

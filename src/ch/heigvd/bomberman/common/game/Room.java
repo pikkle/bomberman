@@ -13,13 +13,13 @@ public class Room {
     private boolean running = false;
     private List<Player> players = new LinkedList<Player>();
 
-    public Room(String name, Arena arena){
+    public Room(String name, Arena arena) {
         this.name = name;
         this.arena = arena;
         minPlayer = 2;
     }
 
-    public Room(String name, Arena arena, int minPlayer){
+    public Room(String name, Arena arena, int minPlayer) {
         this.name = name;
         this.arena = arena;
         this.minPlayer = minPlayer;
@@ -27,11 +27,12 @@ public class Room {
 
     /**
      * Creates a room
+     *
      * @param name
      * @param arena
      * @param password
      */
-    public Room(String name, Arena arena, String password){
+    public Room(String name, Arena arena, String password) {
         this.name = name;
         this.arena = arena;
         this.password = password;
@@ -40,27 +41,28 @@ public class Room {
 
     /**
      * Creates a room
+     *
      * @param name
      * @param arena
      * @param minPlayer
      * @param password
      */
-    public Room(String name, Arena arena, int minPlayer, String password){
+    public Room(String name, Arena arena, int minPlayer, String password) {
         this.name = name;
         this.arena = arena;
         this.minPlayer = minPlayer;
         this.password = password;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public int getPlayerNumber(){
+    public int getPlayerNumber() {
         return players.size();
     }
 
-    public Arena getArena(){
+    public Arena getArena() {
         return arena;
     }
 

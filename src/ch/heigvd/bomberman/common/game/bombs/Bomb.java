@@ -2,8 +2,6 @@ package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.DestructibleElement;
-import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.ElementVisitor;
 import javafx.geometry.Point2D;
 
 import java.util.List;
@@ -19,20 +17,25 @@ public abstract class Bomb extends DestructibleElement {
         this.blastRange = blastRange;
     }
 
+    public int getCountdown() {
+        return countdown;
+    }
+
+    public void decreaseCountdown() {
+        countdown--;
+    }
+
     /**
      * To call when the bomb explose, will remove all the element in range
      */
     public void explose() {
         getElementsInRange().forEach(e -> arena.remove(e));
+        setChanged();
+        notifyObservers();
     }
 
     /**
      * @return the elements in range of the blastRange
      */
-    public abstract List<Element> getElementsInRange();
-
-    @Override
-    public void accept(ElementVisitor visitor) {
-        visitor.visit(this);
-    }
+    public abstract List<DestructibleElement> getElementsInRange();
 }

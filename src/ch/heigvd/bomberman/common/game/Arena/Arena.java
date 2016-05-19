@@ -8,10 +8,16 @@ import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
+import javafx.util.Duration;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 /**
@@ -32,11 +38,25 @@ public class Arena
     @ForeignCollectionField(eager = true)
     private Collection<Element> elements = new LinkedList<Element>();
 
-    public Arena() {
+    private Queue<Bomb> bombs = new ConcurrentLinkedQueue<>();
 
+    public Arena() {
+        new Thread(() -> {
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> bombs.forEach(b -> {
+                b.decreaseCountdown();
+                if (b.getCountdown() <= 0) {
+                    b.explose();
+                    elements.remove(b);
+                    bombs.remove(b);
+                }
+            })));
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
+        }).start();
     }
 
     public Arena(int width, int height) {
+        this();
         this.width = width;
         this.height = height;
     }
@@ -95,11 +115,31 @@ public class Arena
      * @throws RuntimeException if the cell is already occuped
      */
     public void add(Element element) throws RuntimeException {
-        if (getElements(element.getPosition()).stream().noneMatch(e -> e instanceof Bomb)) { // Pas de bombe déjà posée
-            elements.add(element);
-        } else {
-            throw new RuntimeException("Cell already occuped");
+        if(!elements.contains(element)) {
+            if (isEmpty(element.getPosition())) {
+                elements.add(element);
+            } else {
+                throw new RuntimeException("Cell already occuped");
+            }
         }
+    }
+
+    /**
+     * Add a bomb to the arena
+     *
+     * @param bomb
+     * @throws RuntimeException
+     */
+    public void add(Bomb bomb) throws RuntimeException {
+        if (bombs.stream().noneMatch(b -> b.getPosition().equals(bomb.getPosition()))) {
+            if(!bombs.contains(bomb))
+                bombs.add(bomb);
+            if(!elements.contains(bomb))
+                elements.add(bomb);
+        } else {
+            throw new RuntimeException("Already a bomb");
+        }
+
     }
 
     public void remove(Element e) {

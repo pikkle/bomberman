@@ -35,7 +35,6 @@ public abstract class Element extends Observable {
         discr = getClass().getName();
         this.position = position;
         this.arena = arena;
-        arena.add(this);
     }
 
     public int getId() {
@@ -58,7 +57,7 @@ public abstract class Element extends Observable {
     public boolean equals(Object obj) {
         if(this == obj)
             return true;
-        if(obj instanceof Element && ((Element) obj).getId() == getId() )
+        if(obj instanceof Element && getId() != 0 && ((Element) obj).getId() == getId() )
             return true;
         return false;
     }

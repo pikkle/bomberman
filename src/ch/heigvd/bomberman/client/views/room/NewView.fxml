@@ -23,10 +23,6 @@
                     <children>
                         <Button onAction="#previous" text="&lt;" />
                         <StackPane fx:id="arenaContainer" prefHeight="150.0" prefWidth="200.0">
-                             <children>
-                                <GridPane fx:id="gridPane" alignment="center" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="background" stylesheets="@../ArenaTheme.css">
-                                </GridPane>
-                             </children>
                              <HBox.margin>
                                 <Insets left="10.0" right="10.0" />
                             </HBox.margin>

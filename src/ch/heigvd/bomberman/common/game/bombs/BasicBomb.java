@@ -1,7 +1,8 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.DestructibleElement;
+import ch.heigvd.bomberman.common.game.ElementVisitor;
 import javafx.geometry.Point2D;
 
 import java.util.LinkedList;
@@ -17,11 +18,17 @@ public class BasicBomb extends Bomb {
 
 	public BasicBomb(Point2D position, int countdown, int blastRange, Arena arena) {
 		super(position, countdown, blastRange, arena);
+		arena.add(this);
 	}
 
 	@Override
-	public List<Element> getElementsInRange() {
+	public List<DestructibleElement> getElementsInRange() {
 		// Todo add element in the range
 		return new LinkedList<>();
+	}
+
+	@Override
+	public void accept(ElementVisitor visitor) {
+		visitor.visit(this);
 	}
 }
