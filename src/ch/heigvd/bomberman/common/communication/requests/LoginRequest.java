@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.responses.Response;
 
-public class LoginRequest extends Request {
+public class LoginRequest extends Request<Boolean> {
 	private String username, password;
 	public LoginRequest(String username, String password) {
 		this.username = username;

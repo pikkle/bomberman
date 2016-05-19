@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.responses.Response;
 
-public class ReadyRequest extends Request {
+public class ReadyRequest extends Request<Boolean> {
 	private boolean state;
 	public ReadyRequest(boolean state) {
 		this.state = state;

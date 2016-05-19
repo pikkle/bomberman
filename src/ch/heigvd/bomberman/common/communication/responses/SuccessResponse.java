@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.communication.responses;
 
 import java.util.UUID;
 
-public class SuccessResponse extends Response {
+public class SuccessResponse extends Response<Boolean> {
 	private String message;
 	public SuccessResponse(UUID uuid, String message) {
 		super(uuid);
@@ -10,7 +10,8 @@ public class SuccessResponse extends Response {
 	}
 
 	@Override
-	public void accept(ResponseVisitor visitor) {
-		visitor.visit(this);
+	public Boolean accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
 	}
+
 }
