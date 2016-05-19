@@ -26,8 +26,8 @@ public class ElementTest {
 
 	@Before
 	public void setUp() throws Exception {
-		elementOrm = new ElementORM<Element>();
-		arenaOrm = new ArenaORM();
+		elementOrm = ElementORM.getInstance();
+		arenaOrm = ArenaORM.getInstance();
 		arena = new SimpleArena();
 
 		arenaOrm.create(arena);

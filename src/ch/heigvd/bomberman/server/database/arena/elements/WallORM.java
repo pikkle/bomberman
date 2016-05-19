@@ -9,7 +9,15 @@ import java.sql.SQLException;
  */
 public class WallORM extends ElementORM<Wall>
 {
-	public WallORM() throws SQLException {
+	private static WallORM instance;
+
+	private WallORM() throws SQLException {
 		super(Wall.class);
+	}
+
+	public static synchronized ElementORM getInstance() throws SQLException {
+		if (instance  == null)
+			instance  = new WallORM();
+		return instance;
 	}
 }

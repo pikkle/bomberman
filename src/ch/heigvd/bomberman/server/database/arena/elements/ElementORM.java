@@ -14,13 +14,22 @@ import java.util.List;
 
 public class ElementORM<T extends Element> extends MainORM<T>
 {
+	private static ElementORM instance;
+
 	protected ElementORM(Class<T> clazz) throws SQLException {
 		super(clazz);
-		createTable();
+		if(instance == null)
+			createTable();
 	}
 
-	public ElementORM() throws SQLException {
+	protected ElementORM() throws SQLException {
 		this((Class<T>) Element.class);
+	}
+
+	public static synchronized ElementORM getInstance() throws SQLException {
+		if (instance  == null)
+			instance  = new ElementORM();
+		return instance;
 	}
 
 	public List<T> findByArena(Arena arena) throws SQLException

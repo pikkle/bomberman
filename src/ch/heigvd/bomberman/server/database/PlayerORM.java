@@ -10,9 +10,17 @@ import java.sql.SQLException;
  */
 public class PlayerORM extends MainORM<Player>
 {
-    public PlayerORM() throws SQLException {
+    private static PlayerORM instance;
+
+    private PlayerORM() throws SQLException {
         super(Player.class);
         createTable();
+    }
+
+    public static synchronized PlayerORM getInstance() throws SQLException {
+        if (instance  == null)
+            instance  = new PlayerORM();
+        return instance;
     }
 
     public Player findOneByPseudo(String pseudo) throws SQLException  {
