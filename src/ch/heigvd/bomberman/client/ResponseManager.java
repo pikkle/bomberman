@@ -4,7 +4,6 @@ import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
 import javafx.application.Platform;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

@@ -17,7 +17,8 @@ public class Client extends Application {
 
     private Stage primaryStage;
     private Pane mainLayout;
-    private ResponseManager rm;
+    private ResponseManager rm = ResponseManager.getInstance();
+
 
     /**
      * Entry point of the client
@@ -30,21 +31,20 @@ public class Client extends Application {
 
     public void start(Stage primaryStage) throws Exception {
 
-        rm = ResponseManager.getInstance();
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Bomberman");
         FXMLLoader loader = new FXMLLoader();
 
         loader.setLocation(Client.class.getResource("views/auth/LoginView.fxml"));
+
         mainLayout = loader.load();
 
         LoginViewController controller = loader.getController();
         controller.setClient(this);
 
-
         primaryStage.setScene(new Scene(mainLayout));
-        primaryStage.show();
 
+        primaryStage.show();
     }
 
     public void changeScene(Pane pane){

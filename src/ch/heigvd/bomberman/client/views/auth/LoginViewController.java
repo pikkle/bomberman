@@ -1,6 +1,7 @@
 package ch.heigvd.bomberman.client.views.auth;
 
 import ch.heigvd.bomberman.client.Client;
+import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.ClientMainController;
 import ch.heigvd.bomberman.common.communication.requests.LoginRequest;
 import ch.heigvd.bomberman.common.communication.responses.Response;
@@ -29,6 +30,7 @@ public class LoginViewController {
     private ClientMainController mainController;
     private static final int DEFAULT_PORT = 3737;
     private static final String DEFAULT_ADDRESS = "127.0.0.1";
+    ResponseManager rm;
 
     @FXML
     private Pane mainPane;
@@ -42,6 +44,8 @@ public class LoginViewController {
     @FXML
     private PasswordField pwd;
 
+    @FXML private Button login, createAcount;
+
     @FXML
     private ImageView serverStatusIcon;
 
@@ -52,26 +56,33 @@ public class LoginViewController {
     @FXML
     private void initialize() {
 
+
+        rm = ResponseManager.getInstance();
         testServer();
-        serverStatusLabel.setText("");
-        serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
     }
 
-    private void testServer(){
+    public void testServer(){
         try
         {
-            client.getRm().connect(DEFAULT_ADDRESS, DEFAULT_PORT);
+            rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
         } catch (IOException e)
         {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            serverStatusLabel.setText("Offline");
+            serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ko_sign.png")));
+            hiddeAll();
         }
     }
 
     public void setClient(Client client) {
 
         this.client = client;
+    }
+
+    private void hiddeAll() {
+        userId.setDisable(true);
+        pwd.setDisable(true);
+        login.setDisable(true);
+        createAcount.setDisable(true);
     }
 
 
