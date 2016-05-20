@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox fx:id="mainPane" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.auth.NewViewController">
    <children>
       <GridPane prefHeight="192.0" prefWidth="318.0">
@@ -38,7 +37,7 @@
       </GridPane>
       <ButtonBar prefHeight="40.0" prefWidth="200.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Confirm" />
+          <Button mnemonicParsing="false" onAction="#confirm" text="Confirm" />
             <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
         </buttons>
       </ButtonBar>

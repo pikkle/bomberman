@@ -1,17 +1,20 @@
 package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
-import ch.heigvd.bomberman.common.communication.responses.HelloResponse;
-import ch.heigvd.bomberman.common.communication.responses.Response;
-import ch.heigvd.bomberman.common.communication.responses.SuccessResponse;
+import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.game.Player;
+import ch.heigvd.bomberman.server.database.PlayerORM;
+
+import java.sql.SQLException;
+import java.util.Optional;
 
 public class RequestProcessor implements RequestVisitor {
-	private static RequestProcessor instance = new RequestProcessor();
+	private RequestManager requestManager;
+	private static Server server = Server.getInstance();
+	private static PlayerORM db = server.getDatabase();
 
-	private RequestProcessor(){	}
-
-	public static RequestVisitor getInstance() {
-		return instance;
+	public RequestProcessor(RequestManager requestManager){
+		this.requestManager = requestManager;
 	}
 
 	public Response visit(HelloRequest request){
@@ -32,15 +35,41 @@ public class RequestProcessor implements RequestVisitor {
 
 	@Override
 	public Response visit(AccountCreationRequest request) {
-		return null;
+		if (requestManager.isLoggedIn())
+			return new ErrorResponse(request.getID(), "Already logged in");
+		Optional<Player> player;
+		try {
+			player = db.findOneByPseudo(request.getUsername());
+		} catch (SQLException e) {
+			player = Optional.empty();
+		}
+		return player.map(p -> (Response) new ErrorResponse(request.getID(), "Account name already exists !"))
+			.orElseGet(()->{
+				Player newPlayer = new Player(request.getUsername(), request.getPassword());
+				try {
+					db.create(newPlayer);
+				} catch (SQLException e) {
+					return new ErrorResponse(request.getID(), "Error while creating the user");
+				}
+				return new NoResponse(request.getID());
+			});
 	}
 
 	@Override
-	public Response visit(LoginRequest loginRequest) {
-		System.out.println("Connection from user");
-		System.out.println("Username: " + loginRequest.getUsername());
-		System.out.println("Password: " + loginRequest.getPassword());
-		return new SuccessResponse(loginRequest.getID(), "Connection successful");
+	public Response visit(LoginRequest request) {
+		if (requestManager.isLoggedIn())
+			return new ErrorResponse(request.getID(), "Already logged in");
+		Optional<Player> player;
+		try {
+			player = db.findOneByPseudo(request.getUsername());
+		} catch (SQLException e) {
+			player = Optional.empty();
+		}
+		return player.filter(p->p.getPassword().equals(request.getPassword()))
+			.map(p->{
+				requestManager.setLoggedIn(true);
+				requestManager.setPlayer(p);
+				return (Response) new SuccessResponse(request.getID(), "Successfully logged in !");
+			}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
-
 }

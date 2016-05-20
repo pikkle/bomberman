@@ -1,13 +1,12 @@
 package ch.heigvd.bomberman.common.communication.responses;
 
 import ch.heigvd.bomberman.common.communication.Message;
-import ch.heigvd.bomberman.common.game.Direction;
 
 import java.util.UUID;
 
-public class SuccessResponse extends Response<Message> {
+public class ErrorResponse extends Response<Message> {
 	private String message;
-	public SuccessResponse(UUID uuid, String message) {
+	public ErrorResponse(UUID uuid, String message) {
 		super(uuid);
 		this.message = message;
 	}

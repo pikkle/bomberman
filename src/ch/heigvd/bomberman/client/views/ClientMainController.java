@@ -59,8 +59,8 @@ public class ClientMainController {
     @FXML
     private void initialize() {
 
-        rm = ResponseManager.getInstance();
-        rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
+
+
 
         try {
             loginWindow();
@@ -77,6 +77,8 @@ public class ClientMainController {
         {
             e.printStackTrace();
         }
+
+
     }
 
     @FXML
@@ -129,24 +131,6 @@ public class ClientMainController {
 
     private void loginWindow() throws Exception
     {
-        Stage stage = new Stage();
-        Pane pane;
-        LoginViewController controller;
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/auth/LoginView.fxml"));
 
-        stage.setTitle("Login");
-        pane = loader.load();
-        controller = loader.getController();
-        controller.setMainController(this);
-
-        /*stage.setOnCloseRequest(event -> {
-            Platform.exit();
-            stage.close();
-        });*/
-
-        stage.initModality(Modality.APPLICATION_MODAL);
-
-        stage.setScene(new Scene(pane));
-        stage.showAndWait();
     }
 }
