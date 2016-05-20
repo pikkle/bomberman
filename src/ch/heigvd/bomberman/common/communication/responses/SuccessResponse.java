@@ -1,10 +1,11 @@
 package ch.heigvd.bomberman.common.communication.responses;
 
+import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Direction;
 
 import java.util.UUID;
 
-public class SuccessResponse extends Response<Boolean> {
+public class SuccessResponse extends Response<Message> {
 	private String message;
 	public SuccessResponse(UUID uuid, String message) {
 		super(uuid);
@@ -12,8 +13,11 @@ public class SuccessResponse extends Response<Boolean> {
 	}
 
 	@Override
-	public Boolean accept(ResponseVisitor visitor) {
+	public Message accept(ResponseVisitor visitor) {
 		return visitor.visit(this);
 	}
 
+	public String getMessage() {
+		return message;
+	}
 }

@@ -1,13 +1,9 @@
 package ch.heigvd.bomberman.client;
 
+import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventType;
-import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -80,7 +76,7 @@ public class ResponseManager
         return socket != null && socket.isConnected();
     }
 
-    public void loginRequest(String username, String password, Consumer<Boolean> callback) {
+    public void loginRequest(String username, String password, Consumer<Message> callback) {
         LoginRequest r = new LoginRequest(username, password);
         send(r, callback);
     }

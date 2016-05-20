@@ -75,8 +75,8 @@ public class LoginViewController {
         }
         else {
             String hashPasswd = pwd.getText();
-            mainController.getRm().loginRequest(userId.getText(), hashPasswd, aBoolean -> {
-                if (aBoolean) {
+            mainController.getRm().loginRequest(userId.getText(), hashPasswd, message -> {
+                if (message.state()) {
                     loginSucces();
                 } else {
                     loginFailure();

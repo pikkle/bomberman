@@ -6,6 +6,7 @@ import ch.heigvd.bomberman.common.game.Player;
 import ch.heigvd.bomberman.server.database.PlayerORM;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class RequestProcessor implements RequestVisitor {
 	private RequestManager requestManager;
@@ -36,42 +37,39 @@ public class RequestProcessor implements RequestVisitor {
 	public Response visit(AccountCreationRequest request) {
 		if (requestManager.isLoggedIn())
 			return new ErrorResponse(request.getID(), "Already logged in");
+		Optional<Player> player;
 		try {
-			Player p = db.findOneByPseudo(request.getUsername());
-			if (p == null){
-				System.out.println("Creating a new entry in db");
-				System.out.println("Username: " + request.getUsername());
-				System.out.println("Password: " + request.getPassword());
-				p = new Player(request.getUsername(), request.getPassword());
-				db.create(p);
-				return new SuccessResponse(request.getID(), "Successfully created a new account !");
-			} else {
-				return new ErrorResponse(request.getID(), "Account name already exists !");
-			}
+			player = db.findOneByPseudo(request.getUsername());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			player = Optional.empty();
 		}
-		return new ErrorResponse(request.getID(), "Error with the server database !");
+		return player.map(p -> (Response) new ErrorResponse(request.getID(), "Account name already exists !"))
+			.orElseGet(()->{
+				Player newPlayer = new Player(request.getUsername(), request.getPassword());
+				try {
+					db.create(newPlayer);
+				} catch (SQLException e) {
+					return new ErrorResponse(request.getID(), "Error while creating the user");
+				}
+				return new NoResponse(request.getID());
+			});
 	}
 
 	@Override
 	public Response visit(LoginRequest request) {
 		if (requestManager.isLoggedIn())
 			return new ErrorResponse(request.getID(), "Already logged in");
-		System.out.println("Connection from user");
-		System.out.println("Username: " + request.getUsername());
-		System.out.println("Password: " + request.getPassword());
+		Optional<Player> player;
 		try {
-			Player p = db.findOneByPseudo(request.getUsername());
-			if (p.getPassword().equals(request.getPassword())){
+			player = db.findOneByPseudo(request.getUsername());
+		} catch (SQLException e) {
+			player = Optional.empty();
+		}
+		return player.filter(p->p.getPassword().equals(request.getPassword()))
+			.map(p->{
 				requestManager.setLoggedIn(true);
 				requestManager.setPlayer(p);
-				return new SuccessResponse(request.getID(), "Successfully logged in !");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return new ErrorResponse(request.getID(), "Wrong credentials");
+				return (Response) new SuccessResponse(request.getID(), "Successfully logged in !");
+			}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
-
 }
