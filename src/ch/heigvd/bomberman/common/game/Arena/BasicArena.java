@@ -1,5 +1,6 @@
 package ch.heigvd.bomberman.common.game.Arena;
 
+import ch.heigvd.bomberman.common.game.Box;
 import ch.heigvd.bomberman.common.game.Point;
 import ch.heigvd.bomberman.common.game.Wall;
 
@@ -19,6 +20,9 @@ public class BasicArena extends Arena {
 				new Wall(new Point(l, c), this);
 			}
 		}
+
+		new Box(new Point(5, 4), this);
+		new Box(new Point(5, 5), this);
 
 		for(int l = 1; l < height - 1; ++l){
 			for(int c = 1; c < width - 1; ++c){
