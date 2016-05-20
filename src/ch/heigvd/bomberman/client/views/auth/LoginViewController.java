@@ -25,7 +25,8 @@ import java.io.IOException;
  * Created by julien on 08.05.16.
  */
 public class LoginViewController {
-    ClientMainController mainController;
+    private Client client;
+    private ClientMainController mainController;
     private static final int DEFAULT_PORT = 3737;
     private static final String DEFAULT_ADDRESS = "127.0.0.1";
 
@@ -51,14 +52,28 @@ public class LoginViewController {
     @FXML
     private void initialize() {
 
+        testServer();
         serverStatusLabel.setText("");
         serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
     }
 
-    public void setMainController(ClientMainController mainController)
-    {
-        this.mainController = mainController;
+    private void testServer(){
+        try
+        {
+            client.getRm().connect(DEFAULT_ADDRESS, DEFAULT_PORT);
+        } catch (IOException e)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
+
+    public void setClient(Client client) {
+
+        this.client = client;
+    }
+
 
     @FXML
     private void login()
@@ -133,5 +148,24 @@ public class LoginViewController {
 
         stage.setScene(new Scene(pane));
         stage.showAndWait();
+    }
+
+    @FXML
+    private void bypass()
+    {
+        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/ClientMain.fxml"));
+        try
+        {
+            Pane pane = loader.load();
+            client.changeScene(pane);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+
+
     }
 }

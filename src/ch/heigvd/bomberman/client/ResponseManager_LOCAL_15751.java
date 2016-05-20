@@ -36,77 +36,62 @@ public class ResponseManager
         return instance;
     }
 
-    public void connect(String address, int port) throws IOException
-    {
+    public void connect(String address, int port) {
+        try {
+            socket = new Socket(address, port);
+            writer = new ObjectOutputStream(socket.getOutputStream());
+            reader = new ObjectInputStream(socket.getInputStream());
 
-        socket = new Socket(address, port);
-        writer = new ObjectOutputStream(socket.getOutputStream());
-        reader = new ObjectInputStream(socket.getInputStream());
+            receiver = new Thread() {
+                @Override
+                public void run() {
+                    while (!this.isInterrupted()) {
+                        try {
+                            Response response = (Response) reader.readObject();
 
-        receiver = new Thread()
-        {
-            @Override
-            public void run()
-            {
-                while (!this.isInterrupted())
-                {
-                    try
-                    {
-                        Response response = (Response) reader.readObject();
-
-                        Consumer callback = callbacks.get(response.getID());
-                        Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
+                            Consumer callback = callbacks.get(response.getID());
+                            Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
 
 
-                    } catch (IOException | ClassNotFoundException e)
-                    {
-                        e.printStackTrace();
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        };
-        receiver.start();
-
+            };
+            receiver.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void disconnect() throws IOException
-    {
+    public void disconnect() throws IOException {
         receiver.interrupt();
         writer.close();
         reader.close();
         socket.close();
     }
 
-    public boolean isConnected()
-    {
+    public boolean isConnected() {
         return socket != null && socket.isConnected();
     }
 
-<<<<<<< Updated upstream
     public void loginRequest(String username, String password, Consumer<Message> callback) {
-=======
-    public void loginRequest(String username, String password, Consumer<Boolean> callback)
-    {
->>>>>>> Stashed changes
         LoginRequest r = new LoginRequest(username, password);
         send(r, callback);
     }
 
-    public void newAccountRequest(String username, String pwd, Consumer<Boolean> callback)
-    {
+    public void newAccountRequest(String username, String pwd, Consumer<Boolean> callback){
         AccountCreationRequest r = new AccountCreationRequest(username, pwd);
         send(r, callback);
     }
 
-    private <T> void send(Request<T> r, Consumer<? super T> callback)
-    {
-        try
-        {
+    private <T> void send(Request<T> r, Consumer<? super T> callback) {
+        try {
             writer.writeObject(r);
-            if (callback != null)
+	        if (callback != null)
                 callbacks.put(r.getID(), callback);
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
