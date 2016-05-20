@@ -66,8 +66,8 @@ public class NewViewController {
         }
 
         else {
-            mainController.getRm().newAccountRequest(userId.getText(), pwd.getText(), aBoolean -> {
-                if (aBoolean) {
+            mainController.getRm().newAccountRequest(userId.getText(), pwd.getText(), message -> {
+                if (message.state()) {
                     creationSucces();
                 } else {
                     creationFailure();

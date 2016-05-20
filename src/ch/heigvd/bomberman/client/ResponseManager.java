@@ -82,17 +82,13 @@ public class ResponseManager
         return socket != null && socket.isConnected();
     }
 
-<<<<<<< Updated upstream
-    public void loginRequest(String username, String password, Consumer<Message> callback) {
-=======
-    public void loginRequest(String username, String password, Consumer<Boolean> callback)
+    public void loginRequest(String username, String password, Consumer<Message> callback)
     {
->>>>>>> Stashed changes
         LoginRequest r = new LoginRequest(username, password);
         send(r, callback);
     }
 
-    public void newAccountRequest(String username, String pwd, Consumer<Boolean> callback)
+    public void newAccountRequest(String username, String pwd, Consumer<Message> callback)
     {
         AccountCreationRequest r = new AccountCreationRequest(username, pwd);
         send(r, callback);

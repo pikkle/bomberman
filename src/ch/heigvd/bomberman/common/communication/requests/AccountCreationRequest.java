@@ -1,9 +1,10 @@
 package ch.heigvd.bomberman.common.communication.requests;
 
 
+import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.responses.Response;
 
-public final class AccountCreationRequest extends Request<Boolean> {
+public final class AccountCreationRequest extends Request<Message> {
     private String username;
     private String password;
 
@@ -18,7 +19,7 @@ public final class AccountCreationRequest extends Request<Boolean> {
     }
 
     @Override
-    public Response<Boolean> accept(RequestVisitor visitor) {
+    public Response<Message> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
 
