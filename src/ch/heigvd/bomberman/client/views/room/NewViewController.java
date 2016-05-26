@@ -7,8 +7,7 @@ import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.server.database.DBManager;
 import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -36,6 +35,18 @@ public class NewViewController
     @FXML
     private TextField roomName;
 
+    @FXML
+    private Spinner<Integer> minPlayer;
+
+    @FXML
+    private CheckBox isPrivate;
+
+    @FXML
+    private PasswordField password;
+
+    @FXML
+    private Label lblPassword;
+
     public NewViewController() throws Exception {
         ArenaORM orm = DBManager.getInstance().getOrm(ArenaORM.class);
         if(orm != null) {
@@ -50,6 +61,11 @@ public class NewViewController
 
     @FXML
     private void initialize() throws Exception {
+        minPlayer.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 4));
+        isPrivate.selectedProperty().addListener((obs, oldValue, newValue) -> {
+            password.setDisable(!newValue);
+            lblPassword.setDisable(!newValue);
+        });
         refreshArena();
     }
 
@@ -79,7 +95,13 @@ public class NewViewController
 
     @FXML
     private void save(){
-        mainController.addRoom(new Room(roomName.getText(), arenas.get(selected)));
+        Room room;
+        if(isPrivate.isSelected())
+            room = new Room(roomName.getText(), arenas.get(selected), minPlayer.getValue(), password.getText());
+        else
+            room = new Room(roomName.getText(), arenas.get(selected), minPlayer.getValue());
+
+        mainController.addRoom(room);
         close();
     }
 
