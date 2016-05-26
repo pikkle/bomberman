@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -79,27 +80,31 @@ public class MapEditorController implements Observer {
 
     private void changeDimension(int width, int height){
         Arena oldArena = arena;
-        arena = new Arena(width, height);
-        renderer = new ArenaRenderer(arena, 750, 750);
-        for(int x = 0; x < arena.getWidth(); x++){
-            for(int y = 0; y < arena.getHeight(); y++){
-                oldArena.getElements(new Point(x, y)).forEach(element -> {
-                    element.setArena(arena);
-                    registerDeleteDragEvents(element);
-                });
+        try {
+            arena = new Arena(width, height);
+            renderer = new ArenaRenderer(arena, 750, 750);
+            for(int x = 0; x < arena.getWidth(); x++){
+                for(int y = 0; y < arena.getHeight(); y++){
+                    oldArena.getElements(new Point(x, y)).forEach(element -> {
+                        element.setArena(arena);
+                        registerDeleteDragEvents(element);
+                    });
+                }
             }
-        }
 
-        AnchorPane grid = renderer.getView();
-        //registerDropEvent(renderer.getGrid());
-        gridContainer.getChildren().clear();
-        gridContainer.getChildren().add(grid);
-        gridContainer.setTopAnchor(grid, 0.0);
-        gridContainer.setLeftAnchor(grid, 0.0);
-        gridContainer.setBottomAnchor(grid, 0.0);
-        gridContainer.setRightAnchor(grid, 0.0);
-        if(arena.getHeight() >= 1 && arena.getWidth() >= 1)
-            registerAddDragEvents();
+            AnchorPane grid = renderer.getView();
+            //registerDropEvent(renderer.getGrid());
+            gridContainer.getChildren().clear();
+            gridContainer.getChildren().add(grid);
+            gridContainer.setTopAnchor(grid, 0.0);
+            gridContainer.setLeftAnchor(grid, 0.0);
+            gridContainer.setBottomAnchor(grid, 0.0);
+            gridContainer.setRightAnchor(grid, 0.0);
+            if(arena.getHeight() >= 1 && arena.getWidth() >= 1)
+                registerAddDragEvents();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     private void registerAddDragEvents() {

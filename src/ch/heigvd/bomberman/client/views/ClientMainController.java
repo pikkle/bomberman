@@ -2,11 +2,10 @@ package ch.heigvd.bomberman.client.views;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
-import ch.heigvd.bomberman.client.views.auth.LoginViewController;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.client.views.room.NewViewController;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
+import ch.heigvd.bomberman.common.game.Arena.BasicArena;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -58,8 +57,8 @@ public class ClientMainController {
     @FXML
     private void initialize() {
 
-        rm = ResponseManager.getInstance();
-        rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
+
+
 
         try {
             loginWindow();
@@ -76,6 +75,8 @@ public class ClientMainController {
         {
             e.printStackTrace();
         }
+
+
     }
 
     @FXML
@@ -98,7 +99,7 @@ public class ClientMainController {
         stage.initModality(Modality.APPLICATION_MODAL);
 
         try {
-            Arena arena = new SimpleArena();
+            Arena arena = new BasicArena(15, 15);
             arena.putBomberman();
             Scene scene = new Scene(new ArenaRenderer(arena, 750, 750).getView());
             stage.setScene(scene);
@@ -145,24 +146,6 @@ public class ClientMainController {
 
     private void loginWindow() throws Exception
     {
-        Stage stage = new Stage();
-        Pane pane;
-        LoginViewController controller;
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/auth/LoginView.fxml"));
 
-        stage.setTitle("Login");
-        pane = loader.load();
-        controller = loader.getController();
-        controller.setMainController(this);
-
-        /*stage.setOnCloseRequest(event -> {
-            Platform.exit();
-            stage.close();
-        });*/
-
-        stage.initModality(Modality.APPLICATION_MODAL);
-
-        stage.setScene(new Scene(pane));
-        stage.showAndWait();
     }
 }

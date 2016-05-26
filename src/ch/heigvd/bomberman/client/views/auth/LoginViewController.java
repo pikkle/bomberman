@@ -1,7 +1,10 @@
 package ch.heigvd.bomberman.client.views.auth;
 
 import ch.heigvd.bomberman.client.Client;
+import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.ClientMainController;
+import ch.heigvd.bomberman.common.communication.requests.LoginRequest;
+import ch.heigvd.bomberman.common.communication.responses.Response;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +15,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
+import java.io.IOException;
+import java.util.function.Consumer;
 
 import java.io.IOException;
 
@@ -19,9 +26,11 @@ import java.io.IOException;
  * Created by julien on 08.05.16.
  */
 public class LoginViewController {
-    ClientMainController mainController;
+    private Client client;
+    private ClientMainController mainController;
     private static final int DEFAULT_PORT = 3737;
     private static final String DEFAULT_ADDRESS = "127.0.0.1";
+    ResponseManager rm;
 
     @FXML
     private Pane mainPane;
@@ -35,6 +44,8 @@ public class LoginViewController {
     @FXML
     private PasswordField pwd;
 
+    @FXML private Button login, createAcount;
+
     @FXML
     private ImageView serverStatusIcon;
 
@@ -45,14 +56,35 @@ public class LoginViewController {
     @FXML
     private void initialize() {
 
-        serverStatusLabel.setText("");
-        serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
+
+        rm = ResponseManager.getInstance();
+        testServer();
     }
 
-    public void setMainController(ClientMainController mainController)
-    {
-        this.mainController = mainController;
+    public void testServer(){
+        try
+        {
+            rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
+        } catch (IOException e)
+        {
+            serverStatusLabel.setText("Offline");
+            serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ko_sign.png")));
+            hiddeAll();
+        }
     }
+
+    public void setClient(Client client) {
+
+        this.client = client;
+    }
+
+    private void hiddeAll() {
+        userId.setDisable(true);
+        pwd.setDisable(true);
+        login.setDisable(true);
+        createAcount.setDisable(true);
+    }
+
 
     @FXML
     private void login()
@@ -69,8 +101,8 @@ public class LoginViewController {
         }
         else {
             String hashPasswd = pwd.getText();
-            mainController.getRm().loginRequest(userId.getText(), hashPasswd, aBoolean -> {
-                if (aBoolean) {
+            mainController.getRm().loginRequest(userId.getText(), hashPasswd, message -> {
+                if (message.state()) {
                     loginSucces();
                 } else {
                     loginFailure();
@@ -92,6 +124,8 @@ public class LoginViewController {
         alert.setContentText("An error uccured while loging in");
         alert.showAndWait();
     }
+
+
 
     @FXML
     private void closeWindow()
@@ -125,5 +159,24 @@ public class LoginViewController {
 
         stage.setScene(new Scene(pane));
         stage.showAndWait();
+    }
+
+    @FXML
+    private void bypass()
+    {
+        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/ClientMain.fxml"));
+        try
+        {
+            Pane pane = loader.load();
+            client.changeScene(pane);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+
+
     }
 }

@@ -1,12 +1,18 @@
 package ch.heigvd.bomberman.client.views.auth;
 
+import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.views.ClientMainController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * Created by julien on 08.05.16.
@@ -60,8 +66,8 @@ public class NewViewController {
         }
 
         else {
-            mainController.getRm().newAccountRequest(userId.getText(), pwd.getText(), aBoolean -> {
-                if (aBoolean) {
+            mainController.getRm().newAccountRequest(userId.getText(), pwd.getText(), message -> {
+                if (message.state()) {
                     creationSucces();
                 } else {
                     creationFailure();
@@ -71,7 +77,7 @@ public class NewViewController {
     }
 
     private void creationSucces(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setContentText("Your acount has been created");
         alert.showAndWait();
         ((Stage)mainPane.getScene().getWindow()).close();

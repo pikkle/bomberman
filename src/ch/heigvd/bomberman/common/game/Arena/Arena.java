@@ -12,6 +12,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -33,7 +34,7 @@ public class Arena extends Observable
     private int height;
 
     @ForeignCollectionField(eager = true)
-    private Collection<Element> elements = new LinkedList();
+    private Collection<Element> elements = new LinkedList<>();
 
     private ElementRemoveHandler elementRemoveHandler = new ElementRemoveHandler(this);
 
@@ -41,23 +42,34 @@ public class Arena extends Observable
 
     private ElementAddHandler elementAddHandler = new ElementAddHandler(this);
 
-    public Arena() {
-        new Thread(() -> {
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> getBombs().forEach(b -> {
-                b.decreaseCountdown();
-                if (b.getCountdown() <= 0) {
-                    b.explose();
-                }
-            })));
-            timeline.setCycleCount(Animation.INDEFINITE);
-            timeline.play();
-        }).start();
+    public Arena() throws URISyntaxException {
+	    this(0, 0);
     }
 
-    public Arena(int width, int height) {
-        this();
+    public Arena(int width, int height) throws URISyntaxException {
         this.width = width;
         this.height = height;
+
+	    new Thread(() -> {
+		    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> getBombs().forEach(b -> {
+			    b.decreaseCountdown();
+			    if (b.getCountdown() <= 0) {
+				    b.explose();
+			    }
+		    })));
+		    timeline.setCycleCount(Animation.INDEFINITE);
+		    timeline.play();
+	    }).start();
+
+	    for (int i = 0; i < getWidth(); i++) {
+		    new Wall(new Point(i, 0), this);
+		    new Wall(new Point(i, getHeight() - 1), this);
+	    }
+
+	    for (int i = 1; i < getHeight() - 1; i++) {
+		    new Wall(new Point(0, i), this);
+		    new Wall(new Point(getWidth() - 1, i), this);
+	    }
     }
 
     public int getId() {

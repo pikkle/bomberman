@@ -25,10 +25,11 @@ public class Room {
 	 * @param name
 	 * @param password
 	 */
-	public Room(String name, String password, int minPlayer) {
+	public Room(String name, String password, int minPlayer, Arena arena) {
 		this.name = name;
 		this.password = password;
 		this.minPlayer = minPlayer;
+		this.arena = arena;
 	}
 
 	public synchronized void addPlayer(PlayerSession p) {

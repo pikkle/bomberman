@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -54,8 +55,8 @@ public class ArenaTest {
 		orm.create(arena);
 		List<Arena> before = orm.findAll();
 		orm.delete(arena);
-		Arena after = orm.find(arena.getId());
-		assertNull(after);
+		Optional<Arena> after = orm.find(arena.getId());
+		assertTrue(after.isPresent());
 		List<Element> all = DBManager.getInstance().getOrm(ElementORM.class).findByArena(arena);
 		assertTrue(all.isEmpty());
 	}
@@ -67,7 +68,7 @@ public class ArenaTest {
 		arena.remove(arena.getElements().stream().findFirst().get());
 		orm.update(arena);
 
-		Arena after = orm.find(arena.getId());
-		assertEquals(68, after.getElements().size());
+		Optional<Arena> after = orm.find(arena.getId());
+		assertEquals(68, after.get().getElements().size());
 	}
 }

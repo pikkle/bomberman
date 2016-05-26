@@ -12,16 +12,6 @@ public class SimpleArena extends Arena {
     public SimpleArena() throws Exception {
         super(15, 15);
 
-        for (int i = 0; i < getWidth(); i++) {
-            new Wall(new Point(i, 0), this);
-            new Wall(new Point(i, getHeight() - 1), this);
-        }
-
-        for (int i = 1; i < getHeight() - 1; i++) {
-            new Wall(new Point(0, i), this);
-            new Wall(new Point(getWidth() - 1, i), this);
-        }
-
         for (int i = 2; i < getHeight() - 2; i++) {
             new Wall(new Point(getWidth() / 2, i), this);
         }

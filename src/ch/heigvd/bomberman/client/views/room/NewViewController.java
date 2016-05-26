@@ -2,8 +2,8 @@ package ch.heigvd.bomberman.client.views.room;
 
 import ch.heigvd.bomberman.client.views.ClientMainController;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
+import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.server.database.DBManager;
 import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import javafx.fxml.FXML;
@@ -94,15 +94,47 @@ public class NewViewController
     }
 
     @FXML
-    private void save(){
-        Room room;
-        if(isPrivate.isSelected())
-            room = new Room(roomName.getText(), arenas.get(selected), minPlayer.getValue(), password.getText());
-        else
-            room = new Room(roomName.getText(), arenas.get(selected), minPlayer.getValue());
+    private void create(){
+        if (roomName.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The room name is empty");
+            alert.showAndWait();
+        }
+        else if (minPlayer.getValue() < 2 || minPlayer.getValue() > 4){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The min player value must be a number between 2 and 4");
+            alert.showAndWait();
+        }
+        else if (isPrivate.isSelected() && password.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("A private room must have a password");
+            alert.showAndWait();
+        }
+        else {
+            String hashPasswd = password.getText();
+            mainController.getRm().createRoomRequest(roomName.getText(), arenas.get(selected).getId(), minPlayer.getValue(), hashPasswd, message -> {
+                System.out.println("sdd");
+                if (message.state()) {
+                    createSucces(message);
+                } else {
+                    createFailure(message);
+                }
+            });
+        }
+    }
 
-        mainController.addRoom(room);
-        close();
+    private void createSucces(Message message){
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setContentText(message.getMessage());
+        alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        alert.showAndWait();
+        ((Stage)mainPane.getScene().getWindow()).close();
+    }
+
+    private void createFailure(Message message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message.getMessage());
+        alert.showAndWait();
     }
 
     @FXML

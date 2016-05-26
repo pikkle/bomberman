@@ -18,13 +18,15 @@ public class Server {
     private int port;
     private boolean running = true;
     private List<RequestManager> clients;
-    private DBManager dbManager;
+    private List<Room> rooms;
+    private DBManager database;
 
     private Server(int port){
         this.port = port;
         this.clients = new LinkedList<RequestManager>();
+        this.rooms = new LinkedList<Room>();
         try {
-            dbManager = DBManager.getInstance();
+            database = DBManager.getInstance();
         } catch (SQLException e) {
             System.out.println("Database error:");
             e.printStackTrace();
@@ -57,7 +59,11 @@ public class Server {
     }
 
     public DBManager getDatabase() {
-        return dbManager;
+        return database;
+    }
+
+    public void addRoom(Room room){
+        rooms.add(room);
     }
 
     /**

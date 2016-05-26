@@ -8,6 +8,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by matthieu.villard on 11.05.2016.
@@ -47,8 +48,7 @@ public abstract class MainORM<T> {
         return objects;
     }
 
-    public T find(long id) throws SQLException {
-        T object = dao.queryForId(id);
-        return object;
+    public Optional<T> find(long id) throws SQLException {
+        return Optional.ofNullable(dao.queryForId(id));
     }
 }

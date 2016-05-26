@@ -13,30 +13,10 @@ public class Room {
     private boolean running = false;
     private List<Player> players = new LinkedList<Player>();
 
-    public Room(String name, Arena arena) {
-        this.name = name;
-        this.arena = arena;
-        minPlayer = 2;
-    }
-
     public Room(String name, Arena arena, int minPlayer) {
         this.name = name;
         this.arena = arena;
         this.minPlayer = minPlayer;
-    }
-
-    /**
-     * Creates a room
-     *
-     * @param name
-     * @param arena
-     * @param password
-     */
-    public Room(String name, Arena arena, String password) {
-        this.name = name;
-        this.arena = arena;
-        this.password = password;
-        minPlayer = 2;
     }
 
     /**
@@ -54,6 +34,14 @@ public class Room {
         this.password = password;
     }
 
+    public synchronized void addPlayer(Player p) {
+        players.add(p);
+    }
+
+    public synchronized void removePlayer(Player p) {
+        players.remove(p);
+    }
+
     public String getName() {
         return name;
     }
@@ -64,13 +52,5 @@ public class Room {
 
     public Arena getArena() {
         return arena;
-    }
-
-    public synchronized void addPlayer(Player player) {
-        players.add(player);
-    }
-
-    public synchronized void removePlayer(Player player) {
-        players.remove(player);
     }
 }

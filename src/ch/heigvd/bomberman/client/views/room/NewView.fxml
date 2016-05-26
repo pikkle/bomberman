@@ -55,7 +55,7 @@
                         <Label fx:id="lblRoom" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="489.0" text="1 / 1" GridPane.columnIndex="1" />
                       <ButtonBar prefHeight="30.0" prefWidth="221.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                           <buttons>
-                              <Button mnemonicParsing="false" onAction="#save" text="Create" />
+                              <Button mnemonicParsing="false" onAction="#create" text="Create" />
                               <Button mnemonicParsing="false" onAction="#close" text="Cancel" />
                           </buttons>
                       </ButtonBar>

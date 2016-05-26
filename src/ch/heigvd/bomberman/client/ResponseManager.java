@@ -1,11 +1,9 @@
 package ch.heigvd.bomberman.client;
 
-import ch.heigvd.bomberman.common.communication.requests.AccountCreationRequest;
-import ch.heigvd.bomberman.common.communication.requests.LoginRequest;
-import ch.heigvd.bomberman.common.communication.requests.Request;
-import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.communication.Message;
+import ch.heigvd.bomberman.common.communication.requests.*;
+import ch.heigvd.bomberman.common.communication.responses.*;
 import javafx.application.Platform;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,62 +35,79 @@ public class ResponseManager
         return instance;
     }
 
-    public void connect(String address, int port) {
-        try {
-            socket = new Socket(address, port);
-            writer = new ObjectOutputStream(socket.getOutputStream());
-            reader = new ObjectInputStream(socket.getInputStream());
+    public void connect(String address, int port) throws IOException
+    {
 
-            receiver = new Thread() {
-                @Override
-                public void run() {
-                    while (!this.isInterrupted()) {
-                        try {
-                            Response response = (Response) reader.readObject();
+        socket = new Socket(address, port);
+        writer = new ObjectOutputStream(socket.getOutputStream());
+        reader = new ObjectInputStream(socket.getInputStream());
 
-                            Consumer callback = callbacks.get(response.getID());
-                            Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
+        receiver = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                while (!this.isInterrupted())
+                {
+                    try
+                    {
+                        Response response = (Response) reader.readObject();
+
+                        Consumer callback = callbacks.get(response.getID());
+                        Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
 
 
-                        } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
+                    } catch (IOException | ClassNotFoundException e)
+                    {
+                        e.printStackTrace();
                     }
                 }
-            };
-            receiver.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+        };
+        receiver.start();
+
     }
 
-    public void disconnect() throws IOException {
+    public void disconnect() throws IOException
+    {
         receiver.interrupt();
         writer.close();
         reader.close();
         socket.close();
     }
 
-    public boolean isConnected() {
+    public boolean isConnected()
+    {
         return socket != null && socket.isConnected();
     }
 
-    public void loginRequest(String username, String password, Consumer<Boolean> callback) {
+    public void loginRequest(String username, String password, Consumer<Message> callback)
+    {
         LoginRequest r = new LoginRequest(username, password);
         send(r, callback);
     }
 
-    public void newAccountRequest(String username, String pwd, Consumer<Boolean> callback){
+    public void newAccountRequest(String username, String pwd, Consumer<Message> callback)
+    {
         AccountCreationRequest r = new AccountCreationRequest(username, pwd);
         send(r, callback);
     }
 
-    private <T> void send(Request<T> r, Consumer<? super T> callback) {
-        try {
+    public void createRoomRequest(String name, long arena, int minPlayer, String password, Consumer<Message> callback)
+    {
+        CreateRoomRequest r = new CreateRoomRequest(name, arena, minPlayer, password);
+        send(r, callback);
+    }
+
+    private <T> void send(Request<T> r, Consumer<? super T> callback)
+    {
+        try
+        {
             writer.writeObject(r);
             if (callback != null)
                 callbacks.put(r.getID(), callback);
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
