@@ -13,6 +13,7 @@
                 <Menu mnemonicParsing="false" text="File">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#arena" text="Carte" />
+                        <MenuItem mnemonicParsing="false" onAction="#mapEditor" text="MapEditor" />
                         <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Quit" />
                     </items>
                 </Menu>

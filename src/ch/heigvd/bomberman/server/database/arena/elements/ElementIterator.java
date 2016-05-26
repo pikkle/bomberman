@@ -18,23 +18,23 @@ import java.sql.SQLException;
 /**
  * Created by matthieu.villard on 14.05.2016.
  */
-public class ElementIterator implements CloseableIterator<Element> {
+public class ElementIterator<T extends Element> implements CloseableIterator<T> {
 	private static final Logger logger = LoggerFactory.getLogger(ElementIterator.class);
 	private final Class<?> dataClass;
-	private final Dao<Element, Long> classDao;
+	private final Dao<T, Long> classDao;
 	private final ConnectionSource connectionSource;
 	private final DatabaseConnection connection;
 	private final CompiledStatement compiledStmt;
 	private final DatabaseResults results;
-	private final GenericRowMapper<Element> rowMapper;
+	private final GenericRowMapper<T> rowMapper;
 	private final String statement;
 	private boolean first = true;
 	private boolean closed;
 	private boolean alreadyMoved;
-	private Element last;
+	private T last;
 	private int rowC;
 
-	public ElementIterator(Class<?> dataClass, Dao<Element, Long> classDao, GenericRowMapper<Element> rowMapper, ConnectionSource connectionSource, DatabaseConnection connection, CompiledStatement compiledStmt, String statement, ObjectCache objectCache) throws SQLException {
+	public ElementIterator(Class<?> dataClass, Dao<T, Long> classDao, GenericRowMapper<T> rowMapper, ConnectionSource connectionSource, DatabaseConnection connection, CompiledStatement compiledStmt, String statement, ObjectCache objectCache) throws SQLException {
 		this.dataClass = dataClass;
 		this.classDao = classDao;
 		this.rowMapper = rowMapper;
@@ -82,7 +82,7 @@ public class ElementIterator implements CloseableIterator<Element> {
 		}
 	}
 
-	public Element first() throws SQLException {
+	public T first() throws SQLException {
 		if(this.closed) {
 			return null;
 		} else {
@@ -91,7 +91,7 @@ public class ElementIterator implements CloseableIterator<Element> {
 		}
 	}
 
-	public Element previous() throws SQLException {
+	public T previous() throws SQLException {
 		if(this.closed) {
 			return null;
 		} else {
@@ -100,11 +100,11 @@ public class ElementIterator implements CloseableIterator<Element> {
 		}
 	}
 
-	public Element current() throws SQLException {
+	public T current() throws SQLException {
 		return this.closed?null:(this.first?this.first():this.getCurrent());
 	}
 
-	public Element nextThrow() throws SQLException {
+	public T nextThrow() throws SQLException {
 		if(this.closed) {
 			return null;
 		} else {
@@ -128,11 +128,11 @@ public class ElementIterator implements CloseableIterator<Element> {
 		}
 	}
 
-	public Element next() {
+	public T next() {
 		SQLException sqlException = null;
 
 		try {
-			Element e = this.nextThrow();
+			T e = this.nextThrow();
 			if(e != null) {
 				return e;
 			}
@@ -145,7 +145,7 @@ public class ElementIterator implements CloseableIterator<Element> {
 		throw new IllegalStateException("Could not get next result for " + this.dataClass, sqlException);
 	}
 
-	public Element moveRelative(int offset) throws SQLException {
+	public T moveRelative(int offset) throws SQLException {
 		if(this.closed) {
 			return null;
 		} else {
@@ -211,11 +211,11 @@ public class ElementIterator implements CloseableIterator<Element> {
 		this.alreadyMoved = false;
 	}
 
-	private Element getCurrent() throws SQLException {
+	private T getCurrent() throws SQLException {
 		if(this.classDao != null) {
 			try {
 				Class clazz = Class.forName(this.results.getString(this.results.findColumn("discr")));
-				classDao.setObjectFactory(new ElementFactory(clazz));
+				classDao.setObjectFactory(new ElementFactory<T>(clazz));
 			} catch (ClassNotFoundException e) {
 				throw SqlExceptionUtil.create("Could not create object for " +this.results.getString(this.results.findColumn("discr")), e);
 			}

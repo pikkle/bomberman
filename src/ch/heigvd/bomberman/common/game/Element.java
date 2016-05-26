@@ -43,6 +43,15 @@ public abstract class Element extends Observable {
         return discr;
     }
 
+    public void setArena(Arena arena){
+        if(this.arena != arena) {
+            if (this.arena != null)
+                this.arena.remove(this);
+            this.arena = arena;
+            arena.add(this);
+        }
+    }
+
     public Arena getArena(){
         return arena;
     }

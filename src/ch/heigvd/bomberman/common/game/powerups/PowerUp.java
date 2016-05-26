@@ -7,6 +7,10 @@ import ch.heigvd.bomberman.common.game.Point;
 
 public abstract class PowerUp extends Element {
 
+	public PowerUp() {
+		super();
+	}
+
 	public PowerUp(Point position, Arena arena) {
 		super(position, arena);
 	}

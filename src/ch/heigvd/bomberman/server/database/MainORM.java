@@ -2,7 +2,6 @@ package ch.heigvd.bomberman.server.database;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.logger.LocalLog;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -20,10 +19,10 @@ public abstract class MainORM<T> {
     private Class<T> clazz;
     protected Dao<T, Long> dao;
 
-    public MainORM(Class<T> clazz) throws SQLException {
+    public MainORM(ConnectionSource connectionSource, Class<T> clazz) throws SQLException {
         System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "ERROR");
         this.clazz = clazz;
-        connectionSource =  new JdbcConnectionSource("jdbc:sqlite:" + DATABASE_NAME);
+        this.connectionSource = connectionSource;
         dao = DaoManager.createDao(connectionSource, clazz);
     }
 
@@ -51,13 +50,5 @@ public abstract class MainORM<T> {
     public T find(long id) throws SQLException {
         T object = dao.queryForId(id);
         return object;
-    }
-
-    public void close() {
-        try {
-            connectionSource.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -100,10 +100,27 @@ public class ClientMainController {
         try {
             Arena arena = new SimpleArena();
             arena.putBomberman();
-            stage.setScene(new Scene(new ArenaRenderer(arena, 750, 750).render()));
+            Scene scene = new Scene(new ArenaRenderer(arena, 750, 750).getView());
+            stage.setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        stage.showAndWait();
+    }
+
+    @FXML
+    private void mapEditor() throws Exception
+    {
+        Stage stage = new Stage();
+        AnchorPane pane;
+        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/mapEditor/MapEditor.fxml"));
+
+        stage.setTitle("MapEditor");
+        pane = loader.load();
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.setScene(new Scene(pane));
         stage.showAndWait();
     }
 

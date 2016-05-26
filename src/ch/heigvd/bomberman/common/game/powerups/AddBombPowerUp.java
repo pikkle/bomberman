@@ -10,6 +10,10 @@ import ch.heigvd.bomberman.common.game.Point;
  */
 public class AddBombPowerUp extends PowerUp {
 
+	public AddBombPowerUp() {
+		super();
+	}
+
 	public AddBombPowerUp(Point position, Arena arena) {
 		super(position, arena);
 		arena.add(this);
@@ -22,6 +26,6 @@ public class AddBombPowerUp extends PowerUp {
 
 	@Override
 	public void accept(ElementVisitor visitor) {
-
+		visitor.visit(this);
 	}
 }

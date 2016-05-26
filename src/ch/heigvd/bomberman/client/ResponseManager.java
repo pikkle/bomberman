@@ -1,7 +1,10 @@
 package ch.heigvd.bomberman.client;
 
-import ch.heigvd.bomberman.common.communication.requests.*;
-import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.communication.requests.AccountCreationRequest;
+import ch.heigvd.bomberman.common.communication.requests.LoginRequest;
+import ch.heigvd.bomberman.common.communication.requests.Request;
+import ch.heigvd.bomberman.common.communication.responses.Response;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -48,9 +51,9 @@ public class ResponseManager
                             Response response = (Response) reader.readObject();
 
                             Consumer callback = callbacks.get(response.getID());
-                            new Thread(() -> {
-                                callback.accept(response.accept(ResponseProcessor.getInstance()));
-                            }).start();
+                            Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
+
+
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -79,10 +82,15 @@ public class ResponseManager
         send(r, callback);
     }
 
+    public void newAccountRequest(String username, String pwd, Consumer<Boolean> callback){
+        AccountCreationRequest r = new AccountCreationRequest(username, pwd);
+        send(r, callback);
+    }
+
     private <T> void send(Request<T> r, Consumer<? super T> callback) {
         try {
             writer.writeObject(r);
-	        if (callback != null)
+            if (callback != null)
                 callbacks.put(r.getID(), callback);
         } catch (IOException e) {
             e.printStackTrace();

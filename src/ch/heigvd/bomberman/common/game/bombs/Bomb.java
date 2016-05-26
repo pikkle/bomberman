@@ -29,7 +29,7 @@ public abstract class Bomb extends Element {
      * To call when the bomb explose, will remove all the element in range
      */
     public void explose() {
-        getElementsInRange().forEach(e -> arena.remove(e));
+        getElementsInRange().forEach(e -> arena.destroy(e));
         arena.remove(this);
     }
 

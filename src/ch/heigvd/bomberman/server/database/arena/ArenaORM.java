@@ -2,8 +2,10 @@ package ch.heigvd.bomberman.server.database.arena;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.server.database.DBManager;
 import ch.heigvd.bomberman.server.database.MainORM;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementORM;
+import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,17 +15,10 @@ import java.util.List;
  */
 public class ArenaORM extends MainORM<Arena>
 {
-	private static ArenaORM instance;
 
-	private ArenaORM() throws SQLException {
-		super(Arena.class);
-		createTable();
-	}
 
-	public static synchronized ArenaORM getInstance() throws SQLException {
-		if (instance  == null)
-			instance  = new ArenaORM();
-		return instance;
+	public ArenaORM(ConnectionSource connectionSource) throws SQLException {
+		super(connectionSource, Arena.class);
 	}
 
 	@Override
@@ -35,11 +30,12 @@ public class ArenaORM extends MainORM<Arena>
 
 	@Override
 	public int delete(Arena arena) throws SQLException {
-		ElementORM orm = ElementORM.getInstance();
+		ElementORM orm = DBManager.getInstance().getOrm(ElementORM.class);
 		List<Element> elements = orm.findByArena(arena);
 		elements.forEach(element -> {
 			try {
-				orm.delete(element);
+				ElementORM ormSpec = DBManager.getInstance().getOrm(element);
+				ormSpec.delete(element);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -55,13 +51,14 @@ public class ArenaORM extends MainORM<Arena>
 	}
 
 	private void updateElements(Arena arena) throws SQLException{
-		ElementORM<Element> orm = ElementORM.getInstance();
+		ElementORM orm = DBManager.getInstance().getOrm(ElementORM.class);
 		List<Element> elements = orm.findByArena(arena);
 
 		// delete elements removed
 		elements.stream().filter(element -> !arena.getElements().contains(element)).forEach(element -> {
 			try {
-				orm.delete(element);
+				ElementORM ormSpec = DBManager.getInstance().getOrm(element);
+				ormSpec.delete(element);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -69,11 +66,12 @@ public class ArenaORM extends MainORM<Arena>
 
 		arena.getElements().stream().forEach(element -> {
 			try {
+				ElementORM ormSpec = DBManager.getInstance().getOrm(element);
 				if(element.getId() == 0) {
-					orm.create(element);
+					ormSpec.create(element);
 				}
 				else
-					orm.update(element);
+					ormSpec.update(element);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

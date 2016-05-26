@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.test;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
 import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.server.database.DBManager;
 import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementORM;
 import org.junit.After;
@@ -22,7 +23,7 @@ public class ArenaTest {
 
 	@Before
 	public void setUp() throws Exception {
-		orm = ArenaORM.getInstance();
+		orm = DBManager.getInstance().getOrm(ArenaORM.class);
 	}
 
 	@After
@@ -55,7 +56,7 @@ public class ArenaTest {
 		orm.delete(arena);
 		Arena after = orm.find(arena.getId());
 		assertNull(after);
-		List<Element> all = ElementORM.getInstance().findByArena(arena);
+		List<Element> all = DBManager.getInstance().getOrm(ElementORM.class).findByArena(arena);
 		assertTrue(all.isEmpty());
 	}
 

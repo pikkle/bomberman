@@ -2,12 +2,13 @@ package ch.heigvd.bomberman.client.views.render;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.Point;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
+import javafx.geometry.VPos;
+import javafx.scene.layout.*;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -19,16 +20,50 @@ public class ArenaRenderer implements Observer
 {
 	private Arena arena;
 	private GridPane gridPane;
-	private double cellWidth;
-	private double cellHeight;
+	AnchorPane container;
+	private double width;
+	private double height;
 	private ElementRenderer elementRenderer;
 
-	public ArenaRenderer(Arena arena, double totalWidth, double totalHeight) {
+	public ArenaRenderer(Arena arena, double width, double height) {
 		this.arena = arena;
 		arena.addObserver(this);
-		cellHeight = totalHeight / arena.getHeight();
-		cellWidth = totalWidth / arena.getWidth();
-		elementRenderer = new ElementRenderer(this);
+		this.width = width;
+		this.height = height;
+		elementRenderer = new ElementRenderer();
+
+		container = new AnchorPane();
+		gridPane = new GridPane();
+		gridPane.setAlignment(Pos.CENTER);
+		gridPane.setStyle("-fx-background-color: #24B846;");
+		gridPane.setGridLinesVisible(true);
+
+		resize(width, height);
+
+		container.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+				resize();
+			}
+		});
+
+		container.heightProperty().addListener(new ChangeListener<Number>() {
+			@Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+				resize();
+			}
+		});
+
+		arena.getElements().stream().forEach(element -> {
+			renderElement(element);
+		});
+
+		BorderPane center = new BorderPane(gridPane);
+		container.setTopAnchor(center, 0.0);
+		container.setLeftAnchor(center, 0.0);
+		container.setRightAnchor(center, 0.0);
+		container.setBottomAnchor(center, 0.0);
+		container.getChildren().add(center);
+
+		container.setStyle("-fx-background-color: grey;");
 	}
 
 	public void renderElement(Element element){
@@ -37,39 +72,91 @@ public class ArenaRenderer implements Observer
 		}
 		if(arena.getElements().contains(element)){
 			element.accept(elementRenderer);
-			ImageView sprite = elementRenderer.getSprite(element);
-			sprite.setFitHeight(cellHeight);
-			sprite.setFitWidth(cellWidth);
-			gridPane.add(sprite, element.x(), (int)element.y());
+			ImageViewPane container = elementRenderer.getSprite(element);
+			if(container != null) {
+				gridPane.add(container, element.x(), element.y());
+			}
 		}
 	}
 
-	public GridPane render(){
-		gridPane = new GridPane();
-		gridPane.setAlignment(Pos.CENTER);
-		gridPane.setStyle("-fx-background-color: #24B846;");
-		gridPane.setGridLinesVisible(true);
+	public ImageViewPane getSprite(Element element){
+		return elementRenderer.getSprite(element);
+	}
 
-		for (int i = 0; i < arena.getWidth(); i++) {
-			ColumnConstraints column = new ColumnConstraints(cellWidth);
-			column.setHgrow(Priority.SOMETIMES);
-			gridPane.getColumnConstraints().add(column);
-		}
-		for (int i = 0; i < arena.getHeight(); i++) {
-			RowConstraints rowConstraints = new RowConstraints(cellHeight);
-			rowConstraints.setVgrow(Priority.SOMETIMES);
-			gridPane.getRowConstraints().add(rowConstraints);
-		}
+	public Arena getArena(){
+		return arena;
+	}
 
-		arena.getElements().stream().forEach(element -> {
-			renderElement(element);
-		});
+	public AnchorPane getView(){
+		return container;
+	}
+
+	public GridPane getGrid(){
 		return gridPane;
+	}
+
+	public double getWidth(){
+		return width;
+	}
+
+	public double getHeight(){
+		return height;
+	}
+
+	public double getCellWidth(){
+		return width / arena.getWidth();
+	}
+
+	public double getCellHeight(){
+		return height / arena.getHeight();
+	}
+
+	public Point getCell(double x, double y){
+		int xVal = 0;
+		int yVal = 0;
+		double width = 0;
+		double height = 0;
+		for(width = 0; x > width + this.width / arena.getWidth(); width += this.width / arena.getWidth(), xVal++);
+		for(height = 0; y > height + this.height / arena.getHeight(); height += this.height / arena.getHeight(), yVal++);
+		return new Point(Math.min(xVal, arena.getWidth() - 1), Math.min(yVal, arena.getHeight() - 1));
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		Element element = (Element)arg;
 		renderElement(element);
+	}
+
+	public void resize(double width, double height){
+		double size = Math.min(height / arena.getHeight(), width / arena.getWidth());
+		this.width = arena.getWidth() * size;
+		this.height = arena.getHeight() * size;
+		gridPane.setMaxWidth(this.width);
+		gridPane.setMaxHeight(this.height);
+		gridPane.getRowConstraints().clear();
+		gridPane.getColumnConstraints().clear();
+
+		for (int i = 0; i < arena.getHeight(); i++) {
+			RowConstraints rowConstraints = new RowConstraints();
+			rowConstraints.setVgrow(Priority.NEVER);
+			rowConstraints.setFillHeight(true);
+			rowConstraints.setMinHeight(10);
+			rowConstraints.setValignment(VPos.CENTER);
+			rowConstraints.setPrefHeight(size);
+			gridPane.getRowConstraints().add(rowConstraints);
+		}
+		for (int i = 0; i < arena.getWidth(); i++) {
+			ColumnConstraints column = new ColumnConstraints();
+			column.setHgrow(Priority.NEVER);
+			column.setFillWidth(true);
+			column.setMinWidth(10);
+			column.setHalignment(HPos.CENTER);
+			column.setPrefWidth(size);
+			gridPane.getColumnConstraints().add(column);
+		}
+	}
+
+	private void resize(){
+		resize(container.getWidth(), container.getHeight());
 	}
 }

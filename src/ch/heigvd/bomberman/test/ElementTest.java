@@ -5,13 +5,14 @@ import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Point;
 import ch.heigvd.bomberman.common.game.Wall;
+import ch.heigvd.bomberman.server.database.DBManager;
 import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementORM;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Collection;
 
 import static org.junit.Assert.*;
 
@@ -26,8 +27,8 @@ public class ElementTest {
 
 	@Before
 	public void setUp() throws Exception {
-		elementOrm = ElementORM.getInstance();
-		arenaOrm = ArenaORM.getInstance();
+		elementOrm = DBManager.getInstance().getOrm(ElementORM.class);
+		arenaOrm = DBManager.getInstance().getOrm(ArenaORM.class);
 		arena = new SimpleArena();
 
 		arenaOrm.create(arena);
@@ -40,7 +41,7 @@ public class ElementTest {
 
 	@Test
 	public void testFind() throws Exception {
-		List<Element> all = elementOrm.findByArena(arena);
+		Collection<Element> all = arena.getElements();
 		assertEquals(all.size(), 69);
 		all.forEach(element -> assertEquals(element.getArena().getId(), arena.getId()));
 	}
@@ -50,18 +51,26 @@ public class ElementTest {
 		Element element = new Wall(new Point(13, 6), arena);
 		elementOrm.create(element);
 		assertNotNull(element.getId());
-		List<Element> all = elementOrm.findByArena(arena);
-		assertEquals(all.size(), 70);
+
+		assertEquals(arena.getElements().size(), 70);
 		assertTrue(arena.getElements().contains(element));
 	}
 
 	@Test
 	public void testDelete() throws Exception {
-		Element element = elementOrm.findOneByArena(arena);
+		Element element = arena.getElements().stream().findFirst().get();
+
 		elementOrm.delete(element);
+
 		assertNull(elementOrm.find(element.getId()));
-		List<Element> all = elementOrm.findByArena(arena);
-		assertEquals(all.size(), 68);
+		assertEquals(arena.getElements().size(), 68);
 		assertFalse(arena.getElements().contains(element));
+	}
+
+	@Test
+	public void testWall() throws Exception {
+		Wall wall = new Wall(new Point(5, 7), arena);
+
+		DBManager.getInstance().getOrm(wall).create(wall);
 	}
 }

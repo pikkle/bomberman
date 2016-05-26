@@ -17,28 +17,24 @@ import java.util.List;
 /**
  * Created by matthieu.villard on 13.05.2016.
  */
-public class ElementDao extends BaseDaoImpl<Element, Long>
+public class ElementDao<T extends Element> extends BaseDaoImpl<T, Long>
 {
 	private static Logger logger = LoggerFactory.getLogger(ElementDao.class);
 
-	public ElementDao() throws SQLException {
-		super(Element.class);
-	}
-
-	public ElementDao(Class dataClass) throws SQLException {
+	public ElementDao(Class<T> dataClass) throws SQLException {
 		super(dataClass);
 	}
 
-	public ElementDao(ConnectionSource connectionSource, Class<Element> dataClass) throws SQLException {
+	public ElementDao(ConnectionSource connectionSource, Class<T> dataClass) throws SQLException {
 		super(connectionSource, dataClass);
 	}
 
-	public ElementDao(ConnectionSource connectionSource, DatabaseTableConfig<Element> tableConfig) throws SQLException {
+	public ElementDao(ConnectionSource connectionSource, DatabaseTableConfig<T> tableConfig) throws SQLException {
 		super(connectionSource, tableConfig);
 	}
 
 	@Override
-	public List<Element> query(PreparedQuery<Element> preparedQuery) throws SQLException {
+	public List<T> query(PreparedQuery<T> preparedQuery) throws SQLException {
 
 		/*setObjectFactory(new ObjectFactory<Element>() {
 			@Override
@@ -51,7 +47,7 @@ public class ElementDao extends BaseDaoImpl<Element, Long>
 			}
 		});*/
 		CompiledStatement compiledStatement = preparedQuery.compile(connectionSource.getReadOnlyConnection(), StatementBuilder.StatementType.SELECT, -1);
-		ElementIterator iterator = new ElementIterator(this.tableInfo.getDataClass(), this, preparedQuery, connectionSource, connectionSource.getReadOnlyConnection(), compiledStatement, preparedQuery.getStatement(), getObjectCache());
+		ElementIterator<T> iterator = new ElementIterator<T>(this.tableInfo.getDataClass(), this, preparedQuery, connectionSource, connectionSource.getReadOnlyConnection(), compiledStatement, preparedQuery.getStatement(), getObjectCache());
 
 		try {
 			ArrayList results = new ArrayList();
@@ -66,5 +62,9 @@ public class ElementDao extends BaseDaoImpl<Element, Long>
 		} finally {
 			iterator.close();
 		}
+	}
+
+	public T queryForFirst(PreparedQuery<T> preparedQuery) throws SQLException {
+		return query(preparedQuery).stream().findFirst().orElse(null);
 	}
 }

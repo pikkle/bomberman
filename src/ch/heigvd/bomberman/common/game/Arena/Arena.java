@@ -1,12 +1,9 @@
 package ch.heigvd.bomberman.common.game.Arena;
 
 
-import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.Point;
-import ch.heigvd.bomberman.common.game.Skin;
+import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
-import ch.heigvd.bomberman.server.database.arena.elements.PositionsConverter;
+import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -18,8 +15,6 @@ import javafx.util.Duration;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Observable;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 /**
@@ -40,14 +35,15 @@ public class Arena extends Observable
     @ForeignCollectionField(eager = true)
     private Collection<Element> elements = new LinkedList();
 
-    @DatabaseField(columnName = "availableStartPoints", canBeNull = false, persisterClass = PositionsConverter.class)
-    private Collection<Point> availableStartPoints = new LinkedList();
+    private ElementRemoveHandler elementRemoveHandler = new ElementRemoveHandler(this);
 
-    private Queue<Bomb> bombs = new ConcurrentLinkedQueue<>();
+    private ElementDestroyHandler elementDestroyHandler = new ElementDestroyHandler(this);
+
+    private ElementAddHandler elementAddHandler = new ElementAddHandler(this);
 
     public Arena() {
         new Thread(() -> {
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> bombs.forEach(b -> {
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> getBombs().forEach(b -> {
                 b.decreaseCountdown();
                 if (b.getCountdown() <= 0) {
                     b.explose();
@@ -112,17 +108,42 @@ public class Arena extends Observable
     }
 
     /**
+     * @return all the availableStartPoints
+     */
+    public Collection<Bomb> getBombs() {
+        return elements.stream().filter(element -> element instanceof Bomb).map(element -> (Bomb)element).collect(Collectors.toList());
+    }
+
+    /**
+     * @return all the availableStartPoints
+     */
+    public Collection<StartPoint> getStartPoints() {
+        return elements.stream().filter(element -> element instanceof StartPoint).map(element -> (StartPoint)element).collect(Collectors.toList());
+    }
+
+    /**
      * Add the element to the arena
      *
      * @param element The element to add
      * @throws RuntimeException if the cell is already occuped
      */
     public void add(Element element) throws RuntimeException {
+        element.accept(elementAddHandler);
+        setChanged();
+        notifyObservers(element);
+    }
+
+    /**
+     * Add the element to the arena
+     *
+     * @param element The element to add
+     * @throws RuntimeException if the cell is already occuped
+     */
+    protected void insert(Element element) throws RuntimeException {
         if(!elements.contains(element)) {
             if (isEmpty(element.position())) {
                 elements.add(element);
-                setChanged();
-                notifyObservers(element);
+                element.setArena(this);
             } else {
                 throw new RuntimeException("Cell already occuped");
             }
@@ -135,69 +156,93 @@ public class Arena extends Observable
      * @param bomb
      * @throws RuntimeException
      */
-    public void add(Bomb bomb) throws RuntimeException {
-        if (bombs.stream().noneMatch(b -> b.position().equals(bomb.position()))) {
-            if(!bombs.contains(bomb))
-                bombs.add(bomb);
-            if(!elements.contains(bomb))
+    protected void insert(Bomb bomb) throws RuntimeException {
+        if (getBombs().stream().noneMatch(b -> b.position().equals(bomb.position()))) {
+            if(!elements.contains(bomb)) {
                 elements.add(bomb);
-            setChanged();
-            notifyObservers(bomb);
+                bomb.setArena(this);
+            }
         } else {
             throw new RuntimeException("Already a bomb");
         }
 
     }
 
+    /**
+     * Add the available start point to the arena
+     *
+     * @param startPoint The position to add
+     * @throws RuntimeException if the cell is already occuped
+     */
+    protected void insert(StartPoint startPoint) throws RuntimeException {
+        if(!elements.contains(startPoint)) {
+            if(getStartPoints().size() >= 4){
+                throw new RuntimeException("4 availables start points have already been set");
+            }
+            else if(!isEmpty(startPoint.position())){
+                throw new RuntimeException("Cell already occuped");
+            }
+            else {
+                elements.add(startPoint);
+            }
+        }
+    }
+
+    /**
+     * Add the powerup start point to the arena
+     *
+     * @param powerUp The position to add
+     * @throws RuntimeException if the cell is already occuped
+     */
+    protected void insert(PowerUp powerUp) throws RuntimeException {
+        Collection<Element> boxes = getElements(powerUp.position());
+        if(boxes.size() == 1 && boxes.stream().filter(element -> element instanceof Box).findFirst().isPresent()){
+            Box box = (Box)boxes.stream().filter(element -> element instanceof Box).findFirst().get();
+            box.setPowerUp(powerUp);
+        }
+        else if(isEmpty(powerUp.position())){
+            insert((Element)powerUp);
+        }
+        else{
+            throw new RuntimeException("Cell already occuped");
+        }
+    }
+
     public void remove(Element e) {
-        // TODO end the element (kill the player, explose the box)
-        elements.remove(e);
+        e.accept(elementRemoveHandler);
         setChanged();
         notifyObservers(e);
     }
 
-    public void remove(Bomb b) {
-        // TODO end the element (kill the player, explose the box)
-        elements.remove(b);
-        bombs.remove(b);
+    protected void delete(Element e) {
+        elements.remove(e);
+    }
+
+    protected void delete(PowerUp powerUp) {
+        Collection<Element> boxes = getElements(powerUp.position());
+        if(boxes.size() == 1 && boxes.stream().filter(element -> element instanceof Box).findFirst().isPresent()){
+            Box box = (Box)boxes.stream().filter(element -> element instanceof Box).findFirst().get();
+            box.setPowerUp(null);
+        }
+        else {
+            delete((Element)powerUp);
+        }
+    }
+
+    public void destroy(Element e) {
+        e.accept(elementDestroyHandler);
         setChanged();
-        notifyObservers(b);
+        notifyObservers(e);
+    }
+
+    protected void destroy(Box b) {
+        delete((Element)b);
+        if(b.getPowerUp().isPresent())
+            add(b.getPowerUp().get());
     }
 
     public void change(Element e) {
         setChanged();
         notifyObservers(e);
-    }
-
-    /**
-     * @return all the availableStartPoints
-     */
-    public Collection<Point> getAvailableStartPoints() {
-        return availableStartPoints;
-    }
-
-    /**
-     * Add the available start point to the arena
-     *
-     * @param position The position to add
-     * @throws RuntimeException if the cell is already occuped
-     */
-    public void add(Point position) throws RuntimeException {
-        if(!availableStartPoints.contains(position)) {
-            if(availableStartPoints.size() >= 4){
-                throw new RuntimeException("4 availables start points have already been set");
-            }
-            else if(!isEmpty(position)){
-                throw new RuntimeException("Cell already occuped");
-            }
-            else {
-                availableStartPoints.add(position);
-            }
-        }
-    }
-
-    public void remove(Point position) {
-        // TODO end the element (kill the player, explose the box)
-        availableStartPoints.remove(position);
     }
 }

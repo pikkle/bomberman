@@ -3,9 +3,9 @@ package ch.heigvd.bomberman.client.views.room;
 import ch.heigvd.bomberman.client.views.ClientMainController;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Arena.RandomArena;
-import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
 import ch.heigvd.bomberman.common.game.Room;
+import ch.heigvd.bomberman.server.database.DBManager;
+import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,12 +13,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 /**
  * Created by matthieu.villard on 10.05.2016.
  */
 public class NewViewController
 {
-    private Arena[] arenas;
+    private List<Arena> arenas;
     private int selected = 0;
     private ClientMainController mainController;
 
@@ -35,7 +37,10 @@ public class NewViewController
     private TextField roomName;
 
     public NewViewController() throws Exception {
-        arenas = new Arena[]{new SimpleArena(), new RandomArena()};
+        ArenaORM orm = DBManager.getInstance().getOrm(ArenaORM.class);
+        if(orm != null) {
+            arenas = orm.findAll();
+        }
     }
 
     public void setMainController(ClientMainController mainController)
@@ -51,7 +56,7 @@ public class NewViewController
     @FXML
     private void next()
     {
-        if(selected < arenas.length - 1) {
+        if(selected < arenas.size() - 1) {
             selected++;
         }
         else{
@@ -67,14 +72,14 @@ public class NewViewController
             selected--;
         }
         else{
-            selected = arenas.length -1;
+            selected = arenas.size() -1;
         }
         refreshArena();
     }
 
     @FXML
     private void save(){
-        mainController.addRoom(new Room(roomName.getText(), arenas[selected]));
+        mainController.addRoom(new Room(roomName.getText(), arenas.get(selected)));
         close();
     }
 
@@ -85,7 +90,7 @@ public class NewViewController
 
     private void refreshArena(){
         arenaContainer.getChildren().clear();
-        arenaContainer.getChildren().add( new ArenaRenderer(arenas[selected], 225, 225).render());
-        lblRoom.setText(selected + 1 + " / " + arenas.length);
+        arenaContainer.getChildren().add( new ArenaRenderer(arenas.get(selected), 225, 225).getView());
+        lblRoom.setText(selected + 1 + " / " + arenas.size());
     }
 }

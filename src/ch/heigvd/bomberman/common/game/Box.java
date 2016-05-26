@@ -1,9 +1,9 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
+import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Optional;
@@ -14,8 +14,11 @@ import java.util.Optional;
  *
  * @author Adriano Ruberto
  */
-@DatabaseTable(tableName = "wall", daoClass = ElementDao.class)
+@DatabaseTable(tableName = "element", daoClass = ElementDao.class)
 public class Box extends Element {
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "powerUp", canBeNull = true)
+    private PowerUp powerUp;
 
     public Box() {
         super();
@@ -26,9 +29,13 @@ public class Box extends Element {
         arena.add(this);
     }
 
-    public Optional<PowerUp> open() {
+    public void setPowerUp(PowerUp powerUp){
+        this.powerUp = powerUp;
+    }
+
+    public Optional<PowerUp> getPowerUp() {
         // TODO return random powerup
-        return Optional.of(new AddBombPowerUp(position, arena));
+        return Optional.of(powerUp);
     }
 
     @Override

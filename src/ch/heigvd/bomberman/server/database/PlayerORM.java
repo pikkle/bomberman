@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.server.database;
 
 import ch.heigvd.bomberman.common.game.Player;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
 
@@ -10,17 +11,9 @@ import java.sql.SQLException;
  */
 public class PlayerORM extends MainORM<Player>
 {
-    private static PlayerORM instance;
 
-    private PlayerORM() throws SQLException {
-        super(Player.class);
-        createTable();
-    }
-
-    public static synchronized PlayerORM getInstance() throws SQLException {
-        if (instance  == null)
-            instance  = new PlayerORM();
-        return instance;
+    public PlayerORM(ConnectionSource connectionSource) throws SQLException {
+        super(connectionSource, Player.class);
     }
 
     public Player findOneByPseudo(String pseudo) throws SQLException  {
