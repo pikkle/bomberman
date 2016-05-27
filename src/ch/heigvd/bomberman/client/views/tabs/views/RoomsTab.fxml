@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="310.0" prefWidth="457.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.room.RoomsController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="310.0" prefWidth="457.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.room.RoomsController">
    <children>
       <HBox prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -21,13 +21,14 @@
       </HBox>
       <TableView fx:id="roomsTableView" layoutX="53.0" layoutY="58.0" prefHeight="338.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <columns>
-            <TableColumn prefWidth="26.0" />
+            <TableColumn fx:id="inRoom" prefWidth="26.0" />
             <TableColumn prefWidth="159.0" text="Nom">
                <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
             </TableColumn>
             <TableColumn prefWidth="189.0" text="Nombre de joueurs">
                <cellValueFactory><PropertyValueFactory property="playerNumber" /></cellValueFactory>
             </TableColumn>
+            <TableColumn fx:id="isPrivate" prefWidth="20.0" />
          </columns>
       </TableView>
    </children>
