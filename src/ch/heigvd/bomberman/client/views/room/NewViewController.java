@@ -105,20 +105,12 @@ public class NewViewController
             String hashPasswd = password.getText();
             rm.createRoomRequest(roomName.getText(), arenas.get(selected).getId(), minPlayer.getValue(), hashPasswd, message -> {
                 if (message.state()) {
-                    createSucces(message);
+                    ((Stage)mainPane.getScene().getWindow()).close();
                 } else {
                     createFailure(message);
                 }
             });
         }
-    }
-
-    private void createSucces(Message message){
-        Alert alert = new Alert(Alert.AlertType.NONE);
-        alert.setContentText(message.getMessage());
-        alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        alert.showAndWait();
-        ((Stage)mainPane.getScene().getWindow()).close();
     }
 
     private void createFailure(Message message){

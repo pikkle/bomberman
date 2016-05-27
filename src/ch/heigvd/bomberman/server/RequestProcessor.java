@@ -107,11 +107,16 @@ public class RequestProcessor implements RequestVisitor {
 			arena = Optional.empty();
 		}
 
-
-
 		return arena.filter(a->a.getId() == request.getArena())
 				.map(a->{
-					server.addRoom(new Room(request.getName(), request.getPassword(), request.getMinPlayer(), a));
+					Room room = new Room(request.getName(), request.getPassword(), request.getMinPlayer(), a);
+					PlayerSession playerSession = new PlayerSession(requestManager.getPlayer(), room);
+					try {
+						room.addPlayer(playerSession);
+					} catch (Exception e) {
+						return new ErrorResponse(request.getID(), e.getMessage());
+					}
+					server.addRoom(room);
 					server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> client.send(new RoomsResponse(client.getRoomsCallback(), server.getRooms().stream().map(r -> r.getClientRoom()).collect(Collectors.toList()))));
 					return (Response) new SuccessResponse(request.getID(), "Room successfully created !");
 				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
@@ -149,7 +154,11 @@ public class RequestProcessor implements RequestVisitor {
 			return new ErrorResponse(request.getID(), "You already joined this room !");
 
 		PlayerSession playerSession = new PlayerSession(requestManager.getPlayer(), room.get());
-		room.get().addPlayer(playerSession);
+		try {
+			room.get().addPlayer(playerSession);
+		} catch (Exception e) {
+			return new ErrorResponse(request.getID(), e.getMessage());
+		}
 
 		requestManager.setRoom(room.get());
 		requestManager.setPlayerSession(playerSession);

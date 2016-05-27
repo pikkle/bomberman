@@ -34,9 +34,13 @@ public class Room {
 		clientRoom = new ch.heigvd.bomberman.common.game.Room(name, password != null && !password.isEmpty(), minPlayer, arena);
 	}
 
-	public synchronized void addPlayer(PlayerSession p) {
-		players.add(p);
-		clientRoom.setPlayerNumber(clientRoom.getPlayerNumber() + 1);
+	public synchronized void addPlayer(PlayerSession p) throws Exception {
+		if(!players.contains(p)) {
+			if(players.size() >= 4)
+				throw new Exception("Already 4 players !");
+			players.add(p);
+			clientRoom.setPlayerNumber(clientRoom.getPlayerNumber() + 1);
+		}
 	}
 
 	public synchronized void removePlayer(PlayerSession p) {

@@ -3,8 +3,6 @@ package ch.heigvd.bomberman.client.views.room;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.communication.Message;
-import ch.heigvd.bomberman.common.communication.requests.Request;
-import ch.heigvd.bomberman.common.communication.requests.RoomsRequest;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,7 +16,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * Created by matthieu.villard on 09.05.2016.
@@ -49,7 +46,7 @@ public class RoomsController
 
     @FXML
     public void join(){
-       /* Room room = (Room) roomsTableView.getSelectionModel().getSelectedItem();
+       Room room = (Room) roomsTableView.getSelectionModel().getSelectedItem();
         rm.joinRoomRequest(room, message -> {
             if (message.state()) {
                 joinSucces(message);
@@ -57,7 +54,6 @@ public class RoomsController
                 joinFailure(message);
             }
         });
-        */
     }
 
     private void joinSucces(Message message){

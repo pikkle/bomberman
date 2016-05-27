@@ -22,7 +22,7 @@ public class ArenaRenderer implements Observer
 {
 	private Arena arena;
 	private GridPane gridPane;
-	AnchorPane container;
+	private AnchorPane container;
 	private double width;
 	private double height;
 	private ElementRenderer elementRenderer;

@@ -93,20 +93,12 @@ public class LoginViewController {
             String hashPasswd = pwd.getText();
             rm.loginRequest(userId.getText(), hashPasswd, message -> {
                 if (message.state()) {
-                    loginSucces(message);
+                    bypass();
                 } else {
                     loginFailure(message);
                 }
             });
         }
-    }
-
-    private void loginSucces(Message message){
-        Alert alert = new Alert(Alert.AlertType.NONE);
-        alert.setContentText(message.getMessage());
-        alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        alert.showAndWait();
-        bypass();
     }
 
     private void loginFailure(Message message){

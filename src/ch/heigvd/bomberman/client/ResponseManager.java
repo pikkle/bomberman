@@ -139,5 +139,4 @@ public class ResponseManager extends Observable
             e.printStackTrace();
         }
     }
-
 }
