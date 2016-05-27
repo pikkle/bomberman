@@ -127,6 +127,7 @@ public class ResponseManager
         ReadyRequest r = new ReadyRequest(ready);
         send(r, callback);
     }
+    
 
     private <T> void send(Request<T> r, Consumer<? super T> callback)
     {
