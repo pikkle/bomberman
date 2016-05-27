@@ -9,7 +9,6 @@ import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RequestProcessor implements RequestVisitor {
@@ -108,9 +107,12 @@ public class RequestProcessor implements RequestVisitor {
 			arena = Optional.empty();
 		}
 
+
+
 		return arena.filter(a->a.getId() == request.getArena())
 				.map(a->{
 					server.addRoom(new Room(request.getName(), request.getPassword(), request.getMinPlayer(), a));
+					server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> client.send(new RoomsResponse(client.getRoomsCallback(), server.getRooms().stream().map(r -> r.getClientRoom()).collect(Collectors.toList()))));
 					return (Response) new SuccessResponse(request.getID(), "Room successfully created !");
 				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
@@ -118,9 +120,13 @@ public class RequestProcessor implements RequestVisitor {
 	@Override
 	public Response visit(RoomsRequest request) {
 		if (!requestManager.isLoggedIn())
-			return new ErrorResponse(request.getID(), "You must be logged !");
+			return new NoResponse(request.getID());
 
-		return new RoomsResponse(UUID.fromString("1"), server.getRooms().stream().map(r -> r.getClientRoom()).collect(Collectors.toList()));
+		requestManager.setRoomsCallback(request.getID());
+
+		requestManager.send(new RoomsResponse(request.getID(), server.getRooms().stream().map(r -> r.getClientRoom()).collect(Collectors.toList())));
+
+		return new NoResponse(request.getID());
 	}
 
 	@Override

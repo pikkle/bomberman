@@ -2,6 +2,9 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.game.Room;
+
+import java.util.List;
 
 public class LoginRequest extends Request<Message> {
 	private String username, password;
@@ -11,7 +14,7 @@ public class LoginRequest extends Request<Message> {
 	}
 
 	@Override
-	public Response accept(RequestVisitor visitor) {
+	public Response<List<Room>> accept(RequestVisitor visitor) {
 		return visitor.visit(this);
 	}
 

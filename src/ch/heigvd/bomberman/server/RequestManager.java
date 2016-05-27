@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.UUID;
 
 public class RequestManager extends Thread {
     private Socket socket;
@@ -20,6 +21,7 @@ public class RequestManager extends Thread {
     private Room room;
     private RequestProcessor requestProcessor;
     private boolean loggedIn = false;
+    private UUID roomsCallback;
 
 
     public RequestManager(Socket socket) {
@@ -31,7 +33,6 @@ public class RequestManager extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -47,6 +48,16 @@ public class RequestManager extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void send(Response response){
+        if (response.isSendable()) {
+            try {
+                writer.writeObject(response);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -82,5 +93,13 @@ public class RequestManager extends Thread {
 
     public PlayerSession getPlayerSession(){
         return playerSession;
+    }
+
+    public void setRoomsCallback(UUID roomsCallback){
+        this.roomsCallback = roomsCallback;
+    }
+
+    public UUID getRoomsCallback(){
+        return roomsCallback;
     }
 }

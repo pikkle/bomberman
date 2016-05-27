@@ -34,19 +34,22 @@ public class RoomsController
     @FXML
     private void initialize() throws IOException {
         rm = ResponseManager.getInstance();
-        rm.roomsRequest(param -> {
-            rooms = param;
-        });
-
+        showRooms();
     }
 
     @FXML
     public void showRooms(){
+        roomsTableView.setItems(rooms);
+
+       rm.roomsRequest(r ->{
+            rooms.clear();
+            rooms.addAll(r);
+        });
     }
 
     @FXML
     public void join(){
-        Room room = (Room) roomsTableView.getSelectionModel().getSelectedItem();
+       /* Room room = (Room) roomsTableView.getSelectionModel().getSelectedItem();
         rm.joinRoomRequest(room, message -> {
             if (message.state()) {
                 joinSucces(message);
@@ -54,6 +57,7 @@ public class RoomsController
                 joinFailure(message);
             }
         });
+        */
     }
 
     private void joinSucces(Message message){

@@ -2,6 +2,9 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.responses.Response;
 import ch.heigvd.bomberman.common.game.Direction;
+import ch.heigvd.bomberman.common.game.Room;
+
+import java.util.List;
 
 /**
  * Projet : GEN_Projet
@@ -19,7 +22,7 @@ public class MoveRequest extends Request<Direction> {
 	}
 
 	@Override
-	public Response accept(RequestVisitor visitor) {
+	public Response<List<Room>> accept(RequestVisitor visitor) {
 		return visitor.visit(this);
 	}
 }

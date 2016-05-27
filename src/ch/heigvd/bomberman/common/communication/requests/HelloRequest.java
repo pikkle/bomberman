@@ -1,6 +1,9 @@
 package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.game.Room;
+
+import java.util.List;
 
 public class HelloRequest extends Request<String> {
     private String message;
@@ -14,7 +17,7 @@ public class HelloRequest extends Request<String> {
     }
 
     @Override
-    public Response accept(RequestVisitor visitor) {
+    public Response<List<Room>> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
 

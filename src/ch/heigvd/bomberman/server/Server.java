@@ -69,6 +69,10 @@ public class Server {
         return rooms;
     }
 
+    public List<RequestManager> getClients(){
+        return clients;
+    }
+
     /**
      * Entry point of the server
      * @param args {server port, ... }

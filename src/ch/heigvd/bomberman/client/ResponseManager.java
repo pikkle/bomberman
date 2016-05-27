@@ -7,7 +7,6 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -107,10 +106,10 @@ public class ResponseManager extends Observable
         send(r, callback);
     }
 
-    public void roomsRequest(Consumer<ObservableList<Room>> callback)
+    public void roomsRequest(Consumer<List<Room>> callback)
     {
         RoomsRequest r = new RoomsRequest();
-        send(r, null);
+        send(r, callback);
     }
 
     public void joinRoomRequest(Room room, Consumer<Message> callback)
@@ -119,16 +118,10 @@ public class ResponseManager extends Observable
         send(r, callback);
     }
 
-
-
     public void readyRequest(boolean ready, Consumer<Bomberman> callback)
     {
         ReadyRequest r = new ReadyRequest(ready);
         send(r, callback);
-    }
-
-    public void lookForRooms(Consumer<List<Room>> callback){
-        callbacks.put(UUID.fromString("1"), callback);
     }
 
     private <T> void send(Request<T> r, Consumer<? super T> callback)
