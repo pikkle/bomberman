@@ -37,6 +37,9 @@ public class ClientMainController {
     @FXML
     private Pane tabsPane;
 
+    @FXML
+    private Pane mainPane;
+
     /***********
      * Methodes*
      ***********/
@@ -59,6 +62,8 @@ public class ClientMainController {
 
         FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
 
+        rm = ResponseManager.getInstance();
+
         try
         {
             tabsPane.getChildren().add(loader.load());
@@ -69,7 +74,7 @@ public class ClientMainController {
     }
 
     @FXML
-    private void closeApp()
+    private void closeApp () throws Exception
     {
         Platform.exit();
     }
@@ -81,7 +86,6 @@ public class ClientMainController {
         stage.setTitle("Bomberman");
 
         stage.setOnCloseRequest(event -> {
-            Platform.exit();
             stage.close();
         });
 

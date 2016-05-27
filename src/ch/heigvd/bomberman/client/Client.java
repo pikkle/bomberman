@@ -8,7 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 
 /**
  * Client executable class
@@ -29,6 +28,8 @@ public class Client extends Application {
         launch(args);
     }
 
+
+    @Override
     public void start(Stage primaryStage) throws Exception {
 
         this.primaryStage = primaryStage;
@@ -41,25 +42,29 @@ public class Client extends Application {
 
         LoginViewController controller = loader.getController();
         controller.setClient(this);
-        primaryStage.setOnCloseRequest(event -> {
-            try
-            {
-                ResponseManager.getInstance().disconnect();
-            } catch (IOException e)
-            {
-                throw new UncheckedIOException(e);
-            }
-        });
 
         primaryStage.setScene(new Scene(mainLayout));
-
         primaryStage.show();
+    }
+
+    @Override
+    public void stop(){
+        System.out.println("Stage is closing");
+        try
+        {
+            rm.disconnect();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        // Save file
     }
 
     public void changeScene(Pane pane){
         primaryStage.hide();
         mainLayout = pane;
         primaryStage.setScene(new Scene(mainLayout));
+
         primaryStage.show();
     }
 
@@ -69,5 +74,9 @@ public class Client extends Application {
 
     public ResponseManager getRm() {
         return rm;
+    }
+
+    public Stage getPrimatyStage(){
+        return primaryStage;
     }
 }

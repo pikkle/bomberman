@@ -118,18 +118,9 @@ public class LoginViewController {
 
 
     @FXML
-    private void closeWindow()
+    private void closeApp()
     {
         Platform.exit();
-        ( (Stage)mainPane.getScene().getWindow() ).close();
-        try
-        {
-            rm.disconnect();
-
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     @FXML

@@ -24,6 +24,7 @@ public class ResponseManager extends Observable
     private ObjectInputStream reader;
     private Map<UUID, Consumer> callbacks;
     private Thread receiver;
+    private boolean closeRequest = false;
 
     private ResponseManager()
     {
@@ -60,7 +61,8 @@ public class ResponseManager extends Observable
 
                     } catch (IOException | ClassNotFoundException e)
                     {
-                        e.printStackTrace();
+                        if (!closeRequest)
+                            e.printStackTrace();
                     }
                 }
             }
@@ -71,6 +73,7 @@ public class ResponseManager extends Observable
 
     public void disconnect() throws IOException
     {
+        closeRequest = true;
         receiver.interrupt();
         writer.close();
         reader.close();
