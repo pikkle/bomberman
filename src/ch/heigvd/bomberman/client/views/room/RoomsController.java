@@ -32,15 +32,16 @@ public class RoomsController
     private void initialize() throws IOException {
         rm = ResponseManager.getInstance();
         roomsTableView.setItems(rooms);
-        showRooms();
+
+        rm.lookForRooms(r ->{
+            rooms.clear();
+            rooms.addAll(r);
+        });
     }
 
     @FXML
     public void showRooms(){
-        rm.roomsRequest(results -> {
-            rooms.clear();
-            rooms.addAll(results);
-        });
+        rm.roomsRequest();
     }
 
     @FXML

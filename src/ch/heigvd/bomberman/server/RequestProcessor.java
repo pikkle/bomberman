@@ -9,6 +9,7 @@ import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RequestProcessor implements RequestVisitor {
@@ -119,7 +120,7 @@ public class RequestProcessor implements RequestVisitor {
 		if (!requestManager.isLoggedIn())
 			return new ErrorResponse(request.getID(), "You must be logged !");
 
-		return new RoomsResponse(request.getID(), server.getRooms().stream().map(r -> r.getClientRoom()).collect(Collectors.toList()));
+		return new RoomsResponse(UUID.fromString("1"), server.getRooms().stream().map(r -> r.getClientRoom()).collect(Collectors.toList()));
 	}
 
 	@Override

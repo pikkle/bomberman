@@ -12,14 +12,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 
-public class ResponseManager
+public class ResponseManager extends Observable
 {
     private static ResponseManager instance;
     private Socket socket;
@@ -110,10 +107,10 @@ public class ResponseManager
         send(r, callback);
     }
 
-    public void roomsRequest(Consumer<List<Room>> callback)
+    public void roomsRequest()
     {
         RoomsRequest r = new RoomsRequest();
-        send(r, callback);
+        send(r, null);
     }
 
     public void joinRoomRequest(Room room, Consumer<Message> callback)
@@ -127,7 +124,10 @@ public class ResponseManager
         ReadyRequest r = new ReadyRequest(ready);
         send(r, callback);
     }
-    
+
+    public void lookForRooms(Consumer<List<Room>> callback){
+        callbacks.put(UUID.fromString("1"), callback);
+    }
 
     private <T> void send(Request<T> r, Consumer<? super T> callback)
     {
