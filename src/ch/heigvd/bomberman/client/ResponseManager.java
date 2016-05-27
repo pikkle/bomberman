@@ -109,6 +109,7 @@ public class ResponseManager extends Observable
 
     public void roomsRequest()
     {
+        
         RoomsRequest r = new RoomsRequest();
         send(r, null);
     }

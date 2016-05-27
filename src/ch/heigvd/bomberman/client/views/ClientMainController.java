@@ -56,11 +56,6 @@ public class ClientMainController {
 
     @FXML
     private void initialize() {
-        try {
-            loginWindow();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/UserTabsView.fxml"));
 
