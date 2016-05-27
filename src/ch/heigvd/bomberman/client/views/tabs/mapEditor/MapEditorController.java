@@ -79,16 +79,24 @@ public class MapEditorController implements Observer {
     }
 
     private void changeDimension(int width, int height){
-        Arena oldArena = arena;
+        if(width < 2 || height < 2){
+            this.width.getValueFactory().setValue(Math.max(width, 2));
+            this.height.getValueFactory().setValue(Math.max(height, 2));
+        }
         try {
+            Arena oldArena = arena;
             arena = new Arena(width, height);
             renderer = new ArenaRenderer(arena, 750, 750);
-            for(int x = 1; x < oldArena.getWidth() - 1 && x < arena.getWidth(); x++){
-                for(int y = 1; y < oldArena.getHeight() - 1 && y < arena.getHeight(); y++){
-                    oldArena.getElements(new Point(x, y)).forEach(element -> {
-                        element.setArena(arena);
-                        registerDeleteDragEvents(element);
-                    });
+            if(oldArena != null) {
+                for (int x = 1; x < oldArena.getWidth() - 1 && x < arena.getWidth() - 1; x++) {
+                    for (int y = 1; y < oldArena.getHeight() - 1 && y < arena.getHeight() - 1; y++) {
+                        oldArena.getElements(new Point(x, y)).forEach(element -> {
+                            if(arena.isEmpty(element.position())){
+                                element.setArena(arena);
+                                registerDeleteDragEvents(element);
+                            }
+                        });
+                    }
                 }
             }
 

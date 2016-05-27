@@ -43,11 +43,8 @@ public class Arena extends Observable implements Serializable
     }
 
     public Arena(int width, int height) throws URISyntaxException {
-        this.width = width;
-        this.height = height;
-
-        if(height < 1 || width < 1)
-            return;
+        this.width = Math.max(width, 2);
+        this.height = Math.max(height, 2);
 
 	    for (int i = 0; i < getWidth(); i++) {
 		    new Wall(new Point(i, 0), this);
