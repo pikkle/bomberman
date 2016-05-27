@@ -57,7 +57,7 @@ public class ClientMainController {
     @FXML
     private void initialize() {
 
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/UserTabsView.fxml"));
+        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
 
         try
         {

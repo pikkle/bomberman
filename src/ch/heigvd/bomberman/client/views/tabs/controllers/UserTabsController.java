@@ -1,4 +1,4 @@
-package ch.heigvd.bomberman.client.views.tabs;
+package ch.heigvd.bomberman.client.views.tabs.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
@@ -18,6 +18,5 @@ public class UserTabsController
     @FXML
     private void initalize(){
         tabs.getSelectionModel().clearAndSelect(0);
-
     }
 }

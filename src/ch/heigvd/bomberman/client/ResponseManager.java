@@ -7,6 +7,7 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -58,7 +59,6 @@ public class ResponseManager extends Observable
                         Consumer callback = callbacks.get(response.getID());
                         Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
 
-
                     } catch (IOException | ClassNotFoundException e)
                     {
                         e.printStackTrace();
@@ -107,9 +107,8 @@ public class ResponseManager extends Observable
         send(r, callback);
     }
 
-    public void roomsRequest()
+    public void roomsRequest(Consumer<ObservableList<Room>> callback)
     {
-        
         RoomsRequest r = new RoomsRequest();
         send(r, null);
     }
@@ -119,6 +118,8 @@ public class ResponseManager extends Observable
         JoinRoomRequest r = new JoinRoomRequest(room);
         send(r, callback);
     }
+
+
 
     public void readyRequest(boolean ready, Consumer<Bomberman> callback)
     {

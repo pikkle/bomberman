@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
 /**
  * Client executable class
  */
@@ -38,6 +41,15 @@ public class Client extends Application {
 
         LoginViewController controller = loader.getController();
         controller.setClient(this);
+        primaryStage.setOnCloseRequest(event -> {
+            try
+            {
+                ResponseManager.getInstance().disconnect();
+            } catch (IOException e)
+            {
+                throw new UncheckedIOException(e);
+            }
+        });
 
         primaryStage.setScene(new Scene(mainLayout));
 
