@@ -42,35 +42,8 @@ public class ElementRenderer implements ElementVisitor
 
 	@Override
 	public void visit(Bomberman bomberman) {
-		if(!rendered.containsKey(bomberman)) {
-			ImageView sprite = new ImageView(new Image("ch/heigvd/bomberman/client/img/skins/" + bomberman.getSkin() + ".png"));
-
-			sprite.setOnKeyPressed(key -> {
-				switch (key.getCode()) {
-					case RIGHT:
-						bomberman.move(Direction.RIGHT);
-						break;
-					case LEFT:
-						bomberman.move(Direction.LEFT);
-						break;
-					case DOWN:
-						bomberman.move(Direction.DOWN);
-						break;
-					case UP:
-						bomberman.move(Direction.UP);
-						break;
-					case SPACE:
-						bomberman.dropBomb();
-						break;
-					default:
-						return;
-				}
-				key.consume();
-			});
-			sprite.setFocusTraversable(true);
-
-			rendered.put(bomberman, new ImageViewPane(sprite));
-		}
+		if(!rendered.containsKey(bomberman))
+			rendered.put(bomberman, new ImageViewPane(new ImageView(new Image("ch/heigvd/bomberman/client/img/skins/" + bomberman.getSkin() + ".png"))));
 	}
 
 	@Override

@@ -1,25 +1,20 @@
 package ch.heigvd.bomberman.client.views.auth;
 
-import ch.heigvd.bomberman.client.Client;
-import ch.heigvd.bomberman.client.views.ClientMainController;
+import ch.heigvd.bomberman.client.ResponseManager;
+import ch.heigvd.bomberman.common.communication.Message;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 /**
  * Created by julien on 08.05.16.
  */
 public class NewViewController {
 
-    ClientMainController mainController;
+    private ResponseManager rm;
 
     @FXML
     private Pane mainPane;
@@ -30,12 +25,7 @@ public class NewViewController {
     @FXML
     private void initialize()
     {
-    }
-
-
-    public void setMainController(ClientMainController mainController)
-    {
-        this.mainController = mainController;
+        rm = ResponseManager.getInstance();
     }
 
     @FXML
@@ -66,26 +56,26 @@ public class NewViewController {
         }
 
         else {
-            mainController.getRm().newAccountRequest(userId.getText(), pwd.getText(), message -> {
+            rm.newAccountRequest(userId.getText(), pwd.getText(), message -> {
                 if (message.state()) {
-                    creationSucces();
+                    creationSucces(message);
                 } else {
-                    creationFailure();
+                    creationFailure(message);
                 }
             });
         }
     }
 
-    private void creationSucces(){
+    private void creationSucces(Message message){
         Alert alert = new Alert(Alert.AlertType.NONE);
-        alert.setContentText("Your acount has been created");
+        alert.setContentText(message.getMessage());
         alert.showAndWait();
         ((Stage)mainPane.getScene().getWindow()).close();
     }
 
-    private void creationFailure(){
+    private void creationFailure(Message message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("An error uccured while creating your acount");
+        alert.setContentText(message.getMessage());
         alert.showAndWait();
     }
 

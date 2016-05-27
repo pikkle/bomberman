@@ -52,7 +52,6 @@ public class CreateRoomRequest extends Request<Message> {
 
     @Override
     public Response<Message> accept(RequestVisitor visitor) {
-        System.out.println("start");
         return visitor.visit(this);
     }
 }

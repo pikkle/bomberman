@@ -1,11 +1,9 @@
 package ch.heigvd.bomberman.client.views.room;
 
-import ch.heigvd.bomberman.client.views.ClientMainController;
+import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.server.database.DBManager;
-import ch.heigvd.bomberman.server.database.arena.ArenaORM;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -21,7 +19,7 @@ public class NewViewController
 {
     private List<Arena> arenas;
     private int selected = 0;
-    private ClientMainController mainController;
+    private ResponseManager rm;
 
     @FXML
     private AnchorPane mainPane;
@@ -47,32 +45,25 @@ public class NewViewController
     @FXML
     private Label lblPassword;
 
-    public NewViewController() throws Exception {
-        ArenaORM orm = DBManager.getInstance().getOrm(ArenaORM.class);
-        if(orm != null) {
-            arenas = orm.findAll();
-        }
-    }
-
-    public void setMainController(ClientMainController mainController)
-    {
-        this.mainController = mainController;
-    }
-
     @FXML
     private void initialize() throws Exception {
+        rm = ResponseManager.getInstance();
         minPlayer.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 4));
         isPrivate.selectedProperty().addListener((obs, oldValue, newValue) -> {
             password.setDisable(!newValue);
             lblPassword.setDisable(!newValue);
         });
-        refreshArena();
+
+        rm.arenasRequest(arenas -> {
+            this.arenas = arenas;
+            refreshArena();
+        });
     }
 
     @FXML
     private void next()
     {
-        if(selected < arenas.size() - 1) {
+        if(arenas != null && selected < arenas.size() - 1) {
             selected++;
         }
         else{
@@ -87,7 +78,7 @@ public class NewViewController
         if(selected > 0) {
             selected--;
         }
-        else{
+        else if(arenas != null){
             selected = arenas.size() -1;
         }
         refreshArena();
@@ -110,10 +101,9 @@ public class NewViewController
             alert.setContentText("A private room must have a password");
             alert.showAndWait();
         }
-        else {
+        else if(arenas != null && !arenas.isEmpty()) {
             String hashPasswd = password.getText();
-            mainController.getRm().createRoomRequest(roomName.getText(), arenas.get(selected).getId(), minPlayer.getValue(), hashPasswd, message -> {
-                System.out.println("sdd");
+            rm.createRoomRequest(roomName.getText(), arenas.get(selected).getId(), minPlayer.getValue(), hashPasswd, message -> {
                 if (message.state()) {
                     createSucces(message);
                 } else {
@@ -143,6 +133,8 @@ public class NewViewController
     }
 
     private void refreshArena(){
+        if(arenas == null || arenas.isEmpty())
+            return;
         arenaContainer.getChildren().clear();
         arenaContainer.getChildren().add( new ArenaRenderer(arenas.get(selected), 225, 225).getView());
         lblRoom.setText(selected + 1 + " / " + arenas.size());

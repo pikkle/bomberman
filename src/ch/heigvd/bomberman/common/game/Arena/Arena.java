@@ -12,6 +12,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
  * Created by matthieu.villard on 09.05.2016.
  */
 @DatabaseTable(tableName = "arena")
-public class Arena extends Observable
+public class Arena extends Observable implements Serializable
 {
     @DatabaseField(generatedId = true)
     private int id;
@@ -36,11 +37,6 @@ public class Arena extends Observable
     @ForeignCollectionField(eager = true)
     private Collection<Element> elements = new LinkedList<>();
 
-    private ElementRemoveHandler elementRemoveHandler = new ElementRemoveHandler(this);
-
-    private ElementDestroyHandler elementDestroyHandler = new ElementDestroyHandler(this);
-
-    private ElementAddHandler elementAddHandler = new ElementAddHandler(this);
 
     public Arena() throws URISyntaxException {
 	    this(0, 0);
@@ -50,16 +46,8 @@ public class Arena extends Observable
         this.width = width;
         this.height = height;
 
-	    new Thread(() -> {
-		    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> getBombs().forEach(b -> {
-			    b.decreaseCountdown();
-			    if (b.getCountdown() <= 0) {
-				    b.explose();
-			    }
-		    })));
-		    timeline.setCycleCount(Animation.INDEFINITE);
-		    timeline.play();
-	    }).start();
+        if(height < 1 || width < 1)
+            return;
 
 	    for (int i = 0; i < getWidth(); i++) {
 		    new Wall(new Point(i, 0), this);
@@ -70,6 +58,19 @@ public class Arena extends Observable
 		    new Wall(new Point(0, i), this);
 		    new Wall(new Point(getWidth() - 1, i), this);
 	    }
+    }
+
+    public void start(){
+        new Thread(() -> {
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> getBombs().forEach(b -> {
+                b.decreaseCountdown();
+                if (b.getCountdown() <= 0) {
+                    b.explose();
+                }
+            })));
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
+        }).start();
     }
 
     public int getId() {
@@ -140,7 +141,7 @@ public class Arena extends Observable
      * @throws RuntimeException if the cell is already occuped
      */
     public void add(Element element) throws RuntimeException {
-        element.accept(elementAddHandler);
+        element.accept(new ElementAddHandler(this));
         setChanged();
         notifyObservers(element);
     }
@@ -221,7 +222,7 @@ public class Arena extends Observable
     }
 
     public void remove(Element e) {
-        e.accept(elementRemoveHandler);
+        e.accept(new ElementRemoveHandler(this));
         setChanged();
         notifyObservers(e);
     }
@@ -242,7 +243,7 @@ public class Arena extends Observable
     }
 
     public void destroy(Element e) {
-        e.accept(elementDestroyHandler);
+        e.accept(new ElementDestroyHandler(this));
         setChanged();
         notifyObservers(e);
     }

@@ -2,44 +2,21 @@ package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.io.Serializable;
 
-public class Room {
+public class Room implements Serializable {
     private String name;
-    private String password;
+    private boolean isPrivate;
     private int minPlayer;
     private Arena arena;
-    private boolean running = false;
-    private List<Player> players = new LinkedList<Player>();
+    private int playerNumber = 0;
 
-    public Room(String name, Arena arena, int minPlayer) {
+    public Room(String name, boolean isPrivate, int minPlayer, Arena arena) {
         this.name = name;
-        this.arena = arena;
+        this.isPrivate = isPrivate;
         this.minPlayer = minPlayer;
-    }
-
-    /**
-     * Creates a room
-     *
-     * @param name
-     * @param arena
-     * @param minPlayer
-     * @param password
-     */
-    public Room(String name, Arena arena, int minPlayer, String password) {
-        this.name = name;
         this.arena = arena;
-        this.minPlayer = minPlayer;
-        this.password = password;
-    }
-
-    public synchronized void addPlayer(Player p) {
-        players.add(p);
-    }
-
-    public synchronized void removePlayer(Player p) {
-        players.remove(p);
+        this.playerNumber = playerNumber;
     }
 
     public String getName() {
@@ -47,7 +24,11 @@ public class Room {
     }
 
     public int getPlayerNumber() {
-        return players.size();
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 
     public Arena getArena() {

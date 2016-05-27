@@ -18,13 +18,12 @@ public class Server {
     private int port;
     private boolean running = true;
     private List<RequestManager> clients;
-    private List<Room> rooms;
+    private List<Room> rooms = new LinkedList();
     private DBManager database;
 
     private Server(int port){
         this.port = port;
         this.clients = new LinkedList<RequestManager>();
-        this.rooms = new LinkedList<Room>();
         try {
             database = DBManager.getInstance();
         } catch (SQLException e) {
@@ -63,7 +62,11 @@ public class Server {
     }
 
     public void addRoom(Room room){
-        rooms.add(room);
+       rooms.add(room);
+    }
+
+    public List<Room> getRooms(){
+        return rooms;
     }
 
     /**

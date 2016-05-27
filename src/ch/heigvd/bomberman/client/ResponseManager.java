@@ -2,13 +2,18 @@ package ch.heigvd.bomberman.client;
 
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.requests.*;
-import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -93,9 +98,33 @@ public class ResponseManager
         send(r, callback);
     }
 
+    public void arenasRequest(Consumer<List<Arena>> callback)
+    {
+        ArenasRequest r = new ArenasRequest();
+        send(r, callback);
+    }
+
     public void createRoomRequest(String name, long arena, int minPlayer, String password, Consumer<Message> callback)
     {
         CreateRoomRequest r = new CreateRoomRequest(name, arena, minPlayer, password);
+        send(r, callback);
+    }
+
+    public void roomsRequest(Consumer<List<Room>> callback)
+    {
+        RoomsRequest r = new RoomsRequest();
+        send(r, callback);
+    }
+
+    public void joinRoomRequest(Room room, Consumer<Message> callback)
+    {
+        JoinRoomRequest r = new JoinRoomRequest(room);
+        send(r, callback);
+    }
+
+    public void readyRequest(boolean ready, Consumer<Bomberman> callback)
+    {
+        ReadyRequest r = new ReadyRequest(ready);
         send(r, callback);
     }
 

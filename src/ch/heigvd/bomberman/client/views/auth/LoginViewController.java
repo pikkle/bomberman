@@ -2,9 +2,7 @@ package ch.heigvd.bomberman.client.views.auth;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
-import ch.heigvd.bomberman.client.views.ClientMainController;
-import ch.heigvd.bomberman.common.communication.requests.LoginRequest;
-import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.communication.Message;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,10 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-
-import java.io.IOException;
-import java.util.function.Consumer;
 
 import java.io.IOException;
 
@@ -27,10 +21,9 @@ import java.io.IOException;
  */
 public class LoginViewController {
     private Client client;
-    private ClientMainController mainController;
     private static final int DEFAULT_PORT = 3737;
     private static final String DEFAULT_ADDRESS = "127.0.0.1";
-    ResponseManager rm;
+    private ResponseManager rm;
 
     @FXML
     private Pane mainPane;
@@ -55,8 +48,6 @@ public class LoginViewController {
 
     @FXML
     private void initialize() {
-
-
         rm = ResponseManager.getInstance();
         testServer();
     }
@@ -74,7 +65,6 @@ public class LoginViewController {
     }
 
     public void setClient(Client client) {
-
         this.client = client;
     }
 
@@ -101,27 +91,27 @@ public class LoginViewController {
         }
         else {
             String hashPasswd = pwd.getText();
-            mainController.getRm().loginRequest(userId.getText(), hashPasswd, message -> {
+            rm.loginRequest(userId.getText(), hashPasswd, message -> {
                 if (message.state()) {
-                    loginSucces();
+                    loginSucces(message);
                 } else {
-                    loginFailure();
+                    loginFailure(message);
                 }
             });
         }
     }
 
-    private void loginSucces(){
+    private void loginSucces(Message message){
         Alert alert = new Alert(Alert.AlertType.NONE);
-        alert.setContentText("Your have been loged in");
+        alert.setContentText(message.getMessage());
         alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
         alert.showAndWait();
-        ((Stage)mainPane.getScene().getWindow()).close();
+        bypass();
     }
 
-    private void loginFailure(){
+    private void loginFailure(Message message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText("An error uccured while loging in");
+        alert.setContentText(message.getMessage());
         alert.showAndWait();
     }
 
@@ -134,7 +124,7 @@ public class LoginViewController {
         ( (Stage)mainPane.getScene().getWindow() ).close();
         try
         {
-            mainController.getRm().disconnect();
+            rm.disconnect();
 
         } catch (IOException e)
         {
@@ -153,7 +143,6 @@ public class LoginViewController {
         stage.setTitle("New User");
         pane = loader.load();
         controller = loader.getController();
-        controller.setMainController(mainController);
 
         stage.initModality(Modality.APPLICATION_MODAL);
 
@@ -173,10 +162,5 @@ public class LoginViewController {
         {
             e.printStackTrace();
         }
-
-
-
-
-
     }
 }

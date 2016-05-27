@@ -1,12 +1,14 @@
 package ch.heigvd.bomberman.common.game;
 
+import java.io.Serializable;
+
 /**
  * Projet : GEN_Projet
  * Créé le 19.05.2016.
  *
  * @author Adriano Ruberto
  */
-public class Point {
+public class Point implements Serializable {
 	private final int x;
 	private final int y;
 

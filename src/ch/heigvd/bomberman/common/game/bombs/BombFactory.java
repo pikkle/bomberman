@@ -3,13 +3,14 @@ package ch.heigvd.bomberman.common.game.bombs;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Point;
 
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
 /**
  * Created by Adriano on 12.05.2016.
  */
-public abstract class BombFactory implements Observer {
+public abstract class BombFactory implements Observer, Serializable {
 	protected int countdown;
 	protected int blastRange;
 	protected Arena arena;

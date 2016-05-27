@@ -16,7 +16,6 @@ import java.util.List;
 public class ArenaORM extends MainORM<Arena>
 {
 
-
 	public ArenaORM(ConnectionSource connectionSource) throws SQLException {
 		super(connectionSource, Arena.class);
 	}

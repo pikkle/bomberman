@@ -6,13 +6,14 @@ import ch.heigvd.bomberman.server.database.arena.elements.PositionConverter;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
 import java.util.Observable;
 
 /**
  * Created by matthieu.villard on 09.05.2016.
  */
 @DatabaseTable(tableName = "element", daoClass = ElementDao.class)
-public abstract class Element extends Observable {
+public abstract class Element extends Observable implements Serializable {
     @DatabaseField(generatedId = true)
     private int id;
 

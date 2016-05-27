@@ -50,20 +50,12 @@ public class ElementOrmSelector implements ElementVisitor {
 
     @Override
     public void visit(Bomb bomb) {
-        try {
-            orm = new ElementORM<Element>(connectionSource, Element.class);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        orm = null;
     }
 
     @Override
     public void visit(Bomberman bomberman) {
-        try {
-            orm = new ElementORM<Element>(connectionSource, Element.class);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        orm = null;
     }
 
     @Override

@@ -56,10 +56,6 @@ public class ClientMainController {
 
     @FXML
     private void initialize() {
-
-
-
-
         try {
             loginWindow();
         } catch (Exception e) {
@@ -75,8 +71,6 @@ public class ClientMainController {
         {
             e.printStackTrace();
         }
-
-
     }
 
     @FXML
@@ -136,7 +130,6 @@ public class ClientMainController {
         stage.setTitle("Salle");
         pane = loader.load();
         controller = loader.getController();
-        controller.setMainController(this);
 
         stage.initModality(Modality.APPLICATION_MODAL);
 

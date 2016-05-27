@@ -1,6 +1,8 @@
 package ch.heigvd.bomberman.client.views.render;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Point;
 import javafx.beans.value.ChangeListener;
@@ -64,6 +66,36 @@ public class ArenaRenderer implements Observer
 		container.getChildren().add(center);
 
 		container.setStyle("-fx-background-color: grey;");
+	}
+
+	public ArenaRenderer(Arena arena, Bomberman bomberman, double width, double height) {
+		this(arena, width, height);
+		arena.remove(arena.getElements(bomberman.position()).stream().findFirst().get());
+		arena.add(bomberman);
+		renderElement(bomberman);
+		elementRenderer.getSprite(bomberman).setOnKeyPressed(key -> {
+			switch (key.getCode()) {
+				case RIGHT:
+					bomberman.move(Direction.RIGHT);
+					break;
+				case LEFT:
+					bomberman.move(Direction.LEFT);
+					break;
+				case DOWN:
+					bomberman.move(Direction.DOWN);
+					break;
+				case UP:
+					bomberman.move(Direction.UP);
+					break;
+				case SPACE:
+					bomberman.dropBomb();
+					break;
+				default:
+					return;
+			}
+			key.consume();
+		});
+		elementRenderer.getSprite(bomberman).setFocusTraversable(true);
 	}
 
 	public void renderElement(Element element){

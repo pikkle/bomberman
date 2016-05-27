@@ -63,4 +63,24 @@ public class RequestManager extends Thread {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+    public Player getPlayer(){
+        return player;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public Room getRoom(){
+        return room;
+    }
+
+    public void setPlayerSession(PlayerSession playerSession) {
+        this.playerSession = playerSession;
+    }
+
+    public PlayerSession getPlayerSession(){
+        return playerSession;
+    }
 }
