@@ -34,4 +34,6 @@ public class Room implements Serializable {
     public Arena getArena() {
         return arena;
     }
+
+    public boolean isPrivate(){ return isPrivate; }
 }

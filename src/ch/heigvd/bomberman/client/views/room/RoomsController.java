@@ -1,16 +1,21 @@
 package ch.heigvd.bomberman.client.views.room;
 
+import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Room;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -26,12 +31,30 @@ public class RoomsController
     private ObservableList<Room> rooms = FXCollections.observableArrayList();
 
     @FXML
-    private TableView roomsTableView;
+    private TableView<Room> roomsTableView;
+
+    @FXML
+    private TableColumn<Room, ImageView> isPrivate;
+
+    @FXML
+    private TableColumn<Room, ImageView> inRoom;
 
     @FXML
     private void initialize() throws IOException {
         rm = ResponseManager.getInstance();
         showRooms();
+
+        inRoom.setCellValueFactory(param -> {
+            if (param.getValue().)
+        });
+
+        isPrivate.setCellValueFactory(param -> {
+            if (param.getValue().isPrivate())
+                return new SimpleObjectProperty<ImageView>(new ImageView(new Image(Client.class.getResourceAsStream("img/lock.png"))));
+            else
+                return new SimpleObjectProperty<ImageView>(new ImageView(new Image(Client.class.getResourceAsStream("img/unlock.png"))));
+
+        });
     }
 
     @FXML
