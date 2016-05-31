@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class RoomSession {
-	private Room room;
+	private String name;
+	private Arena arena;
 	private String password;
+	private int minPlayer;
 	private List<PlayerSession> players = new LinkedList<PlayerSession>();
 	private boolean running = false;
 
@@ -19,16 +21,26 @@ public class RoomSession {
 	 * @param password
 	 */
 	public RoomSession(String name, String password, int minPlayer, Arena arena) {
+		this.name = name;
 		this.password = password;
-		room = new Room(name, password != null && !password.isEmpty(), minPlayer, arena);
+		this.arena = arena;
+		this.minPlayer = minPlayer;
 	}
 
-	public Room getRoom(){
-		return room;
+	public String getName(){
+		return name;
+	}
+
+	public Arena getArena(){
+		return arena;
 	}
 
 	public String getPassword() {
 		return password;
+	}
+
+	public int getMinPlayer(){
+		return minPlayer;
 	}
 
 	public synchronized List<PlayerSession> getPlayers() {
@@ -40,29 +52,27 @@ public class RoomSession {
 			if(players.size() >= 4)
 				throw new Exception("Already 4 players !");
 			players.add(p);
-			room.addPlayer();
 		}
 	}
 
 	public synchronized void removePlayer(PlayerSession p) {
 		if(players.contains(p)) {
 			players.remove(p);
-			room.removePlayer();
 		}
 	}
 
 	public synchronized void start() {
 		for (PlayerSession player : players) {
-			Optional<StartPoint> start = room.getArena().getStartPoints().stream().findFirst();
+			Optional<StartPoint> start = arena.getStartPoints().stream().findFirst();
 			if(start.isPresent()) {
-				room.getArena().remove(start.get());
-				player.setBomberman(new Bomberman(start.get().position(), Skin.values()[players.indexOf(player)], room.getArena()));
+				arena.remove(start.get());
+				player.setBomberman(new Bomberman(start.get().position(), Skin.values()[players.indexOf(player)], arena));
 			}
 			else{
 				return;
 			}
 		}
-		room.getArena().getStartPoints().forEach(startPoint -> room.getArena().remove(startPoint));
+		arena.getStartPoints().forEach(startPoint -> arena.remove(startPoint));
 		running = true;
 
 		new Thread(new Runnable() {
@@ -74,7 +84,7 @@ public class RoomSession {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					room.getArena().getBombs().forEach(b -> {
+					arena.getBombs().forEach(b -> {
 						b.decreaseCountdown();
 						if (b.getCountdown() <= 0) {
 							b.explose();
@@ -98,7 +108,7 @@ public class RoomSession {
 				return;
 			}
 		}
-		if (players.size() < room.getMinPlayer()) {
+		if (players.size() < minPlayer) {
 			return;
 		}
 

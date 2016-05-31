@@ -2,11 +2,8 @@ package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.Player;
-import ch.heigvd.bomberman.common.game.Statistic;
 import ch.heigvd.bomberman.server.database.DBManager;
 
 import java.sql.SQLException;
@@ -96,7 +93,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if(request.getName() == null || request.getName().isEmpty() || request.getMinPlayer() < 2 || request.getMinPlayer() > 4)
 			return new ErrorResponse(request.getID(), "Some fields are wrong or are missing !");
 
-		if(server.getRoomSessions().stream().filter(session -> session.getRoom().getName().equals(request.getName())).findFirst().isPresent())
+		if(server.getRoomSessions().stream().filter(session -> session.getName().equals(request.getName())).findFirst().isPresent())
 			return new ErrorResponse(request.getID(), "This name is already used!");
 
 
@@ -110,7 +107,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		return arena.filter(a-> a .getId() != null && a.getId().equals(request.getArena()))
 				.map(a->{
 					server.addRoom(new RoomSession(request.getName(), request.getPassword(), request.getMinPlayer(), a));
-					server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> client.send(new RoomsResponse(client.getRoomsCallback(), server.getRoomSessions().stream().map(r -> r.getRoom()).collect(Collectors.toList()))));
+					sendRooms();
 					return (Response) new SuccessResponse(request.getID(), "Room successfully created !");
 				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
@@ -122,7 +119,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 
 		requestManager.setRoomsCallback(request.getID());
 
-		requestManager.send(new RoomsResponse(request.getID(), server.getRoomSessions().stream().map(r -> r.getRoom()).collect(Collectors.toList())));
+		sendRooms();
 
 		return new NoResponse(request.getID());
 	}
@@ -135,7 +132,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if (request.getRoom() == null)
 			return new NoResponse(request.getID());
 
-		Optional<RoomSession> roomSession = server.getRoomSessions().stream().filter(r -> r.getRoom().getName().equals(request.getRoom().getName())).findFirst();
+		Optional<RoomSession> roomSession = server.getRoomSessions().stream().filter(r -> r.getName().equals(request.getRoom().getName())).findFirst();
 
 		if(!roomSession.isPresent())
 			return new NoResponse(request.getID());
@@ -166,11 +163,11 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		requestManager.setRoomSession(roomSession.get());
 		requestManager.setPlayerSession(playerSession);
 
-		server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> client.send(new RoomsResponse(client.getRoomsCallback(), server.getRoomSessions().stream().map(r -> r.getRoom()).collect(Collectors.toList()))));
+		sendRooms();
 
-		if(roomSession.get().getPlayers().size() >= roomSession.get().getRoom().getMinPlayer()){
+		if(roomSession.get().getPlayers().size() >= roomSession.get().getMinPlayer()){
 			roomSession.get().getPlayers().stream().filter(player -> player.getReadyUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), roomSession.get().getRoom()));
+				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && ! roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().size(), roomSession.get().getArena(), requestManager.getPlayerSession() != null && roomSession.get().getPlayers().contains(requestManager.getPlayerSession()))));
 				player.setReadyUuid(null);
 			});
 		}
@@ -189,7 +186,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if(!request.getState()){
 			requestManager.getRoomSession().removePlayer(requestManager.getPlayerSession());
 
-			server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> client.send(new RoomsResponse(client.getRoomsCallback(), server.getRoomSessions().stream().map(r -> r.getRoom()).collect(Collectors.toList()))));
+			sendRooms();
 
 			requestManager.getPlayerSession().setStartUuid(null);
 
@@ -202,7 +199,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if(!requestManager.getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getRoomSession().getRoom().getArena().addObserver(this);
+		requestManager.getRoomSession().getArena().addObserver(this);
 
 		requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getStartUuid() != null).forEach(player -> {
 			player.getRequestManager().send(new ReadyResponse(player.getStartUuid(), player.getBomberman()));
@@ -307,7 +304,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 	}
 
 	private void updateElement(Element element){
-		if(requestManager.getRoomSession().getRoom().getArena().getElements().contains(element)){
+		if(requestManager.getRoomSession().getArena().getElements().contains(element)){
 			requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getAddUuid() != null).forEach(player -> {
 				player.getRequestManager().send(new AddElementResponse(player.getAddUuid(), element));
 			});
@@ -330,7 +327,13 @@ public class RequestProcessor implements RequestVisitor, Observer {
 				playerSession.getRequestManager().setPlayerSession(null);
 			});
 
-			server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> client.send(new RoomsResponse(client.getRoomsCallback(), server.getRoomSessions().stream().map(r -> r.getRoom()).collect(Collectors.toList()))));
+			sendRooms();
 		}
+	}
+
+	private void sendRooms(){
+		server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> {
+			client.send(new RoomsResponse(client.getRoomsCallback(), server.getRoomSessions().stream().map(r -> new Room(r.getName(), r.getPassword() != null && ! r.getPassword().isEmpty(), r.getMinPlayer(), r.getPlayers().size(), r.getArena(), requestManager.getPlayerSession() != null && r.getPlayers().contains(requestManager.getPlayerSession()))).collect(Collectors.toList())));
+		});
 	}
 }

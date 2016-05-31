@@ -8,14 +8,17 @@ public class Room implements Serializable {
     private String name;
     private boolean isPrivate;
     private int minPlayer;
-    private int playerNumber = 0;
+    private int playerNumber;
     private Arena arena;
+    private boolean inRoom;
 
-    public Room(String name, boolean isPrivate, int minPlayer, Arena arena) {
+    public Room(String name, boolean isPrivate, int minPlayer, int playerNumber, Arena arena, boolean inRoom) {
         this.name = name;
         this.isPrivate = isPrivate;
         this.minPlayer = minPlayer;
         this.arena = arena;
+        this.inRoom = inRoom;
+        this.playerNumber = playerNumber;
     }
 
     public String getName() {
@@ -45,4 +48,6 @@ public class Room implements Serializable {
     public Arena getArena() {
         return arena;
     }
+
+    public boolean isInRoom(){ return inRoom; }
 }

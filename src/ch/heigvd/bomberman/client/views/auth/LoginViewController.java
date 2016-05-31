@@ -57,6 +57,8 @@ public class LoginViewController {
         try
         {
             rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
+            serverStatusLabel.setText("Online");
+            serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
         } catch (IOException e)
         {
             serverStatusLabel.setText("Offline");

@@ -5,12 +5,16 @@ import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.game.ReadyController;
 import ch.heigvd.bomberman.common.game.Room;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -28,7 +32,13 @@ public class RoomsController extends Observable
     private Client client;
 
     @FXML
-    private TableView roomsTableView;
+    private TableView<Room> roomsTableView;
+
+    @FXML
+    private TableColumn<Room, ImageView> isPrivate;
+
+    @FXML
+    private TableColumn<Room, ImageView> inRoom;
 
 
     @FXML
@@ -36,6 +46,21 @@ public class RoomsController extends Observable
         rm = ResponseManager.getInstance();
         roomsTableView.setItems(rooms);
         showRooms();
+
+        inRoom.setCellValueFactory(param -> {
+            if (param.getValue().isInRoom())
+                return new SimpleObjectProperty<ImageView>(new ImageView(new Image(Client.class.getResourceAsStream("img/ok_sign.png"))));
+            else
+                return new SimpleObjectProperty<ImageView>(new ImageView(new Image(Client.class.getResourceAsStream("img/ko_sign.png"))));
+        });
+
+        isPrivate.setCellValueFactory(param -> {
+            if (param.getValue().isPrivate())
+                return new SimpleObjectProperty<ImageView>(new ImageView(new Image(Client.class.getResourceAsStream("img/lock.png"))));
+            else
+                return new SimpleObjectProperty<ImageView>(new ImageView(new Image(Client.class.getResourceAsStream("img/unlock.png"))));
+
+        });
     }
 
     public void setClient(Client client){
