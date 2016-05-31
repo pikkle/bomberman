@@ -3,6 +3,8 @@ package ch.heigvd.bomberman.common.game.bombs;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Point;
 
+import java.util.Optional;
+
 /**
  * Created by Adriano on 12.05.2016.
  */
@@ -12,13 +14,14 @@ public class BasicBombFactory extends BombFactory {
 	}
 
 	@Override
-	public BasicBomb create(Point position) {
-		if (nbBomb <= 0) throw new RuntimeException("Can't drop a bomb");
+	public Optional<BasicBomb> create(Point position) {
+		if (nbBomb <= 0)
+			return Optional.empty();
 
 		BasicBomb b = new BasicBomb(position, countdown, blastRange, arena);
 		b.addObserver(this);
 		nbBomb--;
-		return b;
+		return Optional.ofNullable(b);
 	}
 
 }

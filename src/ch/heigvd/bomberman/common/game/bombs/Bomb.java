@@ -36,6 +36,8 @@ public abstract class Bomb extends Element {
     public void explose(){
         arena.remove(this);
         getElementsInRange().forEach(element -> arena.destroy(element));
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -106,7 +108,7 @@ public abstract class Bomb extends Element {
 
         // explosion images disapear after a timeout
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(2000),
+                Duration.millis(100),
                 ae -> {
                     explosions.forEach(explosion -> {
                         arena.remove(explosion);

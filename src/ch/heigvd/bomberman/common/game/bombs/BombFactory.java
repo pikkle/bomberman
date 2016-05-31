@@ -6,6 +6,7 @@ import ch.heigvd.bomberman.common.game.Point;
 import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 
 /**
  * Created by Adriano on 12.05.2016.
@@ -29,7 +30,7 @@ public abstract class BombFactory implements Observer, Serializable {
 	 * @param position the position
 	 * @return the new bomb
 	 */
-	public abstract Bomb create(Point position);
+	public abstract Optional<? extends Bomb> create(Point position);
 
 
 	@Override

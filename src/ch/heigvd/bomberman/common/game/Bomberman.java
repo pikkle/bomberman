@@ -18,7 +18,7 @@ public class Bomberman extends Element {
     private BombFactory bombFactory = new BasicBombFactory(arena);
     private List<PowerUp> powerUps = new LinkedList<>();
     private Skin skin;
-    private int maxBombs = 0;
+    private int maxBombs = 1;
 
     /**
      * Constructs a Bomberman at a given position and a given skin
@@ -57,6 +57,17 @@ public class Bomberman extends Element {
                 position = position.add(0, 1);
                 break;
         }
+        if (position.x() < arena.getWidth() && position.x() >= 0 && position.x() < arena.getHeight() && position.x() >= 0) {
+            if(arena.isEmpty(position)){
+                this.position = position;
+            } else if(arena.getElements(position).stream().allMatch(element -> element instanceof PowerUp)){
+                arena.getElements(position).forEach(element -> {
+                    ((PowerUp)element).apply(this);
+                    arena.remove(element);
+                });
+                this.position = position;
+            }
+        }
         if (arena.isEmpty(position) && position.x() < arena.getWidth() && position.x() >= 0 &&
                 position.x() < arena.getHeight() && position.x() >= 0) {
             this.position = position;
@@ -66,14 +77,13 @@ public class Bomberman extends Element {
     /**
      * Drop the bomb
      */
-    public Optional<Bomb> dropBomb() {
-        try {
-            Bomb b = bombFactory.create(position);
-            return Optional.of(b);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+    public Optional<? extends Bomb> dropBomb() {
+        if (maxBombs <= 0)
             return Optional.empty();
-        }
+        Optional<? extends Bomb> b = bombFactory.create(position);
+        if(b.isPresent())
+            maxBombs--;
+        return b;
     }
 
     /**
