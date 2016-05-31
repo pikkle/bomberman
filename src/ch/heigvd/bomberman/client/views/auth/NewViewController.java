@@ -31,12 +31,16 @@ public class NewViewController {
     @FXML
     private void confirm()
     {
-        if (userId.getText().isEmpty()){
+        if(!rm.isConnected()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("You are not connected");
+            alert.showAndWait();
+        }
+        else if (userId.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("The user name is empty");
             alert.showAndWait();
         }
-
         else if (email.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("The email is empty");
@@ -54,7 +58,6 @@ public class NewViewController {
             alert.setContentText("The two password are not the same");
             alert.showAndWait();
         }
-
         else {
             rm.newAccountRequest(userId.getText(), pwd.getText(), message -> {
                 if (message.state()) {
@@ -67,7 +70,7 @@ public class NewViewController {
     }
 
     private void creationSucces(Message message){
-        Alert alert = new Alert(Alert.AlertType.NONE);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message.getMessage());
         alert.showAndWait();
         ((Stage)mainPane.getScene().getWindow()).close();

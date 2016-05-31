@@ -4,7 +4,9 @@ import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.responses.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Direction;
+import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.Room;
+import ch.heigvd.bomberman.common.game.Statistic;
 
 import java.util.List;
 
@@ -25,8 +27,8 @@ public class ResponseProcessor implements ResponseVisitor {
 	}
 
 	@Override
-	public Direction visit(MoveResponse moveResponse) {
-		return null;
+	public Bomberman visit(MoveResponse moveResponse) {
+		return moveResponse.getBomberman();
 	}
 
 	@Override
@@ -52,5 +54,30 @@ public class ResponseProcessor implements ResponseVisitor {
 	@Override
 	public List<Arena> visit(ArenasResponse response) {
 		return response.getArenas();
+	}
+
+	@Override
+	public Room visit(JoinRoomResponse response) {
+		return response.getRoom();
+	}
+
+	@Override
+	public List<Room> visit(RoomsResponse response) {
+		return response.getRooms();
+	}
+
+	@Override
+	public Element visit(AddElementResponse response) {
+		return response.getElement();
+	}
+
+	@Override
+	public Element visit(DestroyElementsResponse response) {
+		return response.getElement();
+	}
+
+	@Override
+	public Statistic visit(EndGameResponse response) {
+		return response.getStatistic();
 	}
 }

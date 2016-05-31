@@ -1,47 +1,49 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
-import ch.heigvd.bomberman.server.database.arena.elements.PositionConverter;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Observable;
+import java.util.UUID;
 
 /**
  * Created by matthieu.villard on 09.05.2016.
  */
-@DatabaseTable(tableName = "element", daoClass = ElementDao.class)
+@Entity
+@Table(name = "element")
 public abstract class Element extends Observable implements Serializable {
-    @DatabaseField(generatedId = true)
-    private int id;
 
-    @DatabaseField(columnName = "discr", canBeNull = false)
-    private String discr;
+    @Id
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @DatabaseField(columnName = "position", canBeNull = false, persisterClass = PositionConverter.class)
+    @Column(name="position")
     protected Point position;
 
-    @DatabaseField (foreign = true, foreignAutoRefresh = true, columnName = "arena")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "arena_id", nullable = true)
     protected Arena arena;
+
+    private UUID uuid;
 
     public Element() {
         this(new Point(), null);
     }
 
     public Element(Point position, Arena arena) {
-        discr = getClass().getName();
         this.position = position;
         this.arena = arena;
+        uuid = UUID.randomUUID();
     }
 
-    public int getId() {
+    public UUID getUuid(){
+        return uuid;
+    }
+
+    public Long getId() {
         return id;
-    }
-
-    public String getDiscr(){
-        return discr;
     }
 
     public void setArena(Arena arena){
@@ -65,7 +67,7 @@ public abstract class Element extends Observable implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-	    return this == obj || (obj instanceof Element && getId() != 0 && ((Element) obj).getId() == getId());
+	    return obj != null && (this == obj || (obj instanceof Element && (getId() != null && getId().equals(((Element) obj).getId())) || ((Element) obj).getUuid().equals(getUuid())));
     }
 
     public abstract void accept(ElementVisitor visitor);

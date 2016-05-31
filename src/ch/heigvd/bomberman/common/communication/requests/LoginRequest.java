@@ -11,7 +11,7 @@ public class LoginRequest extends Request<Message> {
 	}
 
 	@Override
-	public Response accept(RequestVisitor visitor) {
+	public Response<Message> accept(RequestVisitor visitor) {
 		return visitor.visit(this);
 	}
 

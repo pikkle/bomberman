@@ -3,15 +3,11 @@ package ch.heigvd.bomberman.common.game.Arena;
 
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
+import ch.heigvd.bomberman.common.game.explosion.Explosion;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
-import com.j256.ormlite.table.DatabaseTable;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
+import org.hibernate.annotations.Cascade;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -22,21 +18,24 @@ import java.util.stream.Collectors;
 /**
  * Created by matthieu.villard on 09.05.2016.
  */
-@DatabaseTable(tableName = "arena")
+@Entity
+@Table(name = "arena")
 public class Arena extends Observable implements Serializable
 {
-    @DatabaseField(generatedId = true)
-    private int id;
+    @Id
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @DatabaseField(columnName = "width", canBeNull = false)
+    @Column(name="width")
     private int width;
 
-    @DatabaseField(columnName = "height", canBeNull = false)
+    @Column(name="height")
     private int height;
 
-    @ForeignCollectionField(eager = true)
+    @OneToMany(targetEntity = Element.class, fetch = FetchType.EAGER, mappedBy="arena")
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     private Collection<Element> elements = new LinkedList<>();
-
 
     public Arena() throws URISyntaxException {
 	    this(0, 0);
@@ -57,20 +56,7 @@ public class Arena extends Observable implements Serializable
 	    }
     }
 
-    public void start(){
-        new Thread(() -> {
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> getBombs().forEach(b -> {
-                b.decreaseCountdown();
-                if (b.getCountdown() <= 0) {
-                    b.explose();
-                }
-            })));
-            timeline.setCycleCount(Animation.INDEFINITE);
-            timeline.play();
-        }).start();
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -80,18 +66,6 @@ public class Arena extends Observable implements Serializable
 
     public int getHeight() {
         return height;
-    }
-
-    public Bomberman putBomberman() throws Exception {
-        for(int i = 0; i < 4; i++){
-            Point position = new Point(1 + i / 2, 1 + 1 % 2);
-            if(isEmpty(position)){
-                Bomberman bomberman = new Bomberman(position, Skin.values()[i], this);
-                elements.add(bomberman);
-                return bomberman;
-            }
-        }
-        throw new Exception("No available place!");
     }
 
     /**
@@ -118,7 +92,14 @@ public class Arena extends Observable implements Serializable
     }
 
     /**
-     * @return all the availableStartPoints
+     * @return all the bombermen
+     */
+    public Collection<Bomberman> getBombermen() {
+        return elements.stream().filter(element -> element instanceof Bomberman).map(element -> (Bomberman)element).collect(Collectors.toList());
+    }
+
+    /**
+     * @return all the bombs
      */
     public Collection<Bomb> getBombs() {
         return elements.stream().filter(element -> element instanceof Bomb).map(element -> (Bomb)element).collect(Collectors.toList());
@@ -167,15 +148,14 @@ public class Arena extends Observable implements Serializable
      * @throws RuntimeException
      */
     protected void insert(Bomb bomb) throws RuntimeException {
-        if (getBombs().stream().noneMatch(b -> b.position().equals(bomb.position()))) {
-            if(!elements.contains(bomb)) {
+        if(!elements.contains(bomb)) {
+            if (getBombs().stream().noneMatch(b -> b.position().equals(bomb.position()))) {
                 elements.add(bomb);
                 bomb.setArena(this);
+            } else {
+                throw new RuntimeException("Already a bomb");
             }
-        } else {
-            throw new RuntimeException("Already a bomb");
         }
-
     }
 
     /**
@@ -205,16 +185,35 @@ public class Arena extends Observable implements Serializable
      * @throws RuntimeException if the cell is already occuped
      */
     protected void insert(PowerUp powerUp) throws RuntimeException {
-        Collection<Element> boxes = getElements(powerUp.position());
-        if(boxes.size() == 1 && boxes.stream().filter(element -> element instanceof Box).findFirst().isPresent()){
-            Box box = (Box)boxes.stream().filter(element -> element instanceof Box).findFirst().get();
-            box.setPowerUp(powerUp);
+        if(!elements.contains(powerUp)) {
+            Collection<Element> boxes = getElements(powerUp.position());
+            if (boxes.size() == 1 && boxes.stream().filter(element -> element instanceof Box).findFirst().isPresent()) {
+                Box box = (Box) boxes.stream().filter(element -> element instanceof Box).findFirst().get();
+                box.setPowerUp(powerUp);
+            } else if (isEmpty(powerUp.position()) || !boxes.stream().filter(element -> !(element instanceof Explosion)).findFirst().isPresent()) {
+                elements.add(powerUp);
+                powerUp.setArena(this);
+            }
+            else {
+                throw new RuntimeException("Cell already occuped");
+            }
         }
-        else if(isEmpty(powerUp.position())){
-            insert((Element)powerUp);
-        }
-        else{
-            throw new RuntimeException("Cell already occuped");
+    }
+
+    /**
+     * Add the explosion to the arena
+     *
+     * @param explosion The explosion to add
+     * @throws RuntimeException if the cell is already occuped
+     */
+    protected void insert(Explosion explosion) throws RuntimeException {
+        if(!elements.contains(explosion)) {
+            if (!elements.stream().filter(element -> element.position().equals(explosion.position()) && element instanceof Explosion).findFirst().isPresent()) {
+                elements.add(explosion);
+                explosion.setArena(this);
+            } else {
+                throw new RuntimeException("Cell already occuped");
+            }
         }
     }
 
@@ -246,13 +245,37 @@ public class Arena extends Observable implements Serializable
     }
 
     protected void destroy(Box b) {
-        delete((Element)b);
-        if(b.getPowerUp().isPresent())
+        remove((Element)b);
+        if(b.getPowerUp().isPresent()){
             add(b.getPowerUp().get());
+        }
+    }
+
+    protected void destroy(Bomb b) {
+        elements.stream().filter(element -> element.getUuid().equals(b.getUuid())).findFirst().ifPresent(bomb -> ((Bomb)bomb).showExplosion());
     }
 
     public void change(Element e) {
         setChanged();
         notifyObservers(e);
     }
+
+
+    /*private  void readObject(ObjectInputStream ois)
+            throws IOException, ClassNotFoundException {
+
+        id = ois.readInt();
+        width = ois.readInt();
+        height = ois.readInt();
+        elements = (Collection<Element>)ois.readObject();
+    }
+
+    private  void writeObject(ObjectOutputStream oos)
+            throws IOException {
+
+        oos.writeInt(id);
+        oos.writeInt(width);
+        oos.writeInt(height);
+        oos.writeObject(elements);
+    }*/
 }

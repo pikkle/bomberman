@@ -15,7 +15,7 @@ public class ReadyRequest extends Request<Bomberman> {
 	}
 
 	@Override
-	public Response accept(RequestVisitor visitor) {
+	public Response<Bomberman> accept(RequestVisitor visitor) {
 		return visitor.visit(this);
 	}
 

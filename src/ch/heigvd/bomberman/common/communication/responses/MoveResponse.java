@@ -1,6 +1,6 @@
 package ch.heigvd.bomberman.common.communication.responses;
 
-import ch.heigvd.bomberman.common.game.Direction;
+import ch.heigvd.bomberman.common.game.Bomberman;
 
 import java.util.UUID;
 
@@ -10,14 +10,21 @@ import java.util.UUID;
  *
  * @author Adriano Ruberto
  */
-public class MoveResponse extends Response<Direction> {
+public class MoveResponse extends Response<Bomberman> {
 
-	public MoveResponse(UUID uuid) {
+	private Bomberman bomberman;
+
+	public MoveResponse(UUID uuid, Bomberman bomberman) {
 		super(uuid);
+		this.bomberman = bomberman;
+	}
+
+	public Bomberman getBomberman(){
+		return bomberman;
 	}
 
 	@Override
-	public Direction accept(ResponseVisitor visitor) {
+	public Bomberman accept(ResponseVisitor visitor) {
 		return visitor.visit(this);
 	}
 }

@@ -3,23 +3,19 @@ package ch.heigvd.bomberman.client;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 
-public class ResponseManager
+public class ResponseManager extends Observable
 {
     private static ResponseManager instance;
     private Socket socket;
@@ -27,6 +23,7 @@ public class ResponseManager
     private ObjectInputStream reader;
     private Map<UUID, Consumer> callbacks;
     private Thread receiver;
+    private boolean closeRequest = false;
 
     private ResponseManager()
     {
@@ -52,19 +49,25 @@ public class ResponseManager
             @Override
             public void run()
             {
-                while (!this.isInterrupted())
+                while (isConnected() && !this.isInterrupted())
                 {
                     try
                     {
                         Response response = (Response) reader.readObject();
 
-                        Consumer callback = callbacks.get(response.getID());
-                        Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
-
+                        if(callbacks.get(response.getID()) != null) {
+                            Consumer callback = callbacks.get(response.getID());
+                            Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
+                        }
 
                     } catch (IOException | ClassNotFoundException e)
                     {
-                        e.printStackTrace();
+                        try {
+                            disconnect();
+                        } catch (IOException e1) {
+                            if (!closeRequest)
+                                e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -79,6 +82,7 @@ public class ResponseManager
         writer.close();
         reader.close();
         socket.close();
+        closeRequest = true;
     }
 
     public boolean isConnected()
@@ -116,7 +120,7 @@ public class ResponseManager
         send(r, callback);
     }
 
-    public void joinRoomRequest(Room room, Consumer<Message> callback)
+    public void joinRoomRequest(Room room, Consumer<Room> callback)
     {
         JoinRoomRequest r = new JoinRoomRequest(room);
         send(r, callback);
@@ -128,17 +132,46 @@ public class ResponseManager
         send(r, callback);
     }
 
-    private <T> void send(Request<T> r, Consumer<? super T> callback)
+    public void moveRequest(Direction direction, Consumer<Bomberman> callback)
     {
-        try
-        {
-            writer.writeObject(r);
-            if (callback != null)
-                callbacks.put(r.getID(), callback);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        MoveRequest r = new MoveRequest(direction);
+        send(r, callback);
     }
 
+    public void addElementRequest(Consumer<Element> callback)
+    {
+        AddElementRequest r = new AddElementRequest();
+        send(r, callback);
+    }
+
+    public void destroyElementsRequest(Consumer<Element> callback)
+    {
+        DestroyElementsRequest r = new DestroyElementsRequest();
+        send(r, callback);
+    }
+
+    public void dropBombRequest()
+    {
+        DropBombRequest r = new DropBombRequest();
+        send(r, null);
+    }
+
+    public void endGameRequest(Consumer<Statistic> callback)
+    {
+        EndGameRequest r = new EndGameRequest();
+        send(r, callback);
+    }
+
+    private <T> void send(Request<T> r, Consumer<? super T> callback)
+    {
+        if(isConnected()) {
+            try {
+                writer.writeObject(r);
+                if (callback != null)
+                    callbacks.put(r.getID(), callback);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

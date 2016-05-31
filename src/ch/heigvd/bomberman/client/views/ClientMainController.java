@@ -2,17 +2,14 @@ package ch.heigvd.bomberman.client.views;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
-import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.client.views.room.NewViewController;
-import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Arena.BasicArena;
+import ch.heigvd.bomberman.client.views.tabs.controllers.UserTabsController;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -29,13 +26,16 @@ public class ClientMainController {
 
     private ResponseManager rm;
     private Client client;
-    private ObservableList<Room> rooms = FXCollections.observableArrayList();
+    private UserTabsController userTabsController;
 
     @FXML
     private TableView<Room> roomsTableView;
 
     @FXML
     private Pane tabsPane;
+
+    @FXML
+    private Pane mainPane;
 
     /***********
      * Methodes*
@@ -48,25 +48,19 @@ public class ClientMainController {
     public void setMainApp(Client client)
     {
         this.client = client;
-    }
-
-    public void addRoom(Room room){
-        rooms.add(room);
+        userTabsController.setClient(client);
     }
 
     @FXML
     private void initialize() {
-        try {
-            loginWindow();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/UserTabsView.fxml"));
+        rm = ResponseManager.getInstance();
 
         try
         {
-            tabsPane.getChildren().add(loader.load());
+            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
+            TabPane pane = loader.load();
+            userTabsController = loader.getController();
+            tabsPane.getChildren().add(pane);
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -74,7 +68,7 @@ public class ClientMainController {
     }
 
     @FXML
-    private void closeApp()
+    private void closeApp () throws Exception
     {
         Platform.exit();
     }
@@ -82,25 +76,7 @@ public class ClientMainController {
     @FXML
     private void arena()
     {
-        Stage stage = new Stage();
-        stage.setTitle("Bomberman");
 
-        stage.setOnCloseRequest(event -> {
-            Platform.exit();
-            stage.close();
-        });
-
-        stage.initModality(Modality.APPLICATION_MODAL);
-
-        try {
-            Arena arena = new BasicArena(15, 15);
-            arena.putBomberman();
-            Scene scene = new Scene(new ArenaRenderer(arena, 750, 750).getView());
-            stage.setScene(scene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        stage.showAndWait();
     }
 
     @FXML
@@ -135,10 +111,5 @@ public class ClientMainController {
 
         stage.setScene(new Scene(pane));
         stage.showAndWait();
-    }
-
-    private void loginWindow() throws Exception
-    {
-
     }
 }

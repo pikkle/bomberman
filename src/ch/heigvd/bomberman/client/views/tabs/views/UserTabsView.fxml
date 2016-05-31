@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+
+<TabPane fx:id="tabPane" prefHeight="317.0" prefWidth="368.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.tabs.controllers.UserTabsController">
+   <tabs>
+      <Tab fx:id="roomsTab" text="Salles"><fx:include source="RoomsTab.fxml" fx:id="rooms" /></Tab>
+      <Tab text="Statistiques"><fx:include source="StatsTab.fxml" /></Tab>
+      <Tab text="Profil"><fx:include source="ProfileTab.fxml" /></Tab>
+   </tabs>
+</TabPane>

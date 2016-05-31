@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.client.views.auth;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
+import ch.heigvd.bomberman.client.views.ClientMainController;
 import ch.heigvd.bomberman.common.communication.Message;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -56,6 +57,8 @@ public class LoginViewController {
         try
         {
             rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
+            serverStatusLabel.setText("Online");
+            serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
         } catch (IOException e)
         {
             serverStatusLabel.setText("Offline");
@@ -93,20 +96,12 @@ public class LoginViewController {
             String hashPasswd = pwd.getText();
             rm.loginRequest(userId.getText(), hashPasswd, message -> {
                 if (message.state()) {
-                    loginSucces(message);
+                    bypass();
                 } else {
                     loginFailure(message);
                 }
             });
         }
-    }
-
-    private void loginSucces(Message message){
-        Alert alert = new Alert(Alert.AlertType.NONE);
-        alert.setContentText(message.getMessage());
-        alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        alert.showAndWait();
-        bypass();
     }
 
     private void loginFailure(Message message){
@@ -115,21 +110,10 @@ public class LoginViewController {
         alert.showAndWait();
     }
 
-
-
     @FXML
-    private void closeWindow()
+    private void closeApp()
     {
         Platform.exit();
-        ( (Stage)mainPane.getScene().getWindow() ).close();
-        try
-        {
-            rm.disconnect();
-
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     @FXML
@@ -158,6 +142,8 @@ public class LoginViewController {
         {
             Pane pane = loader.load();
             client.changeScene(pane);
+            ClientMainController controller = loader.getController();
+            controller.setMainApp(client);
         } catch (IOException e)
         {
             e.printStackTrace();

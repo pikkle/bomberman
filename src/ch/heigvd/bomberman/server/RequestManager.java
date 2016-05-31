@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.server;
 
-import ch.heigvd.bomberman.common.communication.requests.*;
-import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.communication.requests.Request;
+import ch.heigvd.bomberman.common.communication.responses.Response;
 import ch.heigvd.bomberman.common.game.Player;
 
 import java.io.EOFException;
@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.UUID;
 
 public class RequestManager extends Thread {
     private Socket socket;
@@ -17,9 +18,10 @@ public class RequestManager extends Thread {
     public boolean running = true;
     private PlayerSession playerSession;
     private Player player;
-    private Room room;
+    private RoomSession roomSession;
     private RequestProcessor requestProcessor;
     private boolean loggedIn = false;
+    private UUID roomsCallback;
 
 
     public RequestManager(Socket socket) {
@@ -31,7 +33,6 @@ public class RequestManager extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -40,7 +41,10 @@ public class RequestManager extends Thread {
             try {
                 Request request = (Request) reader.readObject();
                 Response response = request.accept(requestProcessor);
-                if (response.isSendable()) writer.writeObject(response);
+                if (response.isSendable()) {
+                    writer.reset();
+                    writer.writeObject(response);
+                }
             } catch (EOFException e) {
                 System.out.println("Client closed the connection");
                 running = false;
@@ -49,6 +53,20 @@ public class RequestManager extends Thread {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void send(Response response){
+        try {
+            if (response.isSendable()) {
+                writer.reset();
+                writer.writeObject(response);
+            }
+        } catch (EOFException e) {
+            System.out.println("Client closed the connection");
+            running = false;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -68,12 +86,12 @@ public class RequestManager extends Thread {
         return player;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setRoomSession(RoomSession roomSession) {
+        this.roomSession = roomSession;
     }
 
-    public Room getRoom(){
-        return room;
+    public RoomSession getRoomSession(){
+        return roomSession;
     }
 
     public void setPlayerSession(PlayerSession playerSession) {
@@ -82,5 +100,13 @@ public class RequestManager extends Thread {
 
     public PlayerSession getPlayerSession(){
         return playerSession;
+    }
+
+    public void setRoomsCallback(UUID roomsCallback){
+        this.roomsCallback = roomsCallback;
+    }
+
+    public UUID getRoomsCallback(){
+        return roomsCallback;
     }
 }

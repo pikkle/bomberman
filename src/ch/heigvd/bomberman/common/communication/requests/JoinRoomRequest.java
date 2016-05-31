@@ -1,13 +1,12 @@
 package ch.heigvd.bomberman.common.communication.requests;
 
-import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.responses.Response;
 import ch.heigvd.bomberman.common.game.Room;
 
 /**
  * Created by matthieu.villard on 27.05.2016.
  */
-public class JoinRoomRequest extends Request<Message> {
+public class JoinRoomRequest extends Request<Room> {
 
     private Room room;
 
@@ -20,7 +19,7 @@ public class JoinRoomRequest extends Request<Message> {
     }
 
     @Override
-    public Response<Message> accept(RequestVisitor visitor) {
+    public Response<Room> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
 }

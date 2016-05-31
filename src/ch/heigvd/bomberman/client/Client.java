@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * Client executable class
  */
@@ -26,6 +28,8 @@ public class Client extends Application {
         launch(args);
     }
 
+
+    @Override
     public void start(Stage primaryStage) throws Exception {
 
         this.primaryStage = primaryStage;
@@ -40,14 +44,28 @@ public class Client extends Application {
         controller.setClient(this);
 
         primaryStage.setScene(new Scene(mainLayout));
-
         primaryStage.show();
+    }
+
+    @Override
+    public void stop(){
+        System.out.println("Stage is closing");
+        try
+        {
+            if(rm.isConnected())
+                rm.disconnect();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        // Save file
     }
 
     public void changeScene(Pane pane){
         primaryStage.hide();
         mainLayout = pane;
         primaryStage.setScene(new Scene(mainLayout));
+
         primaryStage.show();
     }
 
@@ -57,5 +75,9 @@ public class Client extends Application {
 
     public ResponseManager getRm() {
         return rm;
+    }
+
+    public Stage getPrimatyStage(){
+        return primaryStage;
     }
 }

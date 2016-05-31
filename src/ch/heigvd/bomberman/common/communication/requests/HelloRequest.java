@@ -14,7 +14,7 @@ public class HelloRequest extends Request<String> {
     }
 
     @Override
-    public Response accept(RequestVisitor visitor) {
+    public Response<String> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
 

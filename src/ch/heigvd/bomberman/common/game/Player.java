@@ -1,8 +1,6 @@
 package ch.heigvd.bomberman.common.game;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
+import javax.persistence.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -13,16 +11,22 @@ import java.awt.event.KeyListener;
  * @author Adriano Ruberto
  */
 
-@DatabaseTable(tableName = "player")
+@Entity
+@Table(name = "player")
 public class Player implements KeyListener {
 
-	@DatabaseField(generatedId = true) private int id;
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 
 	private Bomberman bomberman;
 
-	@DatabaseField(columnName = "pseudo", canBeNull = false) private String pseudo;
+	@Column(name="pseudo")
+	private String pseudo;
 
-	@DatabaseField(columnName = "password", canBeNull = false) private String password;
+	@Column(name="password", nullable = true)
+	private String password;
 
 	Player() {
 		// all persisted classes must define a no-arg constructor with at least package visibility
