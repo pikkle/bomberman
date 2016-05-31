@@ -7,9 +7,9 @@ import ch.heigvd.bomberman.common.game.Point;
 /**
  * Created by matthieu.villard on 31.05.2016.
  */
-public class HorizontalExplosion extends Explosion {
+public class TopExplosion extends Explosion {
 
-    public HorizontalExplosion(Point position, Arena arena) {
+    public TopExplosion(Point position, Arena arena) {
         super(position, arena);
         arena.add(this);
     }

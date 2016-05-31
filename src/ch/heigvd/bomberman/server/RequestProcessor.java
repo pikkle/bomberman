@@ -3,8 +3,10 @@ package ch.heigvd.bomberman.server;
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Player;
+import ch.heigvd.bomberman.common.game.Statistic;
 import ch.heigvd.bomberman.server.database.DBManager;
 
 import java.sql.SQLException;
@@ -283,6 +285,22 @@ public class RequestProcessor implements RequestVisitor, Observer {
 	}
 
 	@Override
+	public Response visit(EndGameRequest request) {
+		if (!requestManager.isLoggedIn())
+			return new NoResponse(request.getID());
+
+		if(requestManager.getRoomSession() == null || requestManager.getPlayerSession() == null)
+			return new NoResponse(request.getID());
+
+		if(!requestManager.getRoomSession().isRunning())
+			return new NoResponse(request.getID());
+
+		requestManager.getPlayerSession().setEndUuid(request.getID());
+
+		return new NoResponse(request.getID());
+	}
+
+	@Override
 	public void update(Observable o, Object arg) {
 		Element element = (Element)arg;
 		updateElement(element);
@@ -294,10 +312,25 @@ public class RequestProcessor implements RequestVisitor, Observer {
 				player.getRequestManager().send(new AddElementResponse(player.getAddUuid(), element));
 			});
 		}
-		else{
+		else {
+			if(element instanceof Bomberman)
+				requestManager.getRoomSession().getPlayers().stream().filter(playerSession -> playerSession.getBomberman().equals(element)).forEach(playerSession -> playerSession.setRank(requestManager.getRoomSession().getPlayers().stream().filter(p -> !p.getRank().isPresent()).count()));
 			requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getDestroyUuid() != null).forEach(player -> {
 				player.getRequestManager().send(new DestroyElementsResponse(player.getDestroyUuid(), element));
 			});
+		}
+		if(requestManager.getRoomSession().getPlayers().stream().filter(playerSession -> !playerSession.getRank().isPresent()).count() <= 1){
+			requestManager.getRoomSession().getPlayers().stream().filter(playerSession -> !playerSession.getRank().isPresent()).forEach(playerSession -> playerSession.setRank(1));
+			requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getDestroyUuid() != null).forEach(player -> {
+				player.getRequestManager().send(new EndGameResponse(player.getEndUuid(), new Statistic(player.getRank().get())));
+			});
+			server.removeRoom(requestManager.getRoomSession());
+			requestManager.getRoomSession().getPlayers().forEach(playerSession -> {
+				playerSession.getRequestManager().setRoomSession(null);
+				playerSession.getRequestManager().setPlayerSession(null);
+			});
+
+			server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> client.send(new RoomsResponse(client.getRoomsCallback(), server.getRoomSessions().stream().map(r -> r.getRoom()).collect(Collectors.toList()))));
 		}
 	}
 }

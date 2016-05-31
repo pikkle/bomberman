@@ -1,6 +1,5 @@
 package ch.heigvd.bomberman.server.database;
 
-import ch.heigvd.bomberman.common.game.Element;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -39,14 +38,6 @@ public class DBManager {
 
     public ArenaDao arenas() throws SQLException {
         return new ArenaDao();
-    }
-
-    public ElementDao<Element> elements() throws SQLException {
-        return new ElementDao<Element>();
-    }
-
-    public WallDao walls() throws SQLException {
-        return new WallDao();
     }
 
     /**

@@ -2,9 +2,7 @@ package ch.heigvd.bomberman.client.views.render;
 
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
-import ch.heigvd.bomberman.common.game.explosion.CentralExplosion;
-import ch.heigvd.bomberman.common.game.explosion.HorizontalExplosion;
-import ch.heigvd.bomberman.common.game.explosion.VerticalExplosion;
+import ch.heigvd.bomberman.common.game.explosion.*;
 import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -67,9 +65,33 @@ public class ElementRenderer implements ElementVisitor
 	}
 
 	@Override
+	public void visit(LeftExplosion explosion) {
+		if(!rendered.containsKey(explosion.getUuid()))
+			rendered.put(explosion.getUuid(), new ImageViewPane(new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/explosion/explosionL.png"))));
+	}
+
+	@Override
+	public void visit(RightExplosion explosion) {
+		if(!rendered.containsKey(explosion.getUuid()))
+			rendered.put(explosion.getUuid(), new ImageViewPane(new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/explosion/explosionR.png"))));
+	}
+
+	@Override
 	public void visit(VerticalExplosion explosion) {
 		if(!rendered.containsKey(explosion.getUuid()))
 			rendered.put(explosion.getUuid(), new ImageViewPane(new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/explosion/explosionV.png"))));
+	}
+
+	@Override
+	public void visit(TopExplosion explosion) {
+		if(!rendered.containsKey(explosion.getUuid()))
+			rendered.put(explosion.getUuid(), new ImageViewPane(new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/explosion/explosionT.png"))));
+	}
+
+	@Override
+	public void visit(BottomExplosion explosion) {
+		if(!rendered.containsKey(explosion.getUuid()))
+			rendered.put(explosion.getUuid(), new ImageViewPane(new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/explosion/explosionB.png"))));
 	}
 
 	@Override

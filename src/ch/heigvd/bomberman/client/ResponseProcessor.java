@@ -6,6 +6,7 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Room;
+import ch.heigvd.bomberman.common.game.Statistic;
 
 import java.util.List;
 
@@ -73,5 +74,10 @@ public class ResponseProcessor implements ResponseVisitor {
 	@Override
 	public Element visit(DestroyElementsResponse response) {
 		return response.getElement();
+	}
+
+	@Override
+	public Statistic visit(EndGameResponse response) {
+		return response.getStatistic();
 	}
 }

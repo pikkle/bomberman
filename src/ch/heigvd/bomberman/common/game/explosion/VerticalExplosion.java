@@ -9,10 +9,6 @@ import ch.heigvd.bomberman.common.game.Point;
  */
 public class VerticalExplosion extends Explosion {
 
-    public VerticalExplosion() {
-        super();
-    }
-
     public VerticalExplosion(Point position, Arena arena) {
         super(position, arena);
         arena.add(this);

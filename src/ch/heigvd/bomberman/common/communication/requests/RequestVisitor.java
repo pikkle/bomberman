@@ -15,4 +15,5 @@ public interface RequestVisitor {
 	Response visit(AddElementRequest request);
 	Response visit(DestroyElementsRequest request);
 	Response visit(DropBombRequest request);
+	Response visit(EndGameRequest request);
 }

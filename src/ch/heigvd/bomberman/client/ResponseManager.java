@@ -3,11 +3,8 @@ package ch.heigvd.bomberman.client;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Direction;
-import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
 
 import java.io.IOException;
@@ -157,6 +154,12 @@ public class ResponseManager extends Observable
     {
         DropBombRequest r = new DropBombRequest();
         send(r, null);
+    }
+
+    public void endGameRequest(Consumer<Statistic> callback)
+    {
+        EndGameRequest r = new EndGameRequest();
+        send(r, callback);
     }
 
     private <T> void send(Request<T> r, Consumer<? super T> callback)

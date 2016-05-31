@@ -2,9 +2,7 @@ package ch.heigvd.bomberman.common.game.Arena;
 
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
-import ch.heigvd.bomberman.common.game.explosion.CentralExplosion;
-import ch.heigvd.bomberman.common.game.explosion.HorizontalExplosion;
-import ch.heigvd.bomberman.common.game.explosion.VerticalExplosion;
+import ch.heigvd.bomberman.common.game.explosion.*;
 import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 
 /**
@@ -54,7 +52,27 @@ public class ElementAddHandler implements ElementVisitor {
     }
 
     @Override
+    public void visit(LeftExplosion explosion) {
+        arena.insert(explosion);
+    }
+
+    @Override
+    public void visit(RightExplosion explosion) {
+        arena.insert(explosion);
+    }
+
+    @Override
     public void visit(VerticalExplosion explosion) {
+        arena.insert(explosion);
+    }
+
+    @Override
+    public void visit(TopExplosion explosion) {
+        arena.insert(explosion);
+    }
+
+    @Override
+    public void visit(BottomExplosion explosion) {
         arena.insert(explosion);
     }
 

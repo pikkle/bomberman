@@ -3,18 +3,21 @@ package ch.heigvd.bomberman.server;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Player;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerSession {
 	private Bomberman bomberman;
 	private RoomSession roomSession;
 	private boolean ready = false;
+	private Long rank;
 	private Player player;
 	private UUID readyUuid;
 	private UUID startUuid;
 	private UUID moveUuid;
 	private UUID addUuid;
 	private UUID destroyUuid;
+	private UUID endUuid;
 	private RequestManager requestManager;
 
 	public PlayerSession(Player player, RoomSession roomSession, UUID readyUuid, RequestManager requestManager){
@@ -84,6 +87,14 @@ public class PlayerSession {
 		this.destroyUuid = destroyUuid;
 	}
 
+	public UUID getEndUuid(){
+		return  endUuid;
+	}
+
+	public void setEndUuid(UUID endUuid){
+		this.endUuid = endUuid;
+	}
+
 	public RequestManager getRequestManager(){
 		return requestManager;
 	}
@@ -95,5 +106,13 @@ public class PlayerSession {
 	public void ready(boolean state) {
 		ready = state;
 		roomSession.update();
+	}
+
+	public Optional<Long> getRank(){
+		return Optional.ofNullable(rank);
+	}
+
+	public void setRank(long rank){
+		this.rank = rank;
 	}
 }

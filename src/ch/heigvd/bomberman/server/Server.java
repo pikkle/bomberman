@@ -65,6 +65,10 @@ public class Server {
        roomSessions.add(roomSession);
     }
 
+    public void removeRoom(RoomSession roomSession){
+        roomSessions.remove(roomSession);
+    }
+
     public List<RoomSession> getRoomSessions(){
         return roomSessions;
     }

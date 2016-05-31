@@ -9,10 +9,6 @@ import ch.heigvd.bomberman.common.game.Point;
  */
 public abstract class Explosion extends Element {
 
-    public Explosion() {
-        super();
-    }
-
     public Explosion(Point position, Arena arena) {
         super(position, arena);
     }
