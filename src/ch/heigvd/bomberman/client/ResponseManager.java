@@ -53,7 +53,7 @@ public class ResponseManager extends Observable
                 {
                     try
                     {
-                        Response response = (Response) reader.readUnshared();
+                        Response response = (Response) reader.readObject();
 
                         if(callbacks.get(response.getID()) != null) {
                             Consumer callback = callbacks.get(response.getID());
