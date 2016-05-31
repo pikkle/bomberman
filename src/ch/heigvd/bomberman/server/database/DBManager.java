@@ -1,30 +1,26 @@
 package ch.heigvd.bomberman.server.database;
 
-import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Box;
 import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.Player;
-import ch.heigvd.bomberman.server.database.arena.ArenaORM;
-import ch.heigvd.bomberman.server.database.arena.elements.ElementORM;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 /**
  * Created by matthieu.villard on 26.05.2016.
  */
-public class DBManager
-{
-    private static final String DATABASE_NAME = "bomberman.db";
+public class DBManager {
     private static DBManager instance;
-    private ConnectionSource connectionSource;
+    private static Log log = LogFactory.getLog(DBManager.class);
+    private SessionFactory sessionFactory;
 
     private DBManager() throws SQLException {
-        connectionSource =  new JdbcConnectionSource("jdbc:sqlite:" + DATABASE_NAME);
-        initialize();
+        initDB();
     }
 
     public static synchronized DBManager getInstance() throws SQLException {
@@ -33,80 +29,99 @@ public class DBManager
         return instance;
     }
 
-    public <T extends MainORM> T getOrm(Class<T> clazz) throws SQLException {
-        Constructor<T> constructor = findConstructor(clazz);
-        try {
-            return constructor.newInstance(connectionSource);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+    public void initDB() throws SQLException {
+        //new ArenaDao().createTable();
+    }
+
+    public PlayerDao players() throws SQLException {
+        return new PlayerDao();
+    }
+
+    public ArenaDao arenas() throws SQLException {
+        return new ArenaDao();
+    }
+
+    public ElementDao<Element> elements() throws SQLException {
+        return new ElementDao<Element>();
+    }
+
+    public WallDao walls() throws SQLException {
+        return new WallDao();
+    }
+
+    /**
+     * Constructs a new Singleton SessionFactory
+     * @return
+     * @throws HibernateException
+     */
+    public SessionFactory buildSessionFactory() throws HibernateException {
+        if (sessionFactory != null) {
+            closeFactory();
         }
-        return null;
+        return configureSessionFactory();
     }
 
-    public MainORM getOrm(Arena arena) throws SQLException {
-        return new ArenaORM(connectionSource);
-    }
-
-    public ElementORM getOrm(Element element) throws SQLException {
-        ElementOrmSelector selector = new ElementOrmSelector(connectionSource);
-        element.accept(selector);
-        return selector.getOrm();
-    }
-
-    public MainORM getOrm(Player player) throws SQLException {
-        return new PlayerORM(connectionSource);
-    }
-
-    public void close() {
+    /**
+     * Builds a SessionFactory, if it hasn't been already.
+     */
+    public SessionFactory buildIfNeeded() throws DataAccessLayerException{
+        if (sessionFactory != null) {
+            return sessionFactory;
+        }
         try {
-            connectionSource.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return configureSessionFactory();
+        } catch (HibernateException e) {
+            throw new DataAccessLayerException(e);
         }
     }
-
-    private void initialize() throws SQLException {
-        new PlayerORM(connectionSource).createTable();
-        new ElementORM<Box>(connectionSource, Box.class).createTable();
-        new ArenaORM(connectionSource).createTable();
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
-    private <T extends MainORM> Constructor<T> findConstructor(Class<T> dataClass){
-        Constructor[] constructors;
-        Constructor[] arr$;
-        try {
-            arr$ = (Constructor[])dataClass.getDeclaredConstructors();
-            constructors = arr$;
-        } catch (Exception var8) {
-            throw new IllegalArgumentException("Can\'t lookup declared constructors for " + dataClass, var8);
-        }
 
-        arr$ = constructors;
-        int len$ = constructors.length;
+    public Session openSession() throws HibernateException {
+        buildIfNeeded();
+        return sessionFactory.openSession();
+    }
 
-        for(int i$ = 0; i$ < len$; ++i$) {
-            Constructor con = arr$[i$];
-            if(con.getParameterTypes().length == 1) {
-                if(!con.isAccessible()) {
-                    try {
-                        con.setAccessible(true);
-                    } catch (SecurityException var7) {
-                        throw new IllegalArgumentException("Could not open access to constructor for " + dataClass);
-                    }
-                }
-
-                return con;
+    public void closeFactory() {
+        if (sessionFactory != null) {
+            try {
+                sessionFactory.close();
+            } catch (HibernateException ignored) {
+                log.error("Couldn't close SessionFactory", ignored);
             }
         }
+    }
 
-        if(dataClass.getEnclosingClass() == null) {
-            throw new IllegalArgumentException("Can\'t find a constructor for " + dataClass);
-        } else {
-            throw new IllegalArgumentException("Can\'t find a constructor for " + dataClass + ".  Missing static on inner class?");
+    public void close(Session session) {
+        if (session != null) {
+            try {
+                session.close();
+            } catch (HibernateException ignored) {
+                log.error("Couldn't close Session", ignored);
+            }
         }
+    }
+
+    public void rollback(Transaction tx) {
+        try {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } catch (HibernateException ignored) {
+            log.error("Couldn't rollback Transaction", ignored);
+        }
+    }
+    /**
+     *
+     * @return
+     * @throws HibernateException
+     */
+    private SessionFactory configureSessionFactory() throws HibernateException {
+        Configuration configuration = new Configuration();
+        configuration.configure("ch/heigvd/bomberman/server/resources/hibernate.cfg.xml");
+        sessionFactory = configuration.buildSessionFactory();
+        return sessionFactory;
     }
 }

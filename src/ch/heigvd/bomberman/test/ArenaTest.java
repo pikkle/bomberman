@@ -1,16 +1,11 @@
 package ch.heigvd.bomberman.test;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Arena.SimpleArena;
-import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.server.database.DBManager;
-import ch.heigvd.bomberman.server.database.arena.ArenaORM;
-import ch.heigvd.bomberman.server.database.arena.elements.ElementORM;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,55 +15,52 @@ import static org.junit.Assert.*;
  * Created by matthieu.villard on 18.05.2016.
  */
 public class ArenaTest {
-	ArenaORM orm;
+	DBManager db;
 
 	@Before
 	public void setUp() throws Exception {
-		orm = DBManager.getInstance().getOrm(ArenaORM.class);
+		db = DBManager.getInstance();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		List<Arena> all = orm.findAll();
-		all.forEach(arena -> {
-			try {
-				orm.delete(arena);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		});
+
+	}
+
+	@Test
+	public void testLazy() throws Exception {
+		Optional<Arena> arena = db.arenas().find(new Long(1));
+		System.out.println(arena.get().getId());
 	}
 
 	@Test
 	public void testCreate() throws Exception {
-		List<Arena> before = orm.findAll();
-		Arena arena = new SimpleArena();
-		orm.create(arena);
-		List<Arena> after = orm.findAll();
+		List<Arena> before = db.arenas().findAll();
+		Arena arena = new Arena();
+		db.arenas().create(arena);
+		List<Arena> after = db.arenas().findAll();
 		assertEquals(before.size() + 1, after.size());
 		assertNotNull(arena.getId());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
-		Arena arena = new SimpleArena();
-		orm.create(arena);
-		List<Arena> before = orm.findAll();
-		orm.delete(arena);
-		Optional<Arena> after = orm.find(arena.getId());
+		Arena arena = new Arena();
+		db.arenas().create(arena);
+		List<Arena> before = db.arenas().findAll();
+		db.arenas().delete(arena);
+		Optional<Arena> after = db.arenas().find(arena.getId());
 		assertTrue(after.isPresent());
-		List<Element> all = DBManager.getInstance().getOrm(ElementORM.class).findByArena(arena);
-		assertTrue(all.isEmpty());
 	}
 
 	@Test
 	public void testUpdate() throws Exception {
-		Arena arena = new SimpleArena();
-		orm.create(arena);
+		Arena arena = new Arena();
+		db.arenas().create(arena);
 		arena.remove(arena.getElements().stream().findFirst().get());
-		orm.update(arena);
+		db.arenas().update(arena);
 
-		Optional<Arena> after = orm.find(arena.getId());
+		Optional<Arena> after = db.arenas().find(arena.getId());
 		assertEquals(68, after.get().getElements().size());
 	}
 }

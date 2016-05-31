@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.client.views.auth;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
+import ch.heigvd.bomberman.client.views.ClientMainController;
 import ch.heigvd.bomberman.common.communication.Message;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -107,8 +108,6 @@ public class LoginViewController {
         alert.showAndWait();
     }
 
-
-
     @FXML
     private void closeApp()
     {
@@ -141,6 +140,8 @@ public class LoginViewController {
         {
             Pane pane = loader.load();
             client.changeScene(pane);
+            ClientMainController controller = loader.getController();
+            controller.setMainApp(client);
         } catch (IOException e)
         {
             e.printStackTrace();

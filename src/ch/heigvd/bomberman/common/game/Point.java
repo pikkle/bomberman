@@ -9,6 +9,7 @@ import java.io.Serializable;
  * @author Adriano Ruberto
  */
 public class Point implements Serializable {
+
 	private final int x;
 	private final int y;
 

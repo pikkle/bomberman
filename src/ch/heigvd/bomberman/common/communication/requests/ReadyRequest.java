@@ -2,9 +2,6 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.responses.Response;
 import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Room;
-
-import java.util.List;
 
 public class ReadyRequest extends Request<Bomberman> {
 
@@ -18,7 +15,7 @@ public class ReadyRequest extends Request<Bomberman> {
 	}
 
 	@Override
-	public Response<List<Room>> accept(RequestVisitor visitor) {
+	public Response<Bomberman> accept(RequestVisitor visitor) {
 		return visitor.visit(this);
 	}
 

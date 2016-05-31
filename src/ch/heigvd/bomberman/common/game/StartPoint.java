@@ -1,13 +1,13 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
-import com.j256.ormlite.table.DatabaseTable;
+
+import javax.persistence.Entity;
 
 /**
  * Created by matthieu.villard on 23.05.2016.
  */
-@DatabaseTable(tableName = "element", daoClass = ElementDao.class)
+@Entity
 public class StartPoint extends Element {
 
     public StartPoint() {

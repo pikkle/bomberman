@@ -54,10 +54,12 @@ public class NewViewController
             lblPassword.setDisable(!newValue);
         });
 
-        rm.arenasRequest(arenas -> {
-            this.arenas = arenas;
-            refreshArena();
-        });
+        if(rm.isConnected()) {
+            rm.arenasRequest(arenas -> {
+                this.arenas = arenas;
+                refreshArena();
+            });
+        }
     }
 
     @FXML
@@ -86,7 +88,12 @@ public class NewViewController
 
     @FXML
     private void create(){
-        if (roomName.getText().isEmpty()){
+        if(!rm.isConnected()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("You are not connected");
+            alert.showAndWait();
+        }
+        else if (roomName.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("The room name is empty");
             alert.showAndWait();

@@ -1,5 +1,6 @@
 package ch.heigvd.bomberman.client.views.render;
 
+import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Direction;
@@ -10,10 +11,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.layout.*;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.stream.Collectors;
 
 /**
  * Created by matthieu.villard on 18.05.2016.
@@ -26,6 +30,7 @@ public class ArenaRenderer implements Observer
 	private double width;
 	private double height;
 	private ElementRenderer elementRenderer;
+	private ResponseManager rm = ResponseManager.getInstance();
 
 	public ArenaRenderer(Arena arena, double width, double height) {
 		this.arena = arena;
@@ -70,32 +75,31 @@ public class ArenaRenderer implements Observer
 
 	public ArenaRenderer(Arena arena, Bomberman bomberman, double width, double height) {
 		this(arena, width, height);
-		arena.remove(arena.getElements(bomberman.position()).stream().findFirst().get());
-		arena.add(bomberman);
-		renderElement(bomberman);
-		elementRenderer.getSprite(bomberman).setOnKeyPressed(key -> {
-			switch (key.getCode()) {
-				case RIGHT:
-					bomberman.move(Direction.RIGHT);
-					break;
-				case LEFT:
-					bomberman.move(Direction.LEFT);
-					break;
-				case DOWN:
-					bomberman.move(Direction.DOWN);
-					break;
-				case UP:
-					bomberman.move(Direction.UP);
-					break;
-				case SPACE:
-					bomberman.dropBomb();
-					break;
-				default:
-					return;
-			}
-			key.consume();
-		});
-		elementRenderer.getSprite(bomberman).setFocusTraversable(true);
+		if(elementRenderer.getSprite(bomberman) != null) {
+			elementRenderer.getSprite(bomberman).setOnKeyPressed(key -> {
+				switch (key.getCode()) {
+					case RIGHT:
+						rm.moveRequest(Direction.RIGHT, null);
+						break;
+					case LEFT:
+						rm.moveRequest(Direction.LEFT, null);
+						break;
+					case DOWN:
+						rm.moveRequest(Direction.DOWN, null);
+						break;
+					case UP:
+						rm.moveRequest(Direction.UP, null);
+						break;
+					case SPACE:
+						rm.dropBombRequest();
+						break;
+					default:
+						return;
+				}
+				key.consume();
+			});
+			elementRenderer.getSprite(bomberman).setFocusTraversable(true);
+		}
 	}
 
 	public void renderElement(Element element){
@@ -103,11 +107,21 @@ public class ArenaRenderer implements Observer
 			gridPane.getChildren().remove(elementRenderer.getSprite(element));
 		}
 		if(arena.getElements().contains(element)){
+			// display elements, behind existing ones
+			List<Node> mem = gridPane.getChildren()
+					.filtered(child -> child instanceof ImageViewPane && gridPane.getRowIndex(child) == element.y() && gridPane.getColumnIndex(child) == element.x())
+					.stream()
+					.collect(Collectors.toList());
+
+			mem.forEach(node -> gridPane.getChildren().remove(node));
+
 			element.accept(elementRenderer);
 			ImageViewPane container = elementRenderer.getSprite(element);
 			if(container != null) {
 				gridPane.add(container, element.x(), element.y());
 			}
+
+			mem.forEach(node -> gridPane.add(node, element.x(), element.y()));
 		}
 	}
 

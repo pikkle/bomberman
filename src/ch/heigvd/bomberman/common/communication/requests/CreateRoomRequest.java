@@ -2,9 +2,6 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.responses.Response;
-import ch.heigvd.bomberman.common.game.Room;
-
-import java.util.List;
 
 /**
  * Created by matthieu.villard on 26.05.2016.
@@ -54,7 +51,7 @@ public class CreateRoomRequest extends Request<Message> {
     }
 
     @Override
-    public Response<List<Room>> accept(RequestVisitor visitor) {
+    public Response<Message> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
 }

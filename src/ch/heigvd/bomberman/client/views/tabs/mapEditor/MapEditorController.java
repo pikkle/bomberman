@@ -154,7 +154,7 @@ public class MapEditorController implements Observer {
     private void confirm()
     {
         try {
-            DBManager.getInstance().getOrm(arena).create(arena);
+            DBManager.getInstance().arenas().create(arena);
         } catch (SQLException e) {
             e.printStackTrace();
         }

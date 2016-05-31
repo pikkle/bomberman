@@ -3,15 +3,25 @@ package ch.heigvd.bomberman.server;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Player;
 
+import java.util.UUID;
+
 public class PlayerSession {
 	private Bomberman bomberman;
-	private Room room;
-	private boolean ready;
+	private RoomSession roomSession;
+	private boolean ready = false;
 	private Player player;
+	private UUID readyUuid;
+	private UUID startUuid;
+	private UUID moveUuid;
+	private UUID addUuid;
+	private UUID destroyUuid;
+	private RequestManager requestManager;
 
-	public PlayerSession(Player player, Room room){
+	public PlayerSession(Player player, RoomSession roomSession, UUID readyUuid, RequestManager requestManager){
 		this.player = player;
-		this.room = room;
+		this.roomSession = roomSession;
+		this.readyUuid = readyUuid;
+		this.requestManager = requestManager;
 	}
 
 	public Bomberman getBomberman() {
@@ -22,16 +32,60 @@ public class PlayerSession {
 		this.bomberman = bomberman;
 	}
 
-	public Room getRoom() {
-		return room;
+	public RoomSession getRoomSession() {
+		return roomSession;
 	}
 
-	public void setRoom(Room room) {
-		this.room = room;
+	public void setRoomSession(RoomSession roomSession) {
+		this.roomSession = roomSession;
 	}
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public UUID getReadyUuid(){
+		return  readyUuid;
+	}
+
+	public void setReadyUuid(UUID readyUuid){
+		this.readyUuid = readyUuid;
+	}
+
+	public UUID getStartUuid(){
+		return  startUuid;
+	}
+
+	public void setStartUuid(UUID startUuid){
+		this.startUuid = startUuid;
+	}
+
+	public UUID getMoveUuid(){
+		return  moveUuid;
+	}
+
+	public void setMoveUuid(UUID moveUuid){
+		this.moveUuid = moveUuid;
+	}
+
+	public UUID getAddUuid(){
+		return  addUuid;
+	}
+
+	public void setAddUuid(UUID addUuid){
+		this.addUuid = addUuid;
+	}
+
+	public UUID getDestroyUuid(){
+		return  destroyUuid;
+	}
+
+	public void setDestroyUuid(UUID destroyUuid){
+		this.destroyUuid = destroyUuid;
+	}
+
+	public RequestManager getRequestManager(){
+		return requestManager;
 	}
 
 	public boolean isReady() {
@@ -40,6 +94,6 @@ public class PlayerSession {
 
 	public void ready(boolean state) {
 		ready = state;
-		room.update();
+		roomSession.update();
 	}
 }

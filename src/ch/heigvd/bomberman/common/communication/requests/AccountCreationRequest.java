@@ -3,9 +3,6 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.responses.Response;
-import ch.heigvd.bomberman.common.game.Room;
-
-import java.util.List;
 
 public final class AccountCreationRequest extends Request<Message> {
     private String username;
@@ -22,7 +19,7 @@ public final class AccountCreationRequest extends Request<Message> {
     }
 
     @Override
-    public Response<List<Room>> accept(RequestVisitor visitor) {
+    public Response<Message> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
 

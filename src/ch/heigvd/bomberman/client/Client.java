@@ -52,7 +52,8 @@ public class Client extends Application {
         System.out.println("Stage is closing");
         try
         {
-            rm.disconnect();
+            if(rm.isConnected())
+                rm.disconnect();
         } catch (IOException e)
         {
             e.printStackTrace();

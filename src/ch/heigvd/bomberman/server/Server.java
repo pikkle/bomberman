@@ -18,7 +18,7 @@ public class Server {
     private int port;
     private boolean running = true;
     private List<RequestManager> clients;
-    private List<Room> rooms = new LinkedList();
+    private List<RoomSession> roomSessions = new LinkedList();
     private DBManager database;
 
     private Server(int port){
@@ -61,12 +61,12 @@ public class Server {
         return database;
     }
 
-    public void addRoom(Room room){
-       rooms.add(room);
+    public void addRoom(RoomSession roomSession){
+       roomSessions.add(roomSession);
     }
 
-    public List<Room> getRooms(){
-        return rooms;
+    public List<RoomSession> getRoomSessions(){
+        return roomSessions;
     }
 
     public List<RequestManager> getClients(){

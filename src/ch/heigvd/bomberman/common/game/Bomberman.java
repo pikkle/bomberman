@@ -6,8 +6,6 @@ import ch.heigvd.bomberman.common.game.bombs.BasicBombFactory;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.bombs.BombFactory;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
-import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
-import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +14,6 @@ import java.util.Optional;
 /**
  * Represents a bomberman character in-game
  */
-@DatabaseTable(tableName = "element", daoClass = ElementDao.class)
 public class Bomberman extends Element {
     private BombFactory bombFactory = new BasicBombFactory(arena);
     private List<PowerUp> powerUps = new LinkedList<>();
@@ -32,6 +29,7 @@ public class Bomberman extends Element {
     public Bomberman(Point position, Skin skin, Arena arena) {
         super(position, arena);
         this.skin = skin;
+        arena.add(this);
     }
 
     public Skin getSkin(){
@@ -62,7 +60,6 @@ public class Bomberman extends Element {
         if (arena.isEmpty(position) && position.x() < arena.getWidth() && position.x() >= 0 &&
                 position.x() < arena.getHeight() && position.x() >= 0) {
             this.position = position;
-            arena.change(this);
         }
     }
 

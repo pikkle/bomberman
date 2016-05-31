@@ -2,10 +2,9 @@ package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
-import ch.heigvd.bomberman.server.database.arena.elements.ElementDao;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import org.hibernate.annotations.Cascade;
 
+import javax.persistence.*;
 import java.util.Optional;
 
 /**
@@ -14,11 +13,13 @@ import java.util.Optional;
  *
  * @author Adriano Ruberto
  */
-@DatabaseTable(tableName = "element", daoClass = ElementDao.class)
+@Entity
 public class Box extends Element {
 
-    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "powerUp", canBeNull = true)
-    private PowerUp powerUp;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "powerup_id", nullable = true)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
+    PowerUp powerUp;
 
     public Box() {
         super();
@@ -35,7 +36,7 @@ public class Box extends Element {
 
     public Optional<PowerUp> getPowerUp() {
         // TODO return random powerup
-        return Optional.of(powerUp);
+        return Optional.ofNullable(powerUp);
     }
 
     @Override
