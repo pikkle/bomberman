@@ -18,10 +18,13 @@ public class BasicBombFactory extends BombFactory {
 		if (nbBomb <= 0)
 			return Optional.empty();
 
-		BasicBomb b = new BasicBomb(position, countdown, blastRange, arena);
-		b.addObserver(this);
-		nbBomb--;
-		return Optional.ofNullable(b);
+		try {
+			BasicBomb b = new BasicBomb(position, countdown, blastRange, arena);
+			b.addObserver(this);
+			nbBomb--;
+			return Optional.of(b);
+		} catch (RuntimeException e) {
+			return Optional.empty();
+		}
 	}
-
 }

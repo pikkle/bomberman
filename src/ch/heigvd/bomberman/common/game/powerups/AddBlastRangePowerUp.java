@@ -16,7 +16,7 @@ public class AddBlastRangePowerUp extends PowerUp {
 	 */
 	@Override
 	public void apply(Bomberman bomberman) {
-
+		bomberman.getBombFactory().addRange(1);
 	}
 
 	/**

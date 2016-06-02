@@ -27,7 +27,7 @@ public class AddBombPowerUp extends PowerUp {
 	 */
 	@Override
 	public void apply(Bomberman bomberman) {
-		bomberman.addMaxBomb(1);
+		bomberman.getBombFactory().addBomb(1);
 	}
 
 	/**

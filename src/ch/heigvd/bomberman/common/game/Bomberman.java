@@ -18,7 +18,6 @@ public class Bomberman extends Element {
     private BombFactory bombFactory = new BasicBombFactory(arena);
     private List<PowerUp> powerUps = new LinkedList<>();
     private Skin skin;
-    private int maxBombs = 1;
 
     /**
      * Constructs a Bomberman at a given position and a given skin
@@ -78,12 +77,7 @@ public class Bomberman extends Element {
      * Drop the bomb
      */
     public Optional<? extends Bomb> dropBomb() {
-        if (maxBombs <= 0)
-            return Optional.empty();
-        Optional<? extends Bomb> b = bombFactory.create(position);
-        if(b.isPresent())
-            maxBombs--;
-        return b;
+        return bombFactory.create(position);
     }
 
     /**
@@ -100,8 +94,8 @@ public class Bomberman extends Element {
         this.bombFactory = bombFactory;
     }
 
-    public void addMaxBomb(int n) {
-        maxBombs += n;
+    public BombFactory getBombFactory() {
+        return bombFactory;
     }
 
     @Override

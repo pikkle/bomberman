@@ -14,14 +14,14 @@ import java.util.Optional;
 public abstract class BombFactory implements Observer, Serializable {
 	protected int countdown;
 	protected int blastRange;
-	protected Arena arena;
 	protected int nbBomb;
+	protected Arena arena;
 
 	public BombFactory(int countdown, int blastRange, Arena arena, int maxBomb) {
 		this.countdown = countdown;
 		this.blastRange = blastRange;
-		this.arena = arena;
 		this.nbBomb = maxBomb;
+		this.arena = arena;
 	}
 
 	/**
@@ -36,5 +36,17 @@ public abstract class BombFactory implements Observer, Serializable {
 	@Override
 	public void update(Observable o, Object arg) {
 		nbBomb++;
+	}
+
+	public void addCountdown(int n) {
+		countdown += n;
+	}
+
+	public void addRange(int n) {
+		blastRange += n;
+	}
+
+	public void addBomb(int n) {
+		nbBomb += n;
 	}
 }
