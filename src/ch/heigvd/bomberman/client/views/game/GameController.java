@@ -24,7 +24,7 @@ public class GameController {
     private Client client;
 
     public GameController(Bomberman bomberman, Client client){
-        renderer = new ArenaRenderer(bomberman.getArena(), bomberman, 750, 750);
+        renderer = new ArenaRenderer(bomberman.arena(), bomberman, 750, 750);
         this.client = client;
         mainPane = renderer.getView();
         rm = ResponseManager.getInstance();

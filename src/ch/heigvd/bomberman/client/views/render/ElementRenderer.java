@@ -51,7 +51,7 @@ public class ElementRenderer implements ElementVisitor
 	@Override
 	public void visit(StartPoint startPoint) {
 		if(!rendered.containsKey(startPoint.getUuid())) {
-			Iterator<StartPoint> iterator = startPoint.getArena().getStartPoints().iterator();
+			Iterator<StartPoint> iterator = startPoint.arena().getStartPoints().iterator();
 			int index;
 			for(index = 0; iterator.hasNext() && iterator.next() != startPoint; index++);
 			rendered.put(startPoint.getUuid(), new ImageViewPane(new ImageView(new javafx.scene.image.Image("ch/heigvd/bomberman/client/img/skins/" + Skin.values()[index % Skin.values().length] + ".png"))));
