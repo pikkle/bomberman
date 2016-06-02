@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.client.views.render;
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.explosion.*;
+import ch.heigvd.bomberman.common.game.powerups.AddBlastRangePowerUp;
 import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,6 +35,12 @@ public class ElementRenderer implements ElementVisitor
 	public void visit(AddBombPowerUp powerUp) {
 		if(!rendered.containsKey(powerUp.getUuid()))
 			rendered.put(powerUp.getUuid(), new ImageViewPane(new ImageView(new Image("ch/heigvd/bomberman/client/img/powerups/addBomb.png"))));
+	}
+
+	@Override
+	public void visit(AddBlastRangePowerUp powerUp) {
+		if(!rendered.containsKey(powerUp.getUuid()))
+			rendered.put(powerUp.getUuid(), new ImageViewPane(new ImageView(new Image("ch/heigvd/bomberman/client/img/powerups/blastRange.png"))));
 	}
 
 	@Override

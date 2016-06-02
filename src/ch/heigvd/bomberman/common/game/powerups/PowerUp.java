@@ -19,18 +19,32 @@ public abstract class PowerUp extends Element {
 		arena.add(this);
 	}
 
+	/**
+	 * Apply the power-up on a bomberman.
+	 *
+	 * @param bomberman the bomberman on which apply the power-up
+	 */
 	public abstract void apply(Bomberman bomberman);
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isDestructible() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isBlastAbsorber() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isTraversable() {
 		return true;

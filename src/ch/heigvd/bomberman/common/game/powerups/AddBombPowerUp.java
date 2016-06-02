@@ -22,11 +22,17 @@ public class AddBombPowerUp extends PowerUp {
 		super(position, arena);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void apply(Bomberman bomberman) {
 		bomberman.addMaxBomb(1);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void accept(ElementVisitor visitor) {
 		visitor.visit(this);
