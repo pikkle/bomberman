@@ -63,7 +63,7 @@ public class LoginViewController {
         {
             serverStatusLabel.setText("Offline");
             serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ko_sign.png")));
-            hiddeAll();
+            disableAll();
         }
     }
 
@@ -71,7 +71,7 @@ public class LoginViewController {
         this.client = client;
     }
 
-    private void hiddeAll() {
+    private void disableAll() {
         userId.setDisable(true);
         pwd.setDisable(true);
         login.setDisable(true);
