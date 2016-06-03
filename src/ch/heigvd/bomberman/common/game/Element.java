@@ -46,6 +46,11 @@ public abstract class Element extends Observable implements Serializable {
         return id;
     }
 
+	/**
+	 * Set the arena.
+	 *
+	 * @param arena the arena.
+	 */
     public void setArena(Arena arena){
         if(this.arena != arena) {
             if (this.arena != null)
@@ -55,14 +60,34 @@ public abstract class Element extends Observable implements Serializable {
         }
     }
 
-    public Arena getArena(){
+	/**
+	 * Get the arena where the element is
+	 *
+	 * @return the arena
+	 */
+    public Arena arena(){
         return arena;
     }
 
+	/**
+	 * Get the x value of the position of the element.
+	 *
+	 * @return the x value of the position
+	 */
 	public int x() {return position.x();}
 
+	/**
+	 * Get the y value of the position of the element.
+	 *
+	 * @return the y value of the position
+	 */
 	public int y() {return position.y();}
 
+	/**
+	 * Get the position of the element.
+	 *
+	 * @return the position
+	 */
 	public Point position() {return position;}
 
     @Override
@@ -70,9 +95,31 @@ public abstract class Element extends Observable implements Serializable {
 	    return obj != null && (this == obj || (obj instanceof Element && (getId() != null && getId().equals(((Element) obj).getId())) || ((Element) obj).getUuid().equals(getUuid())));
     }
 
+	/**
+	 * TODO
+	 *
+	 * @param visitor
+	 */
     public abstract void accept(ElementVisitor visitor);
 
+	/**
+     * If an element can be destroyed
+     *
+     * @return true if the element can be destroyed, false if it's not
+     */
     public abstract boolean isDestructible();
+
+	/**
+	 * If the blast can't go through the element
+	 *
+	 * @return true if the blast can, false otherwise
+	 */
     public abstract boolean isBlastAbsorber();
+
+	/**
+	 * If the element can be traversed.
+	 *
+	 * @return true if he can
+	 */
     public abstract boolean isTraversable();
 }

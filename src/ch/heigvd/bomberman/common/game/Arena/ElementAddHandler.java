@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.explosion.*;
+import ch.heigvd.bomberman.common.game.powerups.AddBlastRangePowerUp;
 import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 
 /**
@@ -28,6 +29,11 @@ public class ElementAddHandler implements ElementVisitor {
 
     @Override
     public void visit(AddBombPowerUp powerUp) {
+        arena.insert(powerUp);
+    }
+
+    @Override
+    public void visit(AddBlastRangePowerUp powerUp) {
         arena.insert(powerUp);
     }
 
