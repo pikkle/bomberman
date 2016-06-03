@@ -12,4 +12,5 @@ public class AddElementRequest extends Request<Element> {
     public Response<Element> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
+
 }

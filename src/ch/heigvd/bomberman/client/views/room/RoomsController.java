@@ -30,6 +30,7 @@ public class RoomsController extends Observable
     private ResponseManager rm;
     private ObservableList<Room> rooms = FXCollections.observableArrayList();
     private Client client;
+    private Room room;
 
     @FXML
     private TableView<Room> roomsTableView;
@@ -67,6 +68,10 @@ public class RoomsController extends Observable
         this.client = client;
     }
 
+    public Room getRoom(){
+        return room;
+    }
+
     @FXML
     public void showRooms(){
         if(rm.isConnected()) {
@@ -81,35 +86,54 @@ public class RoomsController extends Observable
 
     @FXML
     public void join(){
-        Room room = (Room) roomsTableView.getSelectionModel().getSelectedItem();
-        rm.joinRoomRequest(room, r -> {
+        room = roomsTableView.getSelectionModel().getSelectedItem();
+        if(room.isPrivate()){
             Stage stage = new Stage();
-            stage.setTitle("Bomberman");
-
-            stage.setOnCloseRequest(event -> {
-                rm.readyRequest(false, null);
-                client.getPrimatyStage().show();
-            });
+            stage.setTitle("Join room");
 
             stage.initModality(Modality.APPLICATION_MODAL);
 
-            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/ready.fxml"));
-            try
-            {
+            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/room/PasswordView.fxml"));
+            try {
                 Pane pane = loader.load();
-                ReadyController controller = loader.getController();
+                PasswordController controller = loader.getController();
                 controller.setClient(client);
-                controller.loadRoom(r);
-                addObserver(controller);
+                controller.setRoomsController(this);
                 stage.setScene(new Scene(pane));
 
-                client.getPrimatyStage().hide();
                 stage.showAndWait();
-
-            } catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+        }
+        else {
+            rm.joinRoomRequest(room, r -> {
+                Stage stage = new Stage();
+                stage.setTitle("Bomberman");
+
+                stage.setOnCloseRequest(event -> {
+                    rm.readyRequest(false, null);
+                    client.getPrimatyStage().show();
+                });
+
+                stage.initModality(Modality.APPLICATION_MODAL);
+
+                FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/ready.fxml"));
+                try {
+                    Pane pane = loader.load();
+                    ReadyController controller = loader.getController();
+                    controller.setClient(client);
+                    controller.loadRoom(r);
+                    addObserver(controller);
+                    stage.setScene(new Scene(pane));
+
+                    client.getPrimatyStage().hide();
+                    stage.showAndWait();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }

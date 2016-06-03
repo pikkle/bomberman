@@ -1,30 +1,45 @@
 package ch.heigvd.bomberman.server;
 
+import ch.heigvd.bomberman.common.communication.responses.EndGameResponse;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Player;
+import ch.heigvd.bomberman.common.game.Statistic;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerSession {
-	private Bomberman bomberman;
+	private RequestManager requestManager;
 	private RoomSession roomSession;
-	private boolean ready = false;
-	private Long rank;
 	private Player player;
+	private boolean ready = false;
+	private Bomberman bomberman;
+	private Long rank;
 	private UUID readyUuid;
 	private UUID startUuid;
 	private UUID moveUuid;
 	private UUID addUuid;
 	private UUID destroyUuid;
 	private UUID endUuid;
-	private RequestManager requestManager;
 
-	public PlayerSession(Player player, RoomSession roomSession, UUID readyUuid, RequestManager requestManager){
+	public PlayerSession(Player player, RoomSession roomSession, UUID readyUuid, RequestManager requestManager) throws Exception {
 		this.player = player;
 		this.roomSession = roomSession;
 		this.readyUuid = readyUuid;
 		this.requestManager = requestManager;
+	}
+
+	public synchronized void close(){
+		if(roomSession.getPlayers().contains(this)) {
+			if (roomSession.isRunning()) {
+				rank = roomSession.getPlayers().stream().filter(p -> !p.getRank().isPresent()).count();
+				requestManager.send(new EndGameResponse(endUuid, new Statistic(rank)));
+
+			}
+			roomSession.removePlayer(this);
+			if(bomberman != null)
+				roomSession.getArena().destroy(bomberman);
+		}
 	}
 
 	public Bomberman getBomberman() {

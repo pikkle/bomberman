@@ -1,12 +1,20 @@
 package ch.heigvd.bomberman.server;
 
+import ch.heigvd.bomberman.common.communication.responses.RoomsResponse;
+import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.server.database.DBManager;
+import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.beans.Observable;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Server executable class
@@ -18,7 +26,7 @@ public class Server {
     private int port;
     private boolean running = true;
     private List<RequestManager> clients;
-    private List<RoomSession> roomSessions = new LinkedList();
+    private ObservableList<RoomSession> roomSessions = new ObservableListWrapper<RoomSession>(new ArrayList(), o -> { return new Observable[] {o.getPlayers()};});
     private DBManager database;
 
     private Server(int port){
@@ -26,6 +34,12 @@ public class Server {
         this.clients = new LinkedList<RequestManager>();
         try {
             database = DBManager.getInstance();
+            roomSessions.addListener(new ListChangeListener<RoomSession>() {
+                @Override
+                public void onChanged(Change<? extends RoomSession> c) {
+                    sendRooms();
+                }
+            });
         } catch (SQLException e) {
             System.out.println("Database error:");
             e.printStackTrace();
@@ -65,7 +79,7 @@ public class Server {
        roomSessions.add(roomSession);
     }
 
-    public void removeRoom(RoomSession roomSession){
+    public void removeRoomSession(RoomSession roomSession){
         roomSessions.remove(roomSession);
     }
 
@@ -75,6 +89,12 @@ public class Server {
 
     public List<RequestManager> getClients(){
         return clients;
+    }
+
+    public void sendRooms(){
+        clients.stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> {
+            client.send(new RoomsResponse(client.getRoomsCallback(),roomSessions.stream().map(r -> new Room(r.getName(), r.getPassword() != null && ! r.getPassword().isEmpty(), r.getMinPlayer(), r.getPlayers().size(), r.getArena(), client.getPlayerSession().isPresent() && r.getPlayers().contains(client.getPlayerSession().get()))).collect(Collectors.toList())));
+        });
     }
 
     /**

@@ -2,11 +2,8 @@ package ch.heigvd.bomberman.client;
 
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.responses.*;
+import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.Room;
-import ch.heigvd.bomberman.common.game.Statistic;
 
 import java.util.List;
 
@@ -44,6 +41,11 @@ public class ResponseProcessor implements ResponseVisitor {
 	@Override
 	public Message visit(ErrorResponse errorResponse) {
 		return new Message(false, errorResponse.getMessage());
+	}
+
+	@Override
+	public Player visit(PlayerResponse response) {
+		return response.getPlayer();
 	}
 
 	@Override

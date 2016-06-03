@@ -10,9 +10,8 @@ import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class RequestProcessor implements RequestVisitor, Observer {
+public class RequestProcessor implements RequestVisitor, Observer{
 	private RequestManager requestManager;
 	private static Server server = Server.getInstance();
 	private static DBManager db;
@@ -26,6 +25,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		}
 	}
 
+	@Override
 	public Response visit(HelloRequest request){
 		System.out.println("Received message: ");
 		System.out.println(request.getMessage());
@@ -73,6 +73,14 @@ public class RequestProcessor implements RequestVisitor, Observer {
 	}
 
 	@Override
+	public Response visit(PlayerRequest request) {
+		if (!requestManager.isLoggedIn())
+			return new NoResponse(request.getID());
+
+		return new PlayerResponse(request.getID(), requestManager.getPlayer());
+	}
+
+	@Override
 	public Response visit(ArenasRequest request) {
 		if (!requestManager.isLoggedIn())
 			return new ArenasResponse(request.getID(), null);
@@ -83,6 +91,32 @@ public class RequestProcessor implements RequestVisitor, Observer {
 			e.printStackTrace();
 			return new ArenasResponse(request.getID(), null);
 		}
+	}
+
+	@Override
+	public Response visit(SaveArenaRequest request) {
+		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
+			return new ErrorResponse(request.getID(), "Permission denied");
+
+		try {
+			db.arenas().createOrUpdate(request.getArena());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new SuccessResponse(request.getID(), "Arean successfully saved");
+	}
+
+	@Override
+	public Response visit(RemoveArenaRequest request) {
+		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
+			return new ErrorResponse(request.getID(), "Permission denied");
+
+		try {
+			db.arenas().delete(request.getArena());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new SuccessResponse(request.getID(), "Arean successfully removed");
 	}
 
 	@Override
@@ -107,7 +141,6 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		return arena.filter(a-> a .getId() != null && a.getId().equals(request.getArena()))
 				.map(a->{
 					server.addRoom(new RoomSession(request.getName(), request.getPassword(), request.getMinPlayer(), a));
-					sendRooms();
 					return (Response) new SuccessResponse(request.getID(), "Room successfully created !");
 				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
@@ -119,7 +152,7 @@ public class RequestProcessor implements RequestVisitor, Observer {
 
 		requestManager.setRoomsCallback(request.getID());
 
-		sendRooms();
+		server.sendRooms();
 
 		return new NoResponse(request.getID());
 	}
@@ -143,31 +176,18 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if(roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().getId() == requestManager.getPlayer().getId()).findFirst().isPresent())
 			return new NoResponse(request.getID());
 
-		PlayerSession playerSession;
-		if(requestManager.getPlayerSession() != null){
-			playerSession = requestManager.getPlayerSession();
-			playerSession.getRoomSession().removePlayer(playerSession);
-			playerSession.setRoomSession(roomSession.get());
-			playerSession.setReadyUuid(request.getID());
-		}
-		else{
-			playerSession = new PlayerSession(requestManager.getPlayer(), roomSession.get(), request.getID(), requestManager);
-		}
+		if(roomSession.get().getPassword() != null && !roomSession.get().getPassword().isEmpty() && !roomSession.get().getPassword().equals(request.getPassword()))
+			return new NoResponse(request.getID());
 
 		try {
-			roomSession.get().addPlayer(playerSession);
+			requestManager.openPlayerSession(roomSession.get(), request.getID());
 		} catch (Exception e) {
 			return new NoResponse(request.getID());
 		}
 
-		requestManager.setRoomSession(roomSession.get());
-		requestManager.setPlayerSession(playerSession);
-
-		sendRooms();
-
 		if(roomSession.get().getPlayers().size() >= roomSession.get().getMinPlayer()){
 			roomSession.get().getPlayers().stream().filter(player -> player.getReadyUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && ! roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().size(), roomSession.get().getArena(), requestManager.getPlayerSession() != null && roomSession.get().getPlayers().contains(requestManager.getPlayerSession()))));
+				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && ! roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().size(), roomSession.get().getArena(), roomSession.get().getPlayers().contains(player))));
 				player.setReadyUuid(null);
 			});
 		}
@@ -175,33 +195,33 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		return new NoResponse(request.getID());
 	}
 
+	// Game requests, allowed
 	@Override
 	public Response visit(ReadyRequest request) {
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(requestManager.getRoomSession() == null || requestManager.getPlayerSession() == null)
+		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
 		if(!request.getState()){
-			requestManager.getRoomSession().removePlayer(requestManager.getPlayerSession());
+			//if(requestManager.getPlayerSession().get().getRoomSession().isRunning())
+				//requestManager.getPlayerSession().get().getRoomSession().getArena().destroy(requestManager.getPlayerSession().get().getBomberman());
 
-			sendRooms();
-
-			requestManager.getPlayerSession().setStartUuid(null);
+			requestManager.closePlayerSession();
 
 			return new NoResponse(request.getID());
 		}
 
-		requestManager.getPlayerSession().setStartUuid(request.getID());
-		requestManager.getPlayerSession().ready(request.getState());
+		requestManager.getPlayerSession().get().setStartUuid(request.getID());
+		requestManager.getPlayerSession().get().ready(request.getState());
 
-		if(!requestManager.getRoomSession().isRunning())
+		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getRoomSession().getArena().addObserver(this);
+		requestManager.getPlayerSession().get().getRoomSession().getArena().addObserver(this);
 
-		requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getStartUuid() != null).forEach(player -> {
+		requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getStartUuid() != null).forEach(player -> {
 			player.getRequestManager().send(new ReadyResponse(player.getStartUuid(), player.getBomberman()));
 			player.setStartUuid(null);
 		});
@@ -214,19 +234,19 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(requestManager.getRoomSession() == null || requestManager.getPlayerSession() == null)
+		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getRoomSession().isRunning())
+		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
 		if(request.getDirection() == null){
-			requestManager.getPlayerSession().setMoveUuid(request.getID());
+			requestManager.getPlayerSession().get().setMoveUuid(request.getID());
 		}
 		else{
-			requestManager.getPlayerSession().getBomberman().move(request.getDirection());
-			requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getMoveUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new MoveResponse(player.getMoveUuid(), requestManager.getPlayerSession().getBomberman()));
+			requestManager.getPlayerSession().get().getBomberman().move(request.getDirection());
+			requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getMoveUuid() != null).forEach(player -> {
+				player.getRequestManager().send(new MoveResponse(player.getMoveUuid(), requestManager.getPlayerSession().get().getBomberman()));
 			});
 		}
 
@@ -238,13 +258,13 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(requestManager.getRoomSession() == null || requestManager.getPlayerSession() == null)
+		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getRoomSession().isRunning())
+		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getPlayerSession().setAddUuid(request.getID());
+		requestManager.getPlayerSession().get().setAddUuid(request.getID());
 
 		return new NoResponse(request.getID());
 	}
@@ -254,13 +274,13 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(requestManager.getRoomSession() == null || requestManager.getPlayerSession() == null)
+		if(!requestManager.getPlayerSession().isPresent() ||requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getRoomSession().isRunning())
+		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getPlayerSession().setDestroyUuid(request.getID());
+		requestManager.getPlayerSession().get().setDestroyUuid(request.getID());
 
 		return new NoResponse(request.getID());
 	}
@@ -270,13 +290,13 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(requestManager.getRoomSession() == null || requestManager.getPlayerSession() == null)
+		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getRoomSession().isRunning())
+		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getPlayerSession().getBomberman().dropBomb();
+		requestManager.getPlayerSession().get().getBomberman().dropBomb();
 
 		return new NoResponse(request.getID());
 	}
@@ -286,13 +306,13 @@ public class RequestProcessor implements RequestVisitor, Observer {
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(requestManager.getRoomSession() == null || requestManager.getPlayerSession() == null)
+		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getRoomSession().isRunning())
+		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getPlayerSession().setEndUuid(request.getID());
+		requestManager.getPlayerSession().get().setEndUuid(request.getID());
 
 		return new NoResponse(request.getID());
 	}
@@ -304,36 +324,30 @@ public class RequestProcessor implements RequestVisitor, Observer {
 	}
 
 	private void updateElement(Element element){
-		if(requestManager.getRoomSession().getArena().getElements().contains(element)){
-			requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getAddUuid() != null).forEach(player -> {
+		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
+			return;
+		if(requestManager.getPlayerSession().get().getRoomSession().getArena().getElements().contains(element)){
+			requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getAddUuid() != null).forEach(player -> {
 				player.getRequestManager().send(new AddElementResponse(player.getAddUuid(), element));
 			});
 		}
 		else {
-			if(element instanceof Bomberman)
-				requestManager.getRoomSession().getPlayers().stream().filter(playerSession -> playerSession.getBomberman().equals(element)).forEach(playerSession -> playerSession.setRank(requestManager.getRoomSession().getPlayers().stream().filter(p -> !p.getRank().isPresent()).count()));
-			requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getDestroyUuid() != null).forEach(player -> {
+			if(element instanceof Bomberman) {
+				requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(playerSession -> playerSession.getBomberman().equals(element)).findFirst().ifPresent(playerSession -> playerSession.close());
+			}
+			requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getDestroyUuid() != null).forEach(player -> {
 				player.getRequestManager().send(new DestroyElementsResponse(player.getDestroyUuid(), element));
 			});
 		}
-		if(requestManager.getRoomSession().getPlayers().stream().filter(playerSession -> !playerSession.getRank().isPresent()).count() <= 1){
-			requestManager.getRoomSession().getPlayers().stream().filter(playerSession -> !playerSession.getRank().isPresent()).forEach(playerSession -> playerSession.setRank(1));
-			requestManager.getRoomSession().getPlayers().stream().filter(player -> player.getDestroyUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new EndGameResponse(player.getEndUuid(), new Statistic(player.getRank().get())));
-			});
-			server.removeRoom(requestManager.getRoomSession());
-			requestManager.getRoomSession().getPlayers().forEach(playerSession -> {
-				playerSession.getRequestManager().setRoomSession(null);
-				playerSession.getRequestManager().setPlayerSession(null);
-			});
-
-			sendRooms();
-		}
+		checkIfEnded();
 	}
 
-	private void sendRooms(){
-		server.getClients().stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> {
-			client.send(new RoomsResponse(client.getRoomsCallback(), server.getRoomSessions().stream().map(r -> new Room(r.getName(), r.getPassword() != null && ! r.getPassword().isEmpty(), r.getMinPlayer(), r.getPlayers().size(), r.getArena(), requestManager.getPlayerSession() != null && r.getPlayers().contains(requestManager.getPlayerSession()))).collect(Collectors.toList())));
-		});
+	private void checkIfEnded() {
+		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
+			return;
+		if(requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(playerSession -> !playerSession.getRank().isPresent()).count() <= 1){
+
+			requestManager.getPlayerSession().get().getRoomSession().close();
+		}
 	}
 }

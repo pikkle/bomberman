@@ -9,22 +9,33 @@ import javafx.scene.control.TabPane;
 /**
  * Created by julien on 27.05.16.
  */
-public class UserTabsController
+public class TabsController
 {
     private Client client;
 
     @FXML
-    private Tab roomsTabs;
+    private Tab roomsTab;
+
+    @FXML
+    private Tab mapsTab;
 
     @FXML
     private RoomsController roomsController ;
 
     @FXML
+    private MapsController mapsController ;
+
+    @FXML
     private TabPane tabs;
 
     @FXML
-    private void initalize(){
-        tabs.getSelectionModel().clearAndSelect(0);
+    public void initalize(){
+        tabs.getSelectionModel().selectedItemProperty()
+                .addListener((obs, oldTab, newTab) -> {
+                    if (newTab == mapsTab) {
+                        mapsController.initalize();
+                    }
+                });
     }
 
     public void setClient(Client client){

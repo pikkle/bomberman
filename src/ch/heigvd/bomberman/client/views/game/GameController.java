@@ -36,7 +36,8 @@ public class GameController {
         stage.setTitle("Bomberman");
 
         stage.setOnCloseRequest(event -> {
-            client.getPrimatyStage().show();
+            rm.readyRequest(false, null);
+            event.consume();
         });
 
         stage.initModality(Modality.APPLICATION_MODAL);

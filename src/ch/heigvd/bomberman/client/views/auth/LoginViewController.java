@@ -96,12 +96,33 @@ public class LoginViewController {
             String hashPasswd = pwd.getText();
             rm.loginRequest(userId.getText(), hashPasswd, message -> {
                 if (message.state()) {
-                    bypass();
+                    loginSuccess();
                 } else {
                     loginFailure(message);
                 }
             });
         }
+    }
+
+    private void loginSuccess(){
+        rm.playerRequest(player -> {
+            if(!player.isAdmin()){
+                bypass();
+            } else {
+                FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/ClientMain.fxml"));
+                try
+                {
+                    Pane pane = loader.load();
+                    client.changeScene(pane);
+                    ClientMainController controller = loader.getController();
+                    controller.loadAdminTabs();
+                    controller.setMainApp(client);
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void loginFailure(Message message){
@@ -143,6 +164,7 @@ public class LoginViewController {
             Pane pane = loader.load();
             client.changeScene(pane);
             ClientMainController controller = loader.getController();
+            controller.loadUserTabs();
             controller.setMainApp(client);
         } catch (IOException e)
         {

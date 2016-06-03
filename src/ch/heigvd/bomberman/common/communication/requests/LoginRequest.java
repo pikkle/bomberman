@@ -22,4 +22,5 @@ public class LoginRequest extends Request<Message> {
 	public String getPassword() {
 		return password;
 	}
+
 }
