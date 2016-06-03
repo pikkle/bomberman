@@ -21,13 +21,13 @@ public class Player implements Serializable {
 
 	private Bomberman bomberman;
 
-	@Column(name="pseudo")
+	@Column(name="pseudo", nullable = false)
 	private String pseudo;
 
 	@Column(name="password", nullable = true)
 	private String password;
 
-	@Column(name="isAdmin")
+	@Column(name="isAdmin", nullable = false)
 	private boolean isAdmin = false;
 
 	Player() {
