@@ -19,7 +19,7 @@ public abstract class Element extends Observable implements Serializable {
 
 	@Column(name = "position") protected Point position;
 	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "arena_id", nullable = true) protected Arena arena;
-	@Column(name = "path") private String path;
+	private String path;
 	@Id @Column(name = "id") @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
 	private UUID uuid;
 

@@ -6,8 +6,6 @@ import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Point;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -44,29 +42,21 @@ public class ArenaRenderer implements Observer {
 
 		resize(width, height);
 
-		container.widthProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
-			                    Number newSceneWidth) {
-				resize();
-			}
+		container.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
+			resize();
 		});
 
-		container.heightProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
-			                    Number newSceneWidth) {
-				resize();
-			}
+		container.heightProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
+			resize();
 		});
 
 		arena.getElements().stream().forEach(this::renderElement);
 
 		BorderPane center = new BorderPane(gridPane);
-		container.setTopAnchor(center, 0.0);
-		container.setLeftAnchor(center, 0.0);
-		container.setRightAnchor(center, 0.0);
-		container.setBottomAnchor(center, 0.0);
+		AnchorPane.setTopAnchor(center, 0.0);
+		AnchorPane.setLeftAnchor(center, 0.0);
+		AnchorPane.setRightAnchor(center, 0.0);
+		AnchorPane.setBottomAnchor(center, 0.0);
 		container.getChildren().add(center);
 
 		//container.setStyle("-fx-background-color: grey;");
@@ -110,8 +100,8 @@ public class ArenaRenderer implements Observer {
 			// display elements, behind existing ones
 			List<Node> mem = gridPane.getChildren()
 			                         .filtered(child -> child instanceof ImageViewPane &&
-			                                            gridPane.getRowIndex(child) == element.y() &&
-			                                            gridPane.getColumnIndex(child) == element.x())
+			                                            GridPane.getRowIndex(child) == element.y() &&
+			                                            GridPane.getColumnIndex(child) == element.x())
 			                         .stream()
 			                         .collect(Collectors.toList());
 
@@ -159,7 +149,9 @@ public class ArenaRenderer implements Observer {
 		double width = 0;
 		double height = 0;
 		for (width = 0; x > width + this.width / arena.getWidth(); width += this.width / arena.getWidth(), xVal++) ;
-		for (height = 0; y > height + this.height / arena.getHeight(); height += this.height / arena.getHeight(), yVal++);
+		for (height = 0;
+		     y > height + this.height / arena.getHeight(); height += this.height / arena.getHeight(), yVal++)
+			;
 		return new Point(Math.min(xVal, arena.getWidth() - 1), Math.min(yVal, arena.getHeight() - 1));
 	}
 
