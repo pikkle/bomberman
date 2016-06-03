@@ -1,6 +1,9 @@
 package ch.heigvd.bomberman.common.game;
 
+import ch.heigvd.bomberman.client.views.render.ImageViewPane;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,17 +19,19 @@ public abstract class Element extends Observable implements Serializable {
 
 	@Column(name = "position") protected Point position;
 	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "arena_id", nullable = true) protected Arena arena;
+	@Column(name = "path") private String path;
 	@Id @Column(name = "id") @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
 	private UUID uuid;
 
-	public Element() {
-		this(new Point(), null);
-	}
-
-	public Element(Point position, Arena arena) {
+	public Element(Point position, Arena arena, String path) {
 		this.position = position;
 		this.arena = arena;
+		this.path = path;
 		uuid = UUID.randomUUID();
+		arena.add(this);
+	}
+
+	protected Element() {
 	}
 
 	public UUID getUuid() {
@@ -87,12 +92,6 @@ public abstract class Element extends Observable implements Serializable {
 		                                       ((Element) obj).getUuid().equals(getUuid())));
 	}
 
-	/**
-	 * TODO
-	 *
-	 * @param visitor
-	 */
-	public abstract void accept(ElementVisitor visitor);
 
 	/**
 	 * If an element can be destroyed
@@ -120,5 +119,9 @@ public abstract class Element extends Observable implements Serializable {
 	 */
 	public void delete() {
 		arena.remove(this);
+	}
+
+	public ImageViewPane getSprite() {
+		return new ImageViewPane(new ImageView(new Image(path)));
 	}
 }

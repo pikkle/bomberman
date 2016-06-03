@@ -4,7 +4,10 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import org.hibernate.annotations.Cascade;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.util.Optional;
 
 /**
@@ -19,29 +22,21 @@ public class Box extends Element {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "powerup_id", nullable = true)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
-    PowerUp powerUp;
-
-    public Box() {
-        super();
-    }
+    private PowerUp powerUp;
 
     public Box(Point position, Arena arena) {
-        super(position, arena);
-        arena.add(this);
+        super(position, arena, "ch/heigvd/bomberman/client/img/box.png");
     }
 
-    public void setPowerUp(PowerUp powerUp){
+	public Box() {}
+
+	public void setPowerUp(PowerUp powerUp){
         this.powerUp = powerUp;
     }
 
     public Optional<PowerUp> getPowerUp() {
         // TODO return random powerup
         return Optional.ofNullable(powerUp);
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) {
-        visitor.visit(this);
     }
 
     @Override

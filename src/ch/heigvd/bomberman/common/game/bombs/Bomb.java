@@ -17,7 +17,7 @@ public abstract class Bomb extends Element {
 	protected int blastRange;
 
 	public Bomb(Point position, int countdown, int blastRange, Arena arena) {
-		super(position, arena);
+		super(position, arena, "ch/heigvd/bomberman/client/img/bomb.png");
 		this.countdown = countdown;
 		this.blastRange = blastRange;
 	}

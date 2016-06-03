@@ -17,7 +17,6 @@ import java.util.Optional;
 public class Bomberman extends Element {
     private BombFactory bombFactory = new BasicBombFactory(arena);
     private List<PowerUp> powerUps = new LinkedList<>();
-    private Skin skin;
 
     /**
      * Constructs a Bomberman at a given position and a given skin
@@ -26,13 +25,7 @@ public class Bomberman extends Element {
      * @param skin     The skin of the bomberman
      */
     public Bomberman(Point position, Skin skin, Arena arena) {
-        super(position, arena);
-        this.skin = skin;
-        arena.add(this);
-    }
-
-    public Skin getSkin(){
-        return skin;
+        super(position, arena, "ch/heigvd/bomberman/client/img/skins/" + skin + ".png");
     }
 
     /**
@@ -96,11 +89,6 @@ public class Bomberman extends Element {
 
     public BombFactory getBombFactory() {
         return bombFactory;
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) {
-        visitor.visit(this);
     }
 
     @Override

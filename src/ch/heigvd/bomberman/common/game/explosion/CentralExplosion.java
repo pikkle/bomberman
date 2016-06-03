@@ -1,7 +1,6 @@
 package ch.heigvd.bomberman.common.game.explosion;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.ElementVisitor;
 import ch.heigvd.bomberman.common.game.Point;
 
 /**
@@ -9,13 +8,7 @@ import ch.heigvd.bomberman.common.game.Point;
  */
 public class CentralExplosion extends Explosion {
 
-    public CentralExplosion(Point position, Arena arena) {
-        super(position, arena);
-        arena.add(this);
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) {
-        visitor.visit(this);
-    }
+	public CentralExplosion(Point position, Arena arena) {
+		super(position, arena, "ch/heigvd/bomberman/client/img/explosion/explosionC.png");
+	}
 }

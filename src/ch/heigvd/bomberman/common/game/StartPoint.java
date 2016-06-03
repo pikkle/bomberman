@@ -10,37 +10,29 @@ import javax.persistence.Entity;
 @Entity
 public class StartPoint extends Element {
 
-    public StartPoint() {
-        super();
-    }
+	/**
+	 * Constructs a Bomberman at a given position and a given skin
+	 *
+	 * @param position The position of the bomberman
+	 */
+	public StartPoint(Point position, Arena arena) {
+		super(position, arena, "ch/heigvd/bomberman/client/img/skins/" + Skin.values()[0] + ".png");
+	}
 
-    /**
-     * Constructs a Bomberman at a given position and a given skin
-     *
-     * @param position The position of the bomberman
-     */
-    public StartPoint(Point position, Arena arena) {
-        super(position, arena);
-        arena.add(this);
-    }
+	public StartPoint() {}
 
-    @Override
-    public boolean isDestructible() {
-        return true;
-    }
+	@Override
+	public boolean isDestructible() {
+		return true;
+	}
 
-    @Override
-    public boolean isBlastAbsorber() {
-        return false;
-    }
+	@Override
+	public boolean isBlastAbsorber() {
+		return false;
+	}
 
-    @Override
-    public boolean isTraversable() {
-        return false;
-    }
-
-    @Override
-    public void accept(ElementVisitor visitor) {
-        visitor.visit(this);
-    }
+	@Override
+	public boolean isTraversable() {
+		return false;
+	}
 }

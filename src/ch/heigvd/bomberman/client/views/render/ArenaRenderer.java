@@ -22,14 +22,12 @@ import java.util.stream.Collectors;
 /**
  * Created by matthieu.villard on 18.05.2016.
  */
-public class ArenaRenderer implements Observer
-{
+public class ArenaRenderer implements Observer {
 	private Arena arena;
 	private GridPane gridPane;
 	private AnchorPane container;
 	private double width;
 	private double height;
-	private ElementRenderer elementRenderer;
 	private ResponseManager rm = ResponseManager.getInstance();
 
 	public ArenaRenderer(Arena arena, double width, double height) {
@@ -37,7 +35,6 @@ public class ArenaRenderer implements Observer
 		arena.addObserver(this);
 		this.width = width;
 		this.height = height;
-		elementRenderer = new ElementRenderer();
 
 		container = new AnchorPane();
 		gridPane = new GridPane();
@@ -48,20 +45,22 @@ public class ArenaRenderer implements Observer
 		resize(width, height);
 
 		container.widthProperty().addListener(new ChangeListener<Number>() {
-			@Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
+			                    Number newSceneWidth) {
 				resize();
 			}
 		});
 
 		container.heightProperty().addListener(new ChangeListener<Number>() {
-			@Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
+			                    Number newSceneWidth) {
 				resize();
 			}
 		});
 
-		arena.getElements().stream().forEach(element -> {
-			renderElement(element);
-		});
+		arena.getElements().stream().forEach(this::renderElement);
 
 		BorderPane center = new BorderPane(gridPane);
 		container.setTopAnchor(center, 0.0);
@@ -75,8 +74,8 @@ public class ArenaRenderer implements Observer
 
 	public ArenaRenderer(Arena arena, Bomberman bomberman, double width, double height) {
 		this(arena, width, height);
-		if(elementRenderer.getSprite(bomberman) != null) {
-			elementRenderer.getSprite(bomberman).setOnKeyPressed(key -> {
+		if (bomberman.getSprite() != null) {
+			bomberman.getSprite().setOnKeyPressed(key -> {
 				switch (key.getCode()) {
 					case RIGHT:
 						rm.moveRequest(Direction.RIGHT, null);
@@ -98,82 +97,79 @@ public class ArenaRenderer implements Observer
 				}
 				key.consume();
 			});
-			elementRenderer.getSprite(bomberman).setFocusTraversable(true);
+			bomberman.getSprite().setFocusTraversable(true);
 		}
 	}
 
-	public void renderElement(Element element){
-		if(elementRenderer.getSprite(element) != null && gridPane.getChildren().contains(elementRenderer.getSprite(element))){
-			gridPane.getChildren().remove(elementRenderer.getSprite(element));
+	public void renderElement(Element element) {
+		ImageViewPane sprite = element.getSprite();
+		if (sprite != null && gridPane.getChildren().contains(sprite)) {
+			gridPane.getChildren().remove(sprite);
 		}
-		if(arena.getElements().contains(element)){
+		if (arena.getElements().contains(element)) {
 			// display elements, behind existing ones
 			List<Node> mem = gridPane.getChildren()
-					.filtered(child -> child instanceof ImageViewPane && gridPane.getRowIndex(child) == element.y() && gridPane.getColumnIndex(child) == element.x())
-					.stream()
-					.collect(Collectors.toList());
+			                         .filtered(child -> child instanceof ImageViewPane &&
+			                                            gridPane.getRowIndex(child) == element.y() &&
+			                                            gridPane.getColumnIndex(child) == element.x())
+			                         .stream()
+			                         .collect(Collectors.toList());
 
 			mem.forEach(node -> gridPane.getChildren().remove(node));
 
-			element.accept(elementRenderer);
-			ImageViewPane container = elementRenderer.getSprite(element);
-			if(container != null) {
-				gridPane.add(container, element.x(), element.y());
+			if (sprite != null) {
+				gridPane.add(sprite, element.x(), element.y());
 			}
 
 			mem.forEach(node -> gridPane.add(node, element.x(), element.y()));
 		}
 	}
 
-	public ImageViewPane getSprite(Element element){
-		return elementRenderer.getSprite(element);
-	}
-
-	public Arena getArena(){
+	public Arena getArena() {
 		return arena;
 	}
 
-	public AnchorPane getView(){
+	public AnchorPane getView() {
 		return container;
 	}
 
-	public GridPane getGrid(){
+	public GridPane getGrid() {
 		return gridPane;
 	}
 
-	public double getWidth(){
+	public double getWidth() {
 		return width;
 	}
 
-	public double getHeight(){
+	public double getHeight() {
 		return height;
 	}
 
-	public double getCellWidth(){
+	public double getCellWidth() {
 		return width / arena.getWidth();
 	}
 
-	public double getCellHeight(){
+	public double getCellHeight() {
 		return height / arena.getHeight();
 	}
 
-	public Point getCell(double x, double y){
+	public Point getCell(double x, double y) {
 		int xVal = 0;
 		int yVal = 0;
 		double width = 0;
 		double height = 0;
-		for(width = 0; x > width + this.width / arena.getWidth(); width += this.width / arena.getWidth(), xVal++);
-		for(height = 0; y > height + this.height / arena.getHeight(); height += this.height / arena.getHeight(), yVal++);
+		for (width = 0; x > width + this.width / arena.getWidth(); width += this.width / arena.getWidth(), xVal++) ;
+		for (height = 0; y > height + this.height / arena.getHeight(); height += this.height / arena.getHeight(), yVal++);
 		return new Point(Math.min(xVal, arena.getWidth() - 1), Math.min(yVal, arena.getHeight() - 1));
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		Element element = (Element)arg;
+		Element element = (Element) arg;
 		renderElement(element);
 	}
 
-	public void resize(double width, double height){
+	public void resize(double width, double height) {
 		double size = Math.min(height / arena.getHeight(), width / arena.getWidth());
 		this.width = arena.getWidth() * size;
 		this.height = arena.getHeight() * size;
@@ -202,7 +198,7 @@ public class ArenaRenderer implements Observer
 		}
 	}
 
-	private void resize(){
+	private void resize() {
 		resize(container.getWidth(), container.getHeight());
 	}
 }

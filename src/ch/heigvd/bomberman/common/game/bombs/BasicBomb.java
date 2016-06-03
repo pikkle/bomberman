@@ -2,7 +2,6 @@ package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.ElementVisitor;
 import ch.heigvd.bomberman.common.game.Point;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ public class BasicBomb extends Bomb {
 
 	public BasicBomb(Point position, int countdown, int blastRange, Arena arena) {
 		super(position, countdown, blastRange, arena);
-		arena.add(this);
 	}
 
 	@Override
@@ -63,10 +61,5 @@ public class BasicBomb extends Bomb {
 			}
 			return res;
 		}, (a, b) -> a);
-	}
-
-	@Override
-	public void accept(ElementVisitor visitor) {
-		visitor.visit(this);
 	}
 }

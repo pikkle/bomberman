@@ -30,7 +30,7 @@ public class Player implements Serializable {
 	@Column(name="isAdmin", nullable = false)
 	private boolean isAdmin = false;
 
-	Player() {
+	protected Player() {
 		// all persisted classes must define a no-arg constructor with at least package visibility
 	}
 

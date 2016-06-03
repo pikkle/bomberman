@@ -1,7 +1,8 @@
 package ch.heigvd.bomberman.common.game.powerups;
 
+import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.ElementVisitor;
+import ch.heigvd.bomberman.common.game.Point;
 
 /**
  * Projet : GEN_Projet
@@ -11,19 +12,15 @@ import ch.heigvd.bomberman.common.game.ElementVisitor;
  */
 public class AddBlastRangePowerUp extends PowerUp {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void apply(Bomberman bomberman) {
-		bomberman.getBombFactory().addRange(1);
+	public AddBlastRangePowerUp(Point position, Arena arena) {
+		super(position, arena, "ch/heigvd/bomberman/client/img/powerups/blastRange.png");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void accept(ElementVisitor visitor) {
-		visitor.visit(this);
+	public void apply(Bomberman bomberman) {
+		bomberman.getBombFactory().addRange(1);
 	}
 }
