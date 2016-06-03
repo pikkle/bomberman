@@ -9,9 +9,9 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost/bomberman?createDatabaseIfNotExist=true</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.url">jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true</property>
+        <property name="hibernate.connection.username">bomber_server</property>
+        <property name="hibernate.connection.password">X1sww*04</property>
 
         <mapping class="ch.heigvd.bomberman.common.game.Wall"/>
         <mapping class="ch.heigvd.bomberman.common.game.Box"/>

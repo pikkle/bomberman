@@ -1,7 +1,6 @@
 package ch.heigvd.bomberman.client.views.tabs.controllers;
 
 import ch.heigvd.bomberman.client.Client;
-import ch.heigvd.bomberman.client.views.room.RoomsController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;

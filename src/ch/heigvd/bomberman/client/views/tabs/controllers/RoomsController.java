@@ -1,9 +1,10 @@
 
-package ch.heigvd.bomberman.client.views.room;
+package ch.heigvd.bomberman.client.views.tabs.controllers;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.game.ReadyController;
+import ch.heigvd.bomberman.client.views.room.PasswordController;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -44,6 +45,8 @@ public class RoomsController extends Observable
 
     @FXML
     private void initialize() throws IOException {
+        //roomsTableView.setColumnResizePolicy(param -> false);
+
         rm = ResponseManager.getInstance();
         roomsTableView.setItems(rooms);
         showRooms();

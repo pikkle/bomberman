@@ -41,6 +41,40 @@ public class ClientMainController {
      * Methodes*
      ***********/
 
+    @FXML
+    private void initialize() {
+        rm = ResponseManager.getInstance();
+        rm.playerRequest(player -> {
+            if (player.isAdmin())
+            {
+                try
+                {
+                    FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/AdminTabsView.fxml"));
+                    TabPane pane = loader.load();
+                    userTabsController = loader.getController();
+                    userTabsController.initalize();
+                    tabsPane.getChildren().add(pane);
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            } else {
+                try
+                {
+                    FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
+                    TabPane pane = loader.load();
+                    userTabsController = loader.getController();
+                    userTabsController.initalize();
+                    tabsPane.getChildren().add(pane);
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
     public ResponseManager getRm(){
         return rm;
     }
@@ -49,39 +83,6 @@ public class ClientMainController {
     {
         this.client = client;
         userTabsController.setClient(client);
-    }
-
-    public void loadAdminTabs(){
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/AdminTabsView.fxml"));
-            TabPane pane = loader.load();
-            userTabsController = loader.getController();
-            userTabsController.initalize();
-            tabsPane.getChildren().add(pane);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public void loadUserTabs(){
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
-            TabPane pane = loader.load();
-            userTabsController = loader.getController();
-            userTabsController.initalize();
-            tabsPane.getChildren().add(pane);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void initialize() {
-        rm = ResponseManager.getInstance();
     }
 
     @FXML

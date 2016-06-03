@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.client.views.room;
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.game.ReadyController;
+import ch.heigvd.bomberman.client.views.tabs.controllers.RoomsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 /**
  * Created by julien on 08.05.16.
@@ -96,7 +97,13 @@ public class LoginViewController {
             String hashPasswd = pwd.getText();
             rm.loginRequest(userId.getText(), hashPasswd, message -> {
                 if (message.state()) {
-                    loginSuccess();
+                    try
+                    {
+                        loginSuccess();
+                    } catch (IOException e)
+                    {
+                        throw new UncheckedIOException(e);
+                    }
                 } else {
                     loginFailure(message);
                 }
@@ -104,25 +111,11 @@ public class LoginViewController {
         }
     }
 
-    private void loginSuccess(){
-        rm.playerRequest(player -> {
-            if(!player.isAdmin()){
-                bypass();
-            } else {
-                FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/ClientMain.fxml"));
-                try
-                {
-                    Pane pane = loader.load();
-                    client.changeScene(pane);
-                    ClientMainController controller = loader.getController();
-                    controller.loadAdminTabs();
-                    controller.setMainApp(client);
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
+    private void loginSuccess() throws IOException{
+        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/ClientMain.fxml"));
+        Pane pane = loader.load();
+        client.changeScene(pane);
+        ClientMainController controller = loader.getController();
     }
 
     private void loginFailure(Message message){
@@ -153,22 +146,5 @@ public class LoginViewController {
 
         stage.setScene(new Scene(pane));
         stage.showAndWait();
-    }
-
-    @FXML
-    private void bypass()
-    {
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/ClientMain.fxml"));
-        try
-        {
-            Pane pane = loader.load();
-            client.changeScene(pane);
-            ClientMainController controller = loader.getController();
-            controller.loadUserTabs();
-            controller.setMainApp(client);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 }
