@@ -15,7 +15,7 @@ public abstract class Explosion extends Element {
 
     @Override
     public boolean isDestructible() {
-        return false;
+        return true;
     }
 
     @Override

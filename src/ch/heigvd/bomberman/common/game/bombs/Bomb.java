@@ -30,15 +30,6 @@ public abstract class Bomb extends Element {
 		countdown--;
 	}
 
-	/**
-	 * To call when the bomb explose, will display the explosion
-	 */
-	public void explose() {
-		arena.remove(this);
-		getElementsInRange().forEach(Element::delete);
-		setChanged();
-		notifyObservers();
-	}
 
 	/**
 	 * To call when the bomb explose, will display the explosion
@@ -53,9 +44,6 @@ public abstract class Bomb extends Element {
 		boolean exploseBottom = true;
 
 		List<Explosion> explosions = new LinkedList<>();
-
-		arena.remove(this);
-		arena.getElements(position).stream().filter(Element::isDestructible).forEach(Element::delete);
 
 		if (!arena.getElements(position)
 		          .stream()
@@ -129,13 +117,10 @@ public abstract class Bomb extends Element {
 		}
 
 		// explosion images disapear after a timeout
-		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), ae -> {
-			explosions.forEach(explosion -> {
-				arena.remove(explosion);
-			});
-			explosions.clear();
-		}));
+		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), ae -> explosions.forEach(Element::delete)));
 		timeline.play();
+
+		getElementsInRange().forEach(Element::delete);
 	}
 
 	/**
@@ -161,7 +146,8 @@ public abstract class Bomb extends Element {
 	@Override
 	public void delete() {
 		super.delete();
-		//showExplosion();
-		getElementsInRange().forEach(Element::delete);
+		showExplosion();
+		setChanged();
+		notifyObservers();
 	}
 }
