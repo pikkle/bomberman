@@ -38,7 +38,7 @@ public class PlayerSession {
 			}
 			roomSession.removePlayer(this);
 			if(bomberman != null)
-				roomSession.getArena().destroy(bomberman);
+				bomberman.delete();
 		}
 	}
 

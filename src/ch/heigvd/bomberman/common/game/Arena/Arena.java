@@ -124,11 +124,17 @@ public class Arena extends Observable implements Serializable
      * @param element The element to add
      * @throws RuntimeException if the cell is already occuped
      */
-    public void add(Element element) throws RuntimeException {
-        element.accept(new ElementAddHandler(this));
+    public void add(Element e) {
+	    elements.add(e);
         setChanged();
-        notifyObservers(element);
+	    notifyObservers(e);
     }
+
+	public void remove(Element e) {
+		elements.remove(e);
+		setChanged();
+		notifyObservers(e);
+	}
 
     /**
      * Add the element to the arena
@@ -223,69 +229,8 @@ public class Arena extends Observable implements Serializable
         }
     }
 
-    public void remove(Element e) {
-        if(elements.contains(e)) {
-            e.accept(new ElementRemoveHandler(this));
-            setChanged();
-            notifyObservers(e);
-        }
-    }
-
-    protected void delete(Element e) {
-        elements.remove(e);
-    }
-
-    protected void delete(PowerUp powerUp) {
-        Collection<Element> boxes = getElements(powerUp.position());
-        if(boxes.size() == 1 && boxes.stream().filter(element -> element instanceof Box).findFirst().isPresent()){
-            Box box = (Box)boxes.stream().filter(element -> element instanceof Box).findFirst().get();
-            box.setPowerUp(null);
-        }
-        else {
-            delete((Element)powerUp);
-        }
-    }
-
-    public void destroy(Element e) {
-        if(elements.contains(e)) {
-            e.accept(new ElementDestroyHandler(this));
-            setChanged();
-            notifyObservers(e);
-        }
-    }
-
-    protected void destroy(Box b) {
-        remove((Element)b);
-        if(b.getPowerUp().isPresent()){
-            add(b.getPowerUp().get());
-        }
-    }
-
-    protected void destroy(Bomb b) {
-        elements.stream().filter(element -> element.getUuid().equals(b.getUuid())).findFirst().ifPresent(bomb -> ((Bomb)bomb).showExplosion());
-    }
-
     public void change(Element e) {
         setChanged();
         notifyObservers(e);
     }
-
-
-    /*private  void readObject(ObjectInputStream ois)
-            throws IOException, ClassNotFoundException {
-
-        id = ois.readInt();
-        width = ois.readInt();
-        height = ois.readInt();
-        elements = (Collection<Element>)ois.readObject();
-    }
-
-    private  void writeObject(ObjectOutputStream oos)
-            throws IOException {
-
-        oos.writeInt(id);
-        oos.writeInt(width);
-        oos.writeInt(height);
-        oos.writeObject(elements);
-    }*/
 }

@@ -13,116 +13,135 @@ import java.util.List;
 
 
 public abstract class Bomb extends Element {
-    protected int countdown;
-    protected int blastRange;
+	protected int countdown;
+	protected int blastRange;
 
-    public Bomb(Point position, int countdown, int blastRange, Arena arena) {
-        super(position, arena);
-        this.countdown = countdown;
-        this.blastRange = blastRange;
-    }
+	public Bomb(Point position, int countdown, int blastRange, Arena arena) {
+		super(position, arena);
+		this.countdown = countdown;
+		this.blastRange = blastRange;
+	}
 
-    public int getCountdown() {
-        return countdown;
-    }
+	public int getCountdown() {
+		return countdown;
+	}
 
-    public void decreaseCountdown() {
-        countdown--;
-    }
+	public void decreaseCountdown() {
+		countdown--;
+	}
 
-    /**
-     * To call when the bomb explose, will display the explosion
-     */
-    public void explose(){
-        arena.remove(this);
-        getElementsInRange().forEach(element -> arena.destroy(element));
-        setChanged();
-        notifyObservers();
-    }
+	/**
+	 * To call when the bomb explose, will display the explosion
+	 */
+	public void explose() {
+		arena.remove(this);
+		getElementsInRange().forEach(Element::delete);
+		setChanged();
+		notifyObservers();
+	}
 
-    /**
-     * To call when the bomb explose, will display the explosion
-     */
-    public void showExplosion(){
+	/**
+	 * To call when the bomb explose, will display the explosion
+	 */
+	public void showExplosion() {
+		int x = position.x();
+		int y = position.y();
 
+		boolean exploseRight = true;
+		boolean exploseLeft = true;
+		boolean exploseTop = true;
+		boolean exploseBottom = true;
 
-        int x = position.x();
-        int y = position.y();
+		List<Explosion> explosions = new LinkedList<>();
 
-        boolean exploseRight = true;
-        boolean exploseLeft = true;
-        boolean exploseTop = true;
-        boolean exploseBottom = true;
+		arena.remove(this);
+		arena.getElements(position).stream().filter(Element::isDestructible).forEach(Element::delete);
 
-        List<Explosion> explosions = new LinkedList<>();
+		if (!arena.getElements(position)
+		          .stream()
+		          .filter(element -> !element.isBlastAbsorber())
+		          .findFirst()
+		          .isPresent()) {
+			explosions.add(new CentralExplosion(position, arena));
 
-        arena.remove(this);
-        arena.getElements(position).stream().filter(element -> element.isDestructible()).forEach(element -> arena.destroy(element));
+			for (int i = 1; i <= blastRange && (exploseRight || exploseLeft || exploseTop || exploseBottom); i++) {
+				Point right = new Point(x + i, y);
+				Point left = new Point(x - i, y);
+				Point top = new Point(x, y - i);
+				Point bottom = new Point(x, y + i);
+				if (exploseRight && right.x() < arena.getWidth()) {
+					if (arena.getElements(right).stream().filter(Element::isBlastAbsorber).findFirst().isPresent())
+						exploseRight = false;
+					if (!arena.getElements(right)
+					          .stream()
+					          .filter(element -> !element.isDestructible())
+					          .findFirst()
+					          .isPresent()) {
+						if (exploseRight && right.x() + 1 < arena.getWidth() && i + 1 <= blastRange &&
+						    !arena.getElements(new Point(right.x() + 1, right.y()))
+						          .stream()
+						          .filter(element -> !element.isDestructible())
+						          .findFirst()
+						          .isPresent()) explosions.add(new HorizontalExplosion(right, arena));
+						else explosions.add(new RightExplosion(right, arena));
+					}
+				}
+				if (exploseLeft && left.x() >= 0) {
+					if (arena.getElements(left).stream().filter(Element::isBlastAbsorber).findFirst().isPresent())
+						exploseLeft = false;
+					if (exploseLeft && left.x() >= 0 && i + 1 <= blastRange &&
+					    !arena.getElements(new Point(left.x() - 1, left.y()))
+					          .stream()
+					          .filter(element -> !element.isDestructible())
+					          .findFirst()
+					          .isPresent()) explosions.add(new HorizontalExplosion(left, arena));
+					else explosions.add(new LeftExplosion(left, arena));
+				}
+				if (exploseTop && top.y() >= 0) {
+					if (arena.getElements(top).stream().filter(Element::isBlastAbsorber).findFirst().isPresent())
+						exploseTop = false;
+					if (exploseTop && top.x() >= 0 && i + 1 <= blastRange &&
+					    !arena.getElements(new Point(top.x(), top.y() - 1))
+					          .stream()
+					          .filter(element -> !element.isDestructible())
+					          .findFirst()
+					          .isPresent()) explosions.add(new VerticalExplosion(top, arena));
+					else explosions.add(new TopExplosion(top, arena));
+				}
+				if (exploseBottom && bottom.y() < arena.getHeight()) {
+					if (arena.getElements(bottom).stream().filter(Element::isBlastAbsorber).findFirst().isPresent())
+						exploseBottom = false;
+					if (!arena.getElements(bottom)
+					          .stream()
+					          .filter(element -> !element.isDestructible())
+					          .findFirst()
+					          .isPresent()) {
+						if (exploseBottom && bottom.x() + 1 < arena.getHeight() && i + 1 <= blastRange &&
+						    !arena.getElements(new Point(bottom.x(), bottom.y() + 1))
+						          .stream()
+						          .filter(element -> !element.isDestructible())
+						          .findFirst()
+						          .isPresent()) explosions.add(new VerticalExplosion(bottom, arena));
+						else explosions.add(new BottomExplosion(bottom, arena));
+					}
+				}
+			}
+		}
 
-        if(!arena.getElements(position).stream().filter(element -> !element.isBlastAbsorber()).findFirst().isPresent()) {
-            explosions.add(new CentralExplosion(position, arena));
+		// explosion images disapear after a timeout
+		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), ae -> {
+			explosions.forEach(explosion -> {
+				arena.remove(explosion);
+			});
+			explosions.clear();
+		}));
+		timeline.play();
+	}
 
-            for (int i = 1; i <= blastRange && (exploseRight || exploseLeft || exploseTop || exploseBottom); i++) {
-                Point right = new Point(x + i, y);
-                Point left = new Point(x - i, y);
-                Point top = new Point(x, y - i);
-                Point bottom = new Point(x, y + i);
-                if (exploseRight && right.x() < arena.getWidth()) {
-                    if(arena.getElements(right).stream().filter(element -> element.isBlastAbsorber()).findFirst().isPresent())
-                        exploseRight = false;
-                    if (!arena.getElements(right).stream().filter(element -> !element.isDestructible()).findFirst().isPresent()) {
-                        if(exploseRight && right.x() + 1 < arena.getWidth() && i + 1 <= blastRange && !arena.getElements(new Point(right.x() + 1, right.y())).stream().filter(element -> !element.isDestructible()).findFirst().isPresent())
-                            explosions.add(new HorizontalExplosion(right, arena));
-                        else
-                            explosions.add(new RightExplosion(right, arena));
-                    }
-                }
-                if (exploseLeft && left.x() >= 0) {
-                    if(arena.getElements(left).stream().filter(element -> element.isBlastAbsorber()).findFirst().isPresent())
-                        exploseLeft = false;
-                    if(exploseLeft && left.x() >= 0 && i + 1 <= blastRange && !arena.getElements(new Point(left.x() - 1, left.y())).stream().filter(element -> !element.isDestructible()).findFirst().isPresent())
-                        explosions.add(new HorizontalExplosion(left, arena));
-                    else
-                        explosions.add(new LeftExplosion(left, arena));
-                }
-                if (exploseTop && top.y() >= 0) {
-                    if(arena.getElements(top).stream().filter(element -> element.isBlastAbsorber()).findFirst().isPresent())
-                        exploseTop = false;
-                    if(exploseTop && top.x() >= 0 && i + 1 <= blastRange && !arena.getElements(new Point(top.x(), top.y() - 1)).stream().filter(element -> !element.isDestructible()).findFirst().isPresent())
-                        explosions.add(new VerticalExplosion(top, arena));
-                    else
-                        explosions.add(new TopExplosion(top, arena));
-                }
-                if (exploseBottom && bottom.y() < arena.getHeight()) {
-                    if(arena.getElements(bottom).stream().filter(element -> element.isBlastAbsorber()).findFirst().isPresent())
-                        exploseBottom = false;
-                    if (!arena.getElements(bottom).stream().filter(element -> !element.isDestructible()).findFirst().isPresent()) {
-                        if(exploseBottom && bottom.x() + 1 < arena.getHeight() && i + 1 <= blastRange && !arena.getElements(new Point(bottom.x(), bottom.y() + 1)).stream().filter(element -> !element.isDestructible()).findFirst().isPresent())
-                            explosions.add(new VerticalExplosion(bottom, arena));
-                        else
-                            explosions.add(new BottomExplosion(bottom, arena));
-                    }
-                }
-            }
-        }
-
-        // explosion images disapear after a timeout
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(100),
-                ae -> {
-                    explosions.forEach(explosion -> {
-                        arena.remove(explosion);
-                    });
-                    explosions.clear();
-                }
-        ));
-        timeline.play();
-    }
-
-    /**
-     * @return the elements in range of the blastRange
-     */
-    public abstract List<Element> getElementsInRange();
+	/**
+	 * @return the elements in range of the blastRange
+	 */
+	public abstract List<Element> getElementsInRange();
 
 	@Override
 	public boolean isDestructible() {
@@ -137,5 +156,12 @@ public abstract class Bomb extends Element {
 	@Override
 	public boolean isTraversable() {
 		return false;
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		//showExplosion();
+		getElementsInRange().forEach(Element::delete);
 	}
 }

@@ -58,4 +58,10 @@ public class Box extends Element {
     public boolean isTraversable() {
         return false;
     }
+
+	@Override
+	public void delete() {
+		super.delete();
+		getPowerUp().ifPresent(arena::add);
+	}
 }

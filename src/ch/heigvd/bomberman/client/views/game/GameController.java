@@ -4,6 +4,7 @@ import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Element;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -45,25 +46,17 @@ public class GameController {
         Scene scene = new Scene(mainPane);
         stage.setScene(scene);
 
-        rm.moveRequest(null, bomberman -> {
-            renderer.getArena().change(bomberman);
-        });
+        rm.moveRequest(null, bomberman -> renderer.getArena().change(bomberman));
 
-        rm.addElementRequest(element -> {
-            renderer.getArena().add(element);
-        });
+        rm.addElementRequest(element -> renderer.getArena().add(element));
 
-        rm.destroyElementsRequest(element -> {
-           renderer.getArena().destroy(element);
-        });
+        rm.destroyElementsRequest(element -> renderer.getArena().remove(element));
 
         rm.endGameRequest(statistic -> {
             final Stage results = new Stage();
             results.setTitle("Results");
 
-            results.setOnCloseRequest(event -> {
-                client.getPrimatyStage().show();
-            });
+            results.setOnCloseRequest(event -> client.getPrimatyStage().show());
 
             results.initModality(Modality.APPLICATION_MODAL);
 
