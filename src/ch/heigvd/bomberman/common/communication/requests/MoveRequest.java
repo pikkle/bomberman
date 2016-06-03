@@ -23,4 +23,5 @@ public class MoveRequest extends Request<Bomberman> {
 	public Response<Bomberman> accept(RequestVisitor visitor) {
 		return visitor.visit(this);
 	}
+
 }

@@ -1,13 +1,15 @@
 package ch.heigvd.bomberman.client.views.tabs.mapEditor;
 
+import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.client.views.render.ImageViewPane;
+import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
-import ch.heigvd.bomberman.server.database.DBManager;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.ImageView;
@@ -15,9 +17,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Observable;
@@ -58,6 +60,7 @@ public class MapEditorController implements Observer {
     @FXML
     private ImageView trash;
 
+    private ResponseManager rm;
     private Arena arena;
     private ArenaRenderer renderer;
     private HashMap<ImageView, Class> elements = new HashMap<>();
@@ -67,6 +70,7 @@ public class MapEditorController implements Observer {
     @FXML
     private void initialize()
     {
+        rm = ResponseManager.getInstance();
         width.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
         height.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
         width.valueProperty().addListener((obs, oldValue, newValue) -> changeDimension(newValue, height.getValue()));
@@ -78,6 +82,11 @@ public class MapEditorController implements Observer {
         elements.put(addBombPowerUp, AddBombPowerUp.class);
     }
 
+    public void loadArena(Arena arena){
+        this.arena = arena;
+        changeDimension(arena.getWidth(), arena.getHeight());
+    }
+
     private void changeDimension(int width, int height){
         if(width < 2 || height < 2){
             this.width.getValueFactory().setValue(Math.max(width, 2));
@@ -85,7 +94,7 @@ public class MapEditorController implements Observer {
         }
         try {
             Arena oldArena = arena;
-            arena = new Arena(width, height);
+            arena = new Arena(width, height, arena);
             renderer = new ArenaRenderer(arena, 750, 750);
             if(oldArena != null) {
                 for (int x = 1; x < oldArena.getWidth() - 1 && x < arena.getWidth() - 1; x++) {
@@ -153,16 +162,36 @@ public class MapEditorController implements Observer {
     @FXML
     private void confirm()
     {
-        try {
-            DBManager.getInstance().arenas().create(arena);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        rm.saveArenaRequest(arena, message -> {
+            if (message.state()) {
+                success(message);
+            } else {
+                failure(message);
+            }
+        });
+    }
+
+    private void success(Message message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(message.getMessage());
+        alert.showAndWait();
+        cancel();
+    }
+
+    private void failure(Message message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message.getMessage());
+        alert.showAndWait();
     }
 
     @FXML
     private void cancel()
     {
-        ((Stage)mainPane.getScene().getWindow()).close();
+        ((Stage)mainPane.getScene().getWindow()).fireEvent(
+                new WindowEvent(
+                        mainPane.getScene().getWindow(),
+                        WindowEvent.WINDOW_CLOSE_REQUEST
+                )
+        );
     }
 }

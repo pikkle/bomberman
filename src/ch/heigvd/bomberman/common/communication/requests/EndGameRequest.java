@@ -11,4 +11,5 @@ public class EndGameRequest extends Request<Statistic> {
     public Response<Statistic> accept(RequestVisitor visitor) {
         return visitor.visit(this);
     }
+
 }

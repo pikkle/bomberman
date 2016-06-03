@@ -18,16 +18,16 @@ public final class AccountCreationRequest extends Request<Message> {
         this.password = password;
     }
 
-    @Override
-    public Response<Message> accept(RequestVisitor visitor) {
-        return visitor.visit(this);
-    }
-
     public String getUsername() {
         return username;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public Response<Message> accept(RequestVisitor visitor) {
+        return visitor.visit(this);
     }
 }

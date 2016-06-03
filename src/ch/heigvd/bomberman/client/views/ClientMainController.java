@@ -3,7 +3,7 @@ package ch.heigvd.bomberman.client.views;
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.room.NewViewController;
-import ch.heigvd.bomberman.client.views.tabs.controllers.UserTabsController;
+import ch.heigvd.bomberman.client.views.tabs.controllers.TabsController;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -26,7 +26,7 @@ public class ClientMainController {
 
     private ResponseManager rm;
     private Client client;
-    private UserTabsController userTabsController;
+    private TabsController userTabsController;
 
     @FXML
     private TableView<Room> roomsTableView;
@@ -51,20 +51,37 @@ public class ClientMainController {
         userTabsController.setClient(client);
     }
 
-    @FXML
-    private void initialize() {
-        rm = ResponseManager.getInstance();
-
+    public void loadAdminTabs(){
         try
         {
-            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
+            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/AdminTabsView.fxml"));
             TabPane pane = loader.load();
             userTabsController = loader.getController();
+            userTabsController.initalize();
             tabsPane.getChildren().add(pane);
         } catch (IOException e)
         {
             e.printStackTrace();
         }
+    }
+
+    public void loadUserTabs(){
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
+            TabPane pane = loader.load();
+            userTabsController = loader.getController();
+            userTabsController.initalize();
+            tabsPane.getChildren().add(pane);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void initialize() {
+        rm = ResponseManager.getInstance();
     }
 
     @FXML

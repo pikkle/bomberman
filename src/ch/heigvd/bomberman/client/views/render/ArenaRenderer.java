@@ -70,7 +70,7 @@ public class ArenaRenderer implements Observer
 		container.setBottomAnchor(center, 0.0);
 		container.getChildren().add(center);
 
-		container.setStyle("-fx-background-color: grey;");
+		//container.setStyle("-fx-background-color: grey;");
 	}
 
 	public ArenaRenderer(Arena arena, Bomberman bomberman, double width, double height) {

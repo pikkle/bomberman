@@ -41,6 +41,12 @@ public class Arena extends Observable implements Serializable
 	    this(0, 0);
     }
 
+    public Arena(int width, int height, Arena arena) throws URISyntaxException {
+        this(width, height);
+        if(arena != null)
+            id = arena.getId();
+    }
+
     public Arena(int width, int height) throws URISyntaxException {
         this.width = Math.max(width, 2);
         this.height = Math.max(height, 2);
@@ -218,9 +224,11 @@ public class Arena extends Observable implements Serializable
     }
 
     public void remove(Element e) {
-        e.accept(new ElementRemoveHandler(this));
-        setChanged();
-        notifyObservers(e);
+        if(elements.contains(e)) {
+            e.accept(new ElementRemoveHandler(this));
+            setChanged();
+            notifyObservers(e);
+        }
     }
 
     protected void delete(Element e) {
@@ -239,9 +247,11 @@ public class Arena extends Observable implements Serializable
     }
 
     public void destroy(Element e) {
-        e.accept(new ElementDestroyHandler(this));
-        setChanged();
-        notifyObservers(e);
+        if(elements.contains(e)) {
+            e.accept(new ElementDestroyHandler(this));
+            setChanged();
+            notifyObservers(e);
+        }
     }
 
     protected void destroy(Box b) {

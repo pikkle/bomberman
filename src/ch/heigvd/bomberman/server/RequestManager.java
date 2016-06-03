@@ -4,11 +4,11 @@ import ch.heigvd.bomberman.common.communication.requests.Request;
 import ch.heigvd.bomberman.common.communication.responses.Response;
 import ch.heigvd.bomberman.common.game.Player;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Optional;
 import java.util.UUID;
 
 public class RequestManager extends Thread {
@@ -18,7 +18,6 @@ public class RequestManager extends Thread {
     public boolean running = true;
     private PlayerSession playerSession;
     private Player player;
-    private RoomSession roomSession;
     private RequestProcessor requestProcessor;
     private boolean loggedIn = false;
     private UUID roomsCallback;
@@ -37,7 +36,7 @@ public class RequestManager extends Thread {
 
     @Override
     public void run() {
-        while (running) {
+        while (running && socket != null && socket.isConnected()) {
             try {
                 Request request = (Request) reader.readObject();
                 Response response = request.accept(requestProcessor);
@@ -45,11 +44,13 @@ public class RequestManager extends Thread {
                     writer.reset();
                     writer.writeObject(response);
                 }
-            } catch (EOFException e) {
-                System.out.println("Client closed the connection");
-                running = false;
             } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    disconnect();
+                } catch (IOException e1) {
+                    if (running)
+                        e.printStackTrace();
+                }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -57,17 +58,35 @@ public class RequestManager extends Thread {
     }
 
     public void send(Response response){
-        try {
-            if (response.isSendable()) {
-                writer.reset();
-                writer.writeObject(response);
+        if(running && socket != null && socket.isConnected()) {
+            try {
+                if (response.isSendable()) {
+                    writer.reset();
+                    writer.writeObject(response);
+                }
+            } catch (IOException e) {
+                try {
+                    disconnect();
+                } catch (IOException e1) {
+                    if (running)
+                        e.printStackTrace();
+                }
             }
-        } catch (EOFException e) {
-            System.out.println("Client closed the connection");
-            running = false;
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+    }
+
+    public void disconnect() throws IOException
+    {
+        interrupt();
+        socket.close();
+        writer.close();
+        reader.close();
+        loggedIn = false;
+        running = false;
+        if(playerSession != null)
+            playerSession.close();
+        Server.getInstance().getClients().remove(this);
+        System.out.println("Client closed the connection");
     }
 
     public boolean isLoggedIn() {
@@ -86,20 +105,23 @@ public class RequestManager extends Thread {
         return player;
     }
 
-    public void setRoomSession(RoomSession roomSession) {
-        this.roomSession = roomSession;
+    public void closePlayerSession() {
+        if(getPlayerSession().isPresent()){
+            playerSession.close();
+            playerSession = null;
+        }
     }
 
-    public RoomSession getRoomSession(){
-        return roomSession;
+    public void openPlayerSession(RoomSession roomSession, UUID uuid) throws Exception {
+        if(getPlayerSession().isPresent()){
+            closePlayerSession();
+        }
+        playerSession = new PlayerSession(player, roomSession, uuid, this);
+        roomSession.addPlayer(playerSession);
     }
 
-    public void setPlayerSession(PlayerSession playerSession) {
-        this.playerSession = playerSession;
-    }
-
-    public PlayerSession getPlayerSession(){
-        return playerSession;
+    public Optional<PlayerSession> getPlayerSession(){
+        return Optional.ofNullable(playerSession);
     }
 
     public void setRoomsCallback(UUID roomsCallback){

@@ -1,8 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
 import javax.persistence.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.Serializable;
 
 /**
  * Projet : GEN_Projet
@@ -13,7 +12,7 @@ import java.awt.event.KeyListener;
 
 @Entity
 @Table(name = "player")
-public class Player implements KeyListener {
+public class Player implements Serializable {
 
 	@Id
 	@Column(name="id")
@@ -27,6 +26,9 @@ public class Player implements KeyListener {
 
 	@Column(name="password", nullable = true)
 	private String password;
+
+	@Column(name="isAdmin")
+	private boolean isAdmin = false;
 
 	Player() {
 		// all persisted classes must define a no-arg constructor with at least package visibility
@@ -57,19 +59,7 @@ public class Player implements KeyListener {
 		this.password = password;
 	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
+	public boolean isAdmin(){
+		return isAdmin;
 	}
 }

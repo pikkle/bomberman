@@ -1,10 +1,12 @@
 package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.*;
+import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Skin;
+import ch.heigvd.bomberman.common.game.StartPoint;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 public class RoomSession {
@@ -12,7 +14,7 @@ public class RoomSession {
 	private Arena arena;
 	private String password;
 	private int minPlayer;
-	private List<PlayerSession> players = new LinkedList<PlayerSession>();
+	private ObservableList<PlayerSession> players = FXCollections.observableArrayList();
 	private boolean running = false;
 
 	/**
@@ -25,6 +27,14 @@ public class RoomSession {
 		this.password = password;
 		this.arena = arena;
 		this.minPlayer = minPlayer;
+	}
+
+	public synchronized void close(){
+		while(!players.isEmpty()){
+			players.stream().findFirst().get().close();
+		}
+		running = false;
+		Server.getInstance().getRoomSessions().remove(this);
 	}
 
 	public String getName(){
@@ -43,7 +53,7 @@ public class RoomSession {
 		return minPlayer;
 	}
 
-	public synchronized List<PlayerSession> getPlayers() {
+	public synchronized ObservableList<PlayerSession> getPlayers() {
 		return players;
 	}
 

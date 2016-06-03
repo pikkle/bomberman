@@ -49,7 +49,7 @@ public class ResponseManager extends Observable
             @Override
             public void run()
             {
-                while (isConnected() && !this.isInterrupted())
+                while (isConnected())
                 {
                     try
                     {
@@ -60,14 +60,15 @@ public class ResponseManager extends Observable
                             Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
                         }
 
-                    } catch (IOException | ClassNotFoundException e)
-                    {
+                    } catch (IOException e) {
                         try {
                             disconnect();
                         } catch (IOException e1) {
                             if (!closeRequest)
                                 e.printStackTrace();
                         }
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -87,7 +88,7 @@ public class ResponseManager extends Observable
 
     public boolean isConnected()
     {
-        return socket != null && socket.isConnected();
+        return !closeRequest && socket != null && socket.isConnected();
     }
 
     public void loginRequest(String username, String password, Consumer<Message> callback)
@@ -102,9 +103,27 @@ public class ResponseManager extends Observable
         send(r, callback);
     }
 
+    public void playerRequest(Consumer<Player> callback)
+    {
+        PlayerRequest r = new PlayerRequest();
+        send(r, callback);
+    }
+
     public void arenasRequest(Consumer<List<Arena>> callback)
     {
         ArenasRequest r = new ArenasRequest();
+        send(r, callback);
+    }
+
+    public void saveArenaRequest(Arena arena, Consumer<Message> callback)
+    {
+        SaveArenaRequest r = new SaveArenaRequest(arena);
+        send(r, callback);
+    }
+
+    public void removeArenaRequest(Arena arena, Consumer<Message> callback)
+    {
+        RemoveArenaRequest r = new RemoveArenaRequest(arena);
         send(r, callback);
     }
 
@@ -122,7 +141,13 @@ public class ResponseManager extends Observable
 
     public void joinRoomRequest(Room room, Consumer<Room> callback)
     {
-        JoinRoomRequest r = new JoinRoomRequest(room);
+        JoinRoomRequest r = new JoinRoomRequest(room, null);
+        send(r, callback);
+    }
+
+    public void joinRoomRequest(Room room, String password, Consumer<Room> callback)
+    {
+        JoinRoomRequest r = new JoinRoomRequest(room, password);
         send(r, callback);
     }
 
