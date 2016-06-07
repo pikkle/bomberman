@@ -3,22 +3,28 @@ package ch.heigvd.bomberman.common.game;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Room implements Serializable {
     private String name;
     private boolean isPrivate;
     private int minPlayer;
-    private int playerNumber;
+    private List<String> players = new LinkedList<>();
     private Arena arena;
     private boolean inRoom;
 
-    public Room(String name, boolean isPrivate, int minPlayer, int playerNumber, Arena arena, boolean inRoom) {
+    public Room(String name, boolean isPrivate, int minPlayer, Arena arena, boolean inRoom) {
         this.name = name;
         this.isPrivate = isPrivate;
         this.minPlayer = minPlayer;
         this.arena = arena;
         this.inRoom = inRoom;
-        this.playerNumber = playerNumber;
+    }
+
+    public Room(String name, boolean isPrivate, int minPlayer, List<String> players, Arena arena, boolean inRoom) {
+        this(name, isPrivate, minPlayer, arena, inRoom);
+        this.players = players;
     }
 
     public String getName() {
@@ -33,16 +39,20 @@ public class Room implements Serializable {
         return minPlayer;
     }
 
-    public int getPlayerNumber() {
-        return playerNumber;
+    public int getPlayerNumber(){
+        return players.size();
     }
 
-    public void addPlayer(){
-        playerNumber++;
+    public List<String> getPlayers() {
+        return players;
     }
 
-    public void removePlayer(){
-        playerNumber = Math.max(0, playerNumber - 1);
+    public void addPlayer(String name){
+        players.add(name);
+    }
+
+    public void removePlayer(String name){
+        players.remove(name);
     }
 
     public Arena getArena() {

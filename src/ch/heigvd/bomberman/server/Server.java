@@ -93,7 +93,7 @@ public class Server {
 
     public void sendRooms(){
         clients.stream().filter(client -> client.getRoomsCallback() != null).forEach(client -> {
-            client.send(new RoomsResponse(client.getRoomsCallback(),roomSessions.stream().map(r -> new Room(r.getName(), r.getPassword() != null && ! r.getPassword().isEmpty(), r.getMinPlayer(), r.getPlayers().size(), r.getArena(), client.getPlayerSession().isPresent() && r.getPlayers().contains(client.getPlayerSession().get()))).collect(Collectors.toList())));
+            client.send(new RoomsResponse(client.getRoomsCallback(),roomSessions.stream().map(r -> new Room(r.getName(), r.getPassword() != null && ! r.getPassword().isEmpty(), r.getMinPlayer(), r.getPlayers().stream().map(p -> p.getPlayer().getPseudo()).collect(Collectors.toList()), r.getArena(), client.getPlayerSession().isPresent() && r.getPlayers().contains(client.getPlayerSession().get()))).collect(Collectors.toList())));
         });
     }
 

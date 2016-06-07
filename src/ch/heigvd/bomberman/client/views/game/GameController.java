@@ -4,9 +4,13 @@ import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Room;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -20,30 +24,44 @@ public class GameController {
 
     private ResponseManager rm;
     private ArenaRenderer renderer;
-    private AnchorPane mainPane;
     private Client client;
 
-    public GameController(Bomberman bomberman, Client client){
-        renderer = new ArenaRenderer(bomberman.getArena(), bomberman, 750, 750);
+    @FXML
+    private AnchorPane mainPane;
+
+    @FXML
+    private GridPane mapContainer;
+
+    @FXML
+    private GridPane header;
+
+    public void setClient(Client client){
         this.client = client;
-        mainPane = renderer.getView();
-        rm = ResponseManager.getInstance();
-        initialize();
     }
 
-    private void initialize(){
-        Stage stage = new Stage();
-        stage.setTitle("Bomberman");
+    public void loadGame(Bomberman bomberman, Room room){
+        renderer = new ArenaRenderer(bomberman.getArena(), bomberman, mapContainer.getWidth(), mapContainer.getHeight());
+        mapContainer.getChildren().clear();
+        mapContainer.add(renderer.getView(), 0, 0);
 
-        stage.setOnCloseRequest(event -> {
-            rm.readyRequest(false, null);
-            event.consume();
+        System.out.println(room.getPlayerNumber() / 2 + room.getPlayerNumber() % 2 + 1);
+        room.getPlayers().forEach(player ->{
+            if((header.getChildren().size() - 1) % 2 == 0){
+                header.add(new Label(player), header.getChildren().size() - 1, 0);
+            }
+            if(header.getChildren().size() < room.getPlayerNumber() / 2 + room.getPlayerNumber() % 2 + 1){
+                header.add(new Label(player), header.getChildren().size() - 1, 0);
+            }
+            else {
+                header.add(new Label(player), header.getChildren().size(), 0);
+            }
         });
+    }
 
-        stage.initModality(Modality.APPLICATION_MODAL);
+    @FXML
+    private void initialize(){
 
-        Scene scene = new Scene(mainPane);
-        stage.setScene(scene);
+        rm = ResponseManager.getInstance();
 
         rm.moveRequest(null, bomberman -> {
             renderer.getArena().change(bomberman);
@@ -75,15 +93,12 @@ public class GameController {
                 controller.setClient(client);
                 controller.setStatistic(statistic);
                 results.setScene(new Scene(pane));
-                stage.close();
+                ((Stage)mainPane.getScene().getWindow()).close();
                 results.showAndWait();
             } catch (IOException e)
             {
                 e.printStackTrace();
             }
         });
-
-        stage.show();
     }
-
 }

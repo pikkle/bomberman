@@ -7,7 +7,6 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class NewViewController
     private AnchorPane mainPane;
 
     @FXML
-    private StackPane arenaContainer;
+    private AnchorPane arenaContainer;
 
     @FXML
     private Label lblRoom;
@@ -135,7 +134,12 @@ public class NewViewController
         if(arenas == null || arenas.isEmpty())
             return;
         arenaContainer.getChildren().clear();
-        arenaContainer.getChildren().add( new ArenaRenderer(arenas.get(selected), 225, 225).getView());
+        AnchorPane grid = new ArenaRenderer(arenas.get(selected), 225, 225).getView();
+        arenaContainer.getChildren().add(grid);
+        arenaContainer.setTopAnchor(grid, 0.0);
+        arenaContainer.setLeftAnchor(grid, 0.0);
+        arenaContainer.setBottomAnchor(grid, 0.0);
+        arenaContainer.setRightAnchor(grid, 0.0);
         lblRoom.setText(selected + 1 + " / " + arenas.size());
     }
 }

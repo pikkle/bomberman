@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class RequestProcessor implements RequestVisitor, Observer{
 	private RequestManager requestManager;
@@ -187,7 +188,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 
 		if(roomSession.get().getPlayers().size() >= roomSession.get().getMinPlayer()){
 			roomSession.get().getPlayers().stream().filter(player -> player.getReadyUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && ! roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().size(), roomSession.get().getArena(), roomSession.get().getPlayers().contains(player))));
+				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && ! roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().stream().map(p -> p.getPlayer().getPseudo()).collect(Collectors.toList()), roomSession.get().getArena(), roomSession.get().getPlayers().contains(player))));
 				player.setReadyUuid(null);
 			});
 		}
