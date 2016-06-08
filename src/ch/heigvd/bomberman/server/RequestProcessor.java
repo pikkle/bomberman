@@ -95,6 +95,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 
 	@Override
 	public Response visit(SaveArenaRequest request) {
+		System.out.println(request.getArena());
 		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
 			return new ErrorResponse(request.getID(), "Permission denied");
 

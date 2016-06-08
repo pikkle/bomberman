@@ -2,8 +2,6 @@ package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.client.views.render.ImageViewPane;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -121,7 +119,7 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	public ImageViewPane getSprite() {
-		if (sprite == null) sprite = new ImageViewPane(new ImageView(new Image(getPath())));
+		if (sprite == null) sprite = new ImageViewPane(getPath());
 		return sprite;
 	}
 

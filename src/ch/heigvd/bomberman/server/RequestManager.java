@@ -45,6 +45,7 @@ public class RequestManager extends Thread {
                     writer.writeObject(response);
                 }
             } catch (IOException e) {
+                e.printStackTrace();
                 try {
                     disconnect();
                 } catch (IOException e1) {

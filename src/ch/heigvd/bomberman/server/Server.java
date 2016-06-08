@@ -4,9 +4,11 @@ import ch.heigvd.bomberman.common.communication.responses.RoomsResponse;
 import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.server.database.DBManager;
 import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.application.Application;
 import javafx.beans.Observable;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
  * Server executable class
  * Runs on port 3737 by default
  */
-public class Server {
+public class Server extends Application {
 	private static final int DEFAULT_PORT = 3737;
 	private static Server instance;
 	private int port;
@@ -30,8 +32,8 @@ public class Server {
 	                                                                               o -> new Observable[]{o.getPlayers()});
 	private DBManager database;
 
-	private Server(int port) {
-		this.port = port;
+	public Server() {
+		this.port = DEFAULT_PORT;
 		try {
 			database = DBManager.getInstance();
 			roomSessions.addListener(new ListChangeListener<RoomSession>() {
@@ -44,10 +46,11 @@ public class Server {
 			System.out.println("Database error:");
 			e.printStackTrace();
 		}
+		instance = this;
 	}
 
 	public static Server getInstance() {
-		if (instance == null) instance = new Server(DEFAULT_PORT);
+		if (instance == null) instance = new Server();
 		return instance;
 	}
 
@@ -57,10 +60,10 @@ public class Server {
 	 * @param args {server port, ... }
 	 */
 	public static void main(String... args) {
-		getInstance().start();
+		launch(args);
 	}
 
-	public void start() {
+	public void start(Stage primaryStage) {
 		try {
 			ServerSocket socket = new ServerSocket(port);
 			synchronized (this) {

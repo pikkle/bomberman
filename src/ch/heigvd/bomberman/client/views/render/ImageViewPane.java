@@ -10,6 +10,9 @@ import javafx.geometry.VPos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
@@ -18,12 +21,10 @@ import java.io.Serializable;
 public class ImageViewPane extends Region implements Serializable {
 
 	private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<>();
+	private String path;
 
-	public ImageViewPane() {
-		this(new ImageView());
-	}
-
-	public ImageViewPane(ImageView imageView) {
+	public ImageViewPane(String path) {
+		this.path = path;
 		imageViewProperty.addListener((arg0, oldIV, newIV) -> {
 			if (oldIV != null) {
 				getChildren().remove(oldIV);
@@ -32,7 +33,7 @@ public class ImageViewPane extends Region implements Serializable {
 				getChildren().add(newIV);
 			}
 		});
-		this.imageViewProperty.set(imageView);
+		this.imageViewProperty.set(new ImageView(path));
 	}
 
 	public ObjectProperty<ImageView> imageViewProperty() {
@@ -56,5 +57,25 @@ public class ImageViewPane extends Region implements Serializable {
 			layoutInArea(imageView, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
 		}
 		super.layoutChildren();
+	}
+
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeUTF(path);
+	}
+
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		path = in.readUTF();
+		if(path != null) {
+			imageViewProperty = new SimpleObjectProperty<>();
+			imageViewProperty.addListener((arg0, oldIV, newIV) -> {
+				if (oldIV != null) {
+					getChildren().remove(oldIV);
+				}
+				if (newIV != null) {
+					getChildren().add(newIV);
+				}
+			});
+			this.imageViewProperty.set(new ImageView(path));
+		}
 	}
 }
