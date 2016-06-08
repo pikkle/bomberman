@@ -44,16 +44,16 @@ public class RoomsController extends Observable {
 		showRooms();
 
 		inRoom.setCellValueFactory(param -> {
-			if (param.getValue().isInRoom()) return new SimpleObjectProperty<ImageView>(
+			if (param.getValue().isInRoom()) return new SimpleObjectProperty<>(
 					new ImageView(new Image(Client.class.getResourceAsStream("img/ok_sign.png"))));
-			else return new SimpleObjectProperty<ImageView>(
+			else return new SimpleObjectProperty<>(
 					new ImageView(new Image(Client.class.getResourceAsStream("img/ko_sign.png"))));
 		});
 
 		isPrivate.setCellValueFactory(param -> {
-			if (param.getValue().isPrivate()) return new SimpleObjectProperty<ImageView>(
+			if (param.getValue().isPrivate()) return new SimpleObjectProperty<>(
 					new ImageView(new Image(Client.class.getResourceAsStream("img/lock.png"))));
-			else return new SimpleObjectProperty<ImageView>(
+			else return new SimpleObjectProperty<>(
 					new ImageView(new Image(Client.class.getResourceAsStream("img/unlock.png"))));
 
 		});
