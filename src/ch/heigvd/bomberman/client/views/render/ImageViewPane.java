@@ -20,11 +20,17 @@ import java.io.Serializable;
  */
 public class ImageViewPane extends Region implements Serializable {
 
-	private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<>();
+	private ObjectProperty<ImageView> imageViewProperty;
 	private String path;
 
 	public ImageViewPane(String path) {
+		initialize(path);
+	}
+
+	private void initialize(String path) {
 		this.path = path;
+		imageViewProperty = new SimpleObjectProperty<>();
+		ImageView imageView = new ImageView(path);
 		imageViewProperty.addListener((arg0, oldIV, newIV) -> {
 			if (oldIV != null) {
 				getChildren().remove(oldIV);
@@ -64,18 +70,6 @@ public class ImageViewPane extends Region implements Serializable {
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		path = in.readUTF();
-		if(path != null) {
-			imageViewProperty = new SimpleObjectProperty<>();
-			imageViewProperty.addListener((arg0, oldIV, newIV) -> {
-				if (oldIV != null) {
-					getChildren().remove(oldIV);
-				}
-				if (newIV != null) {
-					getChildren().add(newIV);
-				}
-			});
-			this.imageViewProperty.set(new ImageView(path));
-		}
+		initialize(in.readUTF());
 	}
 }
