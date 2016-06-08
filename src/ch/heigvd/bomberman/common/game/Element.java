@@ -19,16 +19,17 @@ public abstract class Element extends Observable implements Serializable {
 
 	@Column(name = "position") protected Point position;
 	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "arena_id", nullable = true) protected Arena arena;
-	private String path;
 	@Id @Column(name = "id") @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
 	private UUID uuid;
+
+	@Column(name = "sprite") private ImageViewPane sprite;
 
 	public Element(Point position, Arena arena, String path) {
 		this.position = position;
 		this.arena = arena;
-		this.path = path;
 		uuid = UUID.randomUUID();
 		arena.add(this);
+		sprite = new ImageViewPane(new ImageView(new Image(path)));
 	}
 
 	protected Element() {
@@ -122,6 +123,6 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	public ImageViewPane getSprite() {
-		return new ImageViewPane(new ImageView(new Image(path)));
+		return sprite;
 	}
 }
