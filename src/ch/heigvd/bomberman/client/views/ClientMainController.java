@@ -20,7 +20,6 @@ import java.io.IOException;
 
 public class ClientMainController {
 
-
     private static final int DEFAULT_PORT = 3737;
     private static final String DEFAULT_ADDRESS = "127.0.0.1";
 
@@ -40,6 +39,10 @@ public class ClientMainController {
     /***********
      * Methodes*
      ***********/
+
+    public ClientMainController(){
+        client = Client.getInstance();
+    }
 
     @FXML
     private void initialize() {
@@ -77,12 +80,6 @@ public class ClientMainController {
 
     public ResponseManager getRm(){
         return rm;
-    }
-
-    public void setMainApp(Client client)
-    {
-        this.client = client;
-        userTabsController.setClient(client);
     }
 
     @FXML

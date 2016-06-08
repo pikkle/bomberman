@@ -42,6 +42,9 @@ public class RoomsController extends Observable
     @FXML
     private TableColumn<Room, ImageView> inRoom;
 
+    public RoomsController(){
+        client = Client.getInstance();
+    }
 
     @FXML
     private void initialize() throws IOException {
@@ -65,10 +68,6 @@ public class RoomsController extends Observable
                 return new SimpleObjectProperty<ImageView>(new ImageView(new Image(Client.class.getResourceAsStream("img/unlock.png"))));
 
         });
-    }
-
-    public void setClient(Client client){
-        this.client = client;
     }
 
     public Room getRoom(){
@@ -100,7 +99,6 @@ public class RoomsController extends Observable
             try {
                 Pane pane = loader.load();
                 PasswordController controller = loader.getController();
-                controller.setClient(client);
                 controller.setRoomsController(this);
                 stage.setScene(new Scene(pane));
 
@@ -125,7 +123,6 @@ public class RoomsController extends Observable
                 try {
                     Pane pane = loader.load();
                     ReadyController controller = loader.getController();
-                    controller.setClient(client);
                     controller.loadRoom(r);
                     addObserver(controller);
                     stage.setScene(new Scene(pane));

@@ -14,10 +14,24 @@ import java.io.IOException;
  */
 public class Client extends Application {
 
+    private static Client instance;
     private Stage primaryStage;
     private Pane mainLayout;
     private ResponseManager rm = ResponseManager.getInstance();
 
+    public Client(){
+        synchronized(Client.class){
+            if(instance != null) throw new UnsupportedOperationException(
+                    getClass()+" is singleton but constructor called more than once");
+            instance = this;
+        }
+    }
+
+    public static Client getInstance() {
+        if (instance == null)
+            instance = new Client();
+        return instance;
+    }
 
     /**
      * Entry point of the client
@@ -41,7 +55,6 @@ public class Client extends Application {
         mainLayout = loader.load();
 
         LoginViewController controller = loader.getController();
-        controller.setClient(this);
 
         primaryStage.setScene(new Scene(mainLayout));
         primaryStage.show();

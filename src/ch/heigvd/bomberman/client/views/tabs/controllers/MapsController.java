@@ -35,6 +35,10 @@ public class MapsController {
     @FXML
     FlowPane mapsContainer;
 
+    public MapsController(){
+        client = Client.getInstance();
+    }
+
     @FXML
     public void initalize(){
         rm = ResponseManager.getInstance();
@@ -90,10 +94,6 @@ public class MapsController {
                 mapsContainer.getChildren().add(renderer.getView());
             });
         });
-    }
-
-    public void setClient(Client client){
-        this.client = client;
     }
 
     @FXML

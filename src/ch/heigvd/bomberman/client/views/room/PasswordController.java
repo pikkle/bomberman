@@ -30,14 +30,13 @@ public class PasswordController {
     @FXML
     private PasswordField pwd;
 
+    public PasswordController(){
+        client = Client.getInstance();
+    }
 
     @FXML
     private void initialize() throws IOException {
         rm = ResponseManager.getInstance();
-    }
-
-    public void setClient(Client client){
-        this.client = client;
     }
 
     public void setRoomsController(RoomsController roomsController){
@@ -67,7 +66,6 @@ public class PasswordController {
             {
                 Pane pane = loader.load();
                 ReadyController controller = loader.getController();
-                controller.setClient(client);
                 controller.loadRoom(r);
                 roomsController.addObserver(controller);
                 stage.setScene(new Scene(pane));

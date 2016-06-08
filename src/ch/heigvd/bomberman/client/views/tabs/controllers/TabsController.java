@@ -36,9 +36,4 @@ public class TabsController
                     }
                 });
     }
-
-    public void setClient(Client client){
-        this.client = client;
-        roomsController.setClient(client);
-    }
 }

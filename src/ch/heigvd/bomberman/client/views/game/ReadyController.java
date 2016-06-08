@@ -31,14 +31,14 @@ public class ReadyController implements Observer {
     @FXML
     private AnchorPane mainPane;
 
+    public ReadyController(){
+        client = Client.getInstance();
+    }
+
     @FXML
     private void initialize()
     {
         rm = ResponseManager.getInstance();
-    }
-
-    public void setClient(Client client){
-        this.client = client;
     }
 
     public void loadRoom(Room room){
@@ -74,7 +74,6 @@ public class ReadyController implements Observer {
                     pane = loader.load();
 
                     controller = loader.getController();
-                    controller.setClient(client);
                     controller.loadGame(bomberman, room);
 
                     stage.initModality(Modality.APPLICATION_MODAL);

@@ -48,6 +48,10 @@ public class LoginViewController {
      * Methodes*
      ***********/
 
+    public LoginViewController(){
+        client = Client.getInstance();
+    }
+
     @FXML
     private void initialize() {
         rm = ResponseManager.getInstance();
@@ -66,10 +70,6 @@ public class LoginViewController {
             serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ko_sign.png")));
             hiddeAll();
         }
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
     }
 
     private void hiddeAll() {
