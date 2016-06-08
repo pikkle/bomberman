@@ -42,14 +42,14 @@ public class Arena extends Observable implements Serializable {
 		this.width = Math.max(width, 2);
 		this.height = Math.max(height, 2);
 
-		for (int i = 0; i < getWidth(); i++) {
+		for (int i = 0; i < width(); i++) {
 			new Wall(new Point(i, 0), this);
-			new Wall(new Point(i, getHeight() - 1), this);
+			new Wall(new Point(i, height() - 1), this);
 		}
 
-		for (int i = 1; i < getHeight() - 1; i++) {
+		for (int i = 1; i < height() - 1; i++) {
 			new Wall(new Point(0, i), this);
-			new Wall(new Point(getWidth() - 1, i), this);
+			new Wall(new Point(width() - 1, i), this);
 		}
 	}
 
@@ -57,11 +57,21 @@ public class Arena extends Observable implements Serializable {
 		return id;
 	}
 
-	public int getWidth() {
+	/**
+	 * Gets the cell width of the arena.
+	 *
+	 * @return the width of the arena
+	 */
+	public int width() {
 		return width;
 	}
 
-	public int getHeight() {
+	/**
+	 * Gets the cell height of the arena.
+	 *
+	 * @return the height of the arena
+	 */
+	public int height() {
 		return height;
 	}
 
@@ -119,24 +129,32 @@ public class Arena extends Observable implements Serializable {
 	}
 
 	/**
-	 * Add the element to the arena
+	 * Adds the element to the arena
 	 *
 	 * @param e The element to add
 	 * @throws RuntimeException if the cell is already occuped
 	 */
 	public void add(Element e) {
 		elements.add(e);
-		setChanged();
-		notifyObservers(e);
+		notify(e);
 	}
 
+	/**
+	 * Removes an element from the arena.
+	 *
+	 * @param e the element to remove
+	 */
 	public void remove(Element e) {
 		elements.remove(e);
-		setChanged();
-		notifyObservers(e);
+		notify(e);
 	}
 
-	public void change(Element e) {
+	/**
+	 * Notifies the element that the arena has changed.
+	 *
+	 * @param e the element to notify
+	 */
+	public void notify(Element e) {
 		setChanged();
 		notifyObservers(e);
 	}

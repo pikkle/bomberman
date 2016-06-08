@@ -57,7 +57,7 @@ public abstract class Bomb extends Element {
 				Point left = new Point(x - i, y);
 				Point top = new Point(x, y - i);
 				Point bottom = new Point(x, y + i);
-				if (exploseRight && right.x() < arena.getWidth()) {
+				if (exploseRight && right.x() < arena.width()) {
 					if (arena.getElements(right).stream().filter(Element::isBlastAbsorber).findFirst().isPresent())
 						exploseRight = false;
 					if (!arena.getElements(right)
@@ -65,7 +65,7 @@ public abstract class Bomb extends Element {
 					          .filter(element -> !element.isDestructible())
 					          .findFirst()
 					          .isPresent()) {
-						if (exploseRight && right.x() + 1 < arena.getWidth() && i + 1 <= blastRange &&
+						if (exploseRight && right.x() + 1 < arena.width() && i + 1 <= blastRange &&
 						    !arena.getElements(new Point(right.x() + 1, right.y()))
 						          .stream()
 						          .filter(element -> !element.isDestructible())
@@ -96,7 +96,7 @@ public abstract class Bomb extends Element {
 					          .isPresent()) explosions.add(new VerticalExplosion(top, arena));
 					else explosions.add(new TopExplosion(top, arena));
 				}
-				if (exploseBottom && bottom.y() < arena.getHeight()) {
+				if (exploseBottom && bottom.y() < arena.height()) {
 					if (arena.getElements(bottom).stream().filter(Element::isBlastAbsorber).findFirst().isPresent())
 						exploseBottom = false;
 					if (!arena.getElements(bottom)
@@ -104,7 +104,7 @@ public abstract class Bomb extends Element {
 					          .filter(element -> !element.isDestructible())
 					          .findFirst()
 					          .isPresent()) {
-						if (exploseBottom && bottom.x() + 1 < arena.getHeight() && i + 1 <= blastRange &&
+						if (exploseBottom && bottom.x() + 1 < arena.height() && i + 1 <= blastRange &&
 						    !arena.getElements(new Point(bottom.x(), bottom.y() + 1))
 						          .stream()
 						          .filter(element -> !element.isDestructible())

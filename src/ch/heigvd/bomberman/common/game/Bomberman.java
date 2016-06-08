@@ -49,7 +49,7 @@ public class Bomberman extends Element {
                 position = position.add(0, 1);
                 break;
         }
-        if (position.x() < arena.getWidth() && position.x() >= 0 && position.x() < arena.getHeight() && position.x() >= 0) {
+        if (position.x() < arena.width() && position.x() >= 0 && position.x() < arena.height() && position.x() >= 0) {
             if(arena.isEmpty(position)){
                 this.position = position;
             } else if(arena.getElements(position).stream().allMatch(element -> element instanceof PowerUp)){
@@ -60,8 +60,8 @@ public class Bomberman extends Element {
                 this.position = position;
             }
         }
-        if (arena.isEmpty(position) && position.x() < arena.getWidth() && position.x() >= 0 &&
-                position.x() < arena.getHeight() && position.x() >= 0) {
+        if (arena.isEmpty(position) && position.x() < arena.width() && position.x() >= 0 &&
+                position.x() < arena.height() && position.x() >= 0) {
             this.position = position;
         }
     }

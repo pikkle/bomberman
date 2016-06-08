@@ -136,11 +136,11 @@ public class ArenaRenderer implements Observer {
 	}
 
 	public double getCellWidth() {
-		return width / arena.getWidth();
+		return width / arena.width();
 	}
 
 	public double getCellHeight() {
-		return height / arena.getHeight();
+		return height / arena.height();
 	}
 
 	public Point getCell(double x, double y) {
@@ -148,11 +148,11 @@ public class ArenaRenderer implements Observer {
 		int yVal = 0;
 		double width = 0;
 		double height = 0;
-		for (width = 0; x > width + this.width / arena.getWidth(); width += this.width / arena.getWidth(), xVal++) ;
+		for (width = 0; x > width + this.width / arena.width(); width += this.width / arena.width(), xVal++) ;
 		for (height = 0;
-		     y > height + this.height / arena.getHeight(); height += this.height / arena.getHeight(), yVal++)
+		     y > height + this.height / arena.height(); height += this.height / arena.height(), yVal++)
 			;
-		return new Point(Math.min(xVal, arena.getWidth() - 1), Math.min(yVal, arena.getHeight() - 1));
+		return new Point(Math.min(xVal, arena.width() - 1), Math.min(yVal, arena.height() - 1));
 	}
 
 	@Override
@@ -162,15 +162,15 @@ public class ArenaRenderer implements Observer {
 	}
 
 	public void resize(double width, double height) {
-		double size = Math.min(height / arena.getHeight(), width / arena.getWidth());
-		this.width = arena.getWidth() * size;
-		this.height = arena.getHeight() * size;
+		double size = Math.min(height / arena.height(), width / arena.width());
+		this.width = arena.width() * size;
+		this.height = arena.height() * size;
 		gridPane.setMaxWidth(this.width);
 		gridPane.setMaxHeight(this.height);
 		gridPane.getRowConstraints().clear();
 		gridPane.getColumnConstraints().clear();
 
-		for (int i = 0; i < arena.getHeight(); i++) {
+		for (int i = 0; i < arena.height(); i++) {
 			RowConstraints rowConstraints = new RowConstraints();
 			rowConstraints.setVgrow(Priority.NEVER);
 			rowConstraints.setFillHeight(true);
@@ -179,7 +179,7 @@ public class ArenaRenderer implements Observer {
 			rowConstraints.setPrefHeight(size);
 			gridPane.getRowConstraints().add(rowConstraints);
 		}
-		for (int i = 0; i < arena.getWidth(); i++) {
+		for (int i = 0; i < arena.width(); i++) {
 			ColumnConstraints column = new ColumnConstraints();
 			column.setHgrow(Priority.NEVER);
 			column.setFillWidth(true);

@@ -70,7 +70,7 @@ public class MapEditorController implements Observer {
 
 	public void loadArena(Arena arena) {
 		this.arena = arena;
-		changeDimension(arena.getWidth(), arena.getHeight());
+		changeDimension(arena.width(), arena.height());
 	}
 
 	private void changeDimension(int width, int height) {
@@ -83,8 +83,8 @@ public class MapEditorController implements Observer {
 			arena = new Arena(width, height, arena);
 			renderer = new ArenaRenderer(arena, 750, 750);
 			if (oldArena != null) {
-				for (int x = 1; x < oldArena.getWidth() - 1 && x < arena.getWidth() - 1; x++) {
-					for (int y = 1; y < oldArena.getHeight() - 1 && y < arena.getHeight() - 1; y++) {
+				for (int x = 1; x < oldArena.width() - 1 && x < arena.width() - 1; x++) {
+					for (int y = 1; y < oldArena.height() - 1 && y < arena.height() - 1; y++) {
 						oldArena.getElements(new Point(x, y)).forEach(element -> {
 							if (arena.isEmpty(element.position())) {
 								element.setArena(arena);
@@ -103,7 +103,7 @@ public class MapEditorController implements Observer {
 			gridContainer.setLeftAnchor(grid, 0.0);
 			gridContainer.setBottomAnchor(grid, 0.0);
 			gridContainer.setRightAnchor(grid, 0.0);
-			if (arena.getHeight() >= 1 && arena.getWidth() >= 1) registerAddDragEvents();
+			if (arena.height() >= 1 && arena.width() >= 1) registerAddDragEvents();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
