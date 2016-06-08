@@ -13,7 +13,7 @@ public class BottomExplosion extends Explosion {
 	}
 
 	@Override
-	protected String getPath() {
+	public String getPath() {
 		return "ch/heigvd/bomberman/client/img/explosion/explosionB.png";
 	}
 }

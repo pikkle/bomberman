@@ -20,7 +20,7 @@ public class AddBombPowerUp extends PowerUp {
 	protected AddBombPowerUp() {}
 
 	@Override
-	protected String getPath() {
+	public String getPath() {
 		return "ch/heigvd/bomberman/client/img/powerups/addBomb.png";
 	}
 

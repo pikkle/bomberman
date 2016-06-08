@@ -32,7 +32,7 @@ public class Wall extends Element {
 	}
 
 	@Override
-	protected String getPath() {
+	public String getPath() {
 		return "ch/heigvd/bomberman/client/img/wall.png";
 	}
 }

@@ -146,12 +146,10 @@ public class ArenaRenderer implements Observer {
 	public Point getCell(double x, double y) {
 		int xVal = 0;
 		int yVal = 0;
-		double width = 0;
-		double height = 0;
+		double width;
+		double height;
 		for (width = 0; x > width + this.width / arena.width(); width += this.width / arena.width(), xVal++) ;
-		for (height = 0;
-		     y > height + this.height / arena.height(); height += this.height / arena.height(), yVal++)
-			;
+		for (height = 0; y > height + this.height / arena.height(); height += this.height / arena.height(), yVal++) ;
 		return new Point(Math.min(xVal, arena.width() - 1), Math.min(yVal, arena.height() - 1));
 	}
 

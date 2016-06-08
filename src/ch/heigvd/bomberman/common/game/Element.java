@@ -128,5 +128,5 @@ public abstract class Element extends Observable implements Serializable {
 	 *
 	 * @return the path of the image
 	 */
-	protected abstract String getPath();
+	public abstract String getPath();
 }
