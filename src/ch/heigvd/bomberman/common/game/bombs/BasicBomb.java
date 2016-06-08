@@ -62,4 +62,9 @@ public class BasicBomb extends Bomb {
 			return res;
 		}, (a, b) -> a);
 	}
+
+	@Override
+	public String getPath() {
+		return "ch/heigvd/bomberman/client/img/bomb.png";
+	}
 }

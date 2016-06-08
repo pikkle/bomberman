@@ -16,7 +16,7 @@ public class StartPoint extends Element {
 	 * @param position The position of the bomberman
 	 */
 	public StartPoint(Point position, Arena arena) {
-		super(position, arena, "ch/heigvd/bomberman/client/img/skins/" + Skin.values()[0] + ".png");
+		super(position, arena);
 	}
 
 	public StartPoint() {}
@@ -34,5 +34,10 @@ public class StartPoint extends Element {
 	@Override
 	public boolean isTraversable() {
 		return false;
+	}
+
+	@Override
+	protected String getPath() {
+		return "ch/heigvd/bomberman/client/img/skins/" + Skin.values()[0] + ".png";
 	}
 }

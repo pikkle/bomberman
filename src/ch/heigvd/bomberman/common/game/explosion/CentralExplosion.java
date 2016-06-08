@@ -9,6 +9,11 @@ import ch.heigvd.bomberman.common.game.Point;
 public class CentralExplosion extends Explosion {
 
 	public CentralExplosion(Point position, Arena arena) {
-		super(position, arena, "ch/heigvd/bomberman/client/img/explosion/explosionC.png");
+		super(position, arena);
+	}
+
+	@Override
+	protected String getPath() {
+		return "ch/heigvd/bomberman/client/img/explosion/explosionC.png";
 	}
 }

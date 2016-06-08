@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 @Entity
 public abstract class PowerUp extends Element {
 
-	public PowerUp(Point position, Arena arena, String path) {
-		super(position, arena, path);
+	public PowerUp(Point position, Arena arena) {
+		super(position, arena);
 	}
 
 	protected PowerUp() {}

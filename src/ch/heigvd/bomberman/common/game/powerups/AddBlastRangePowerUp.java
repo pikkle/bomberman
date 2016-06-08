@@ -13,7 +13,12 @@ import ch.heigvd.bomberman.common.game.Point;
 public class AddBlastRangePowerUp extends PowerUp {
 
 	public AddBlastRangePowerUp(Point position, Arena arena) {
-		super(position, arena, "ch/heigvd/bomberman/client/img/powerups/blastRange.png");
+		super(position, arena);
+	}
+
+	@Override
+	protected String getPath() {
+		return "ch/heigvd/bomberman/client/img/powerups/blastRange.png";
 	}
 
 	/**

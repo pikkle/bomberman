@@ -17,19 +17,17 @@ import java.util.UUID;
 @Table(name = "element")
 public abstract class Element extends Observable implements Serializable {
 
+	@Column(name = "sprite")  private ImageViewPane sprite;
 	@Column(name = "position") protected Point position;
 	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "arena_id", nullable = true) protected Arena arena;
 	@Id @Column(name = "id") @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
 	private UUID uuid;
 
-	@Column(name = "sprite") private ImageViewPane sprite;
-
-	public Element(Point position, Arena arena, String path) {
+	public Element(Point position, Arena arena) {
 		this.position = position;
 		this.arena = arena;
 		uuid = UUID.randomUUID();
 		arena.add(this);
-		sprite = new ImageViewPane(new ImageView(new Image(path)));
 	}
 
 	protected Element() {
@@ -123,6 +121,14 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	public ImageViewPane getSprite() {
+		if (sprite == null) sprite = new ImageViewPane(new ImageView(new Image(getPath())));
 		return sprite;
 	}
+
+	/**
+	 * Gets the path of the image.
+	 *
+	 * @return the path of the image
+	 */
+	protected abstract String getPath();
 }

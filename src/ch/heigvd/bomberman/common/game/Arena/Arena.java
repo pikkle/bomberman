@@ -29,7 +29,7 @@ public class Arena extends Observable implements Serializable {
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
 	private Collection<Element> elements = new LinkedList<>();
 
-	public Arena() throws URISyntaxException {
+	public Arena() {
 		this(0, 0);
 	}
 
@@ -38,7 +38,7 @@ public class Arena extends Observable implements Serializable {
 		if (arena != null) id = arena.getId();
 	}
 
-	public Arena(int width, int height) throws URISyntaxException {
+	public Arena(int width, int height) {
 		this.width = Math.max(width, 2);
 		this.height = Math.max(height, 2);
 

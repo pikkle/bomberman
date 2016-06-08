@@ -14,10 +14,15 @@ import javax.persistence.Entity;
 public class AddBombPowerUp extends PowerUp {
 
 	public AddBombPowerUp(Point position, Arena arena) {
-		super(position, arena, "ch/heigvd/bomberman/client/img/powerups/addBomb.png");
+		super(position, arena);
 	}
 
 	protected AddBombPowerUp() {}
+
+	@Override
+	protected String getPath() {
+		return "ch/heigvd/bomberman/client/img/powerups/addBomb.png";
+	}
 
 	/**
 	 * {@inheritDoc}

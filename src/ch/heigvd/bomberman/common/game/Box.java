@@ -19,44 +19,48 @@ import java.util.Optional;
 @Entity
 public class Box extends Element {
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "powerup_id", nullable = true)
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
-    private PowerUp powerUp;
+	@OneToOne(fetch = FetchType.EAGER) @JoinColumn(name = "powerup_id", nullable = true)
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
+	private PowerUp powerUp;
 
-    public Box(Point position, Arena arena) {
-        super(position, arena, "ch/heigvd/bomberman/client/img/box.png");
-    }
+	public Box(Point position, Arena arena) {
+		super(position, arena);
+	}
 
 	public Box() {}
 
-	public void setPowerUp(PowerUp powerUp){
-        this.powerUp = powerUp;
-    }
+	public Optional<PowerUp> getPowerUp() {
+		// TODO return random powerup
+		return Optional.ofNullable(powerUp);
+	}
 
-    public Optional<PowerUp> getPowerUp() {
-        // TODO return random powerup
-        return Optional.ofNullable(powerUp);
-    }
+	public void setPowerUp(PowerUp powerUp) {
+		this.powerUp = powerUp;
+	}
 
-    @Override
-    public boolean isDestructible() {
-        return true;
-    }
+	@Override
+	public boolean isDestructible() {
+		return true;
+	}
 
-    @Override
-    public boolean isBlastAbsorber() {
-        return true;
-    }
+	@Override
+	public boolean isBlastAbsorber() {
+		return true;
+	}
 
-    @Override
-    public boolean isTraversable() {
-        return false;
-    }
+	@Override
+	public boolean isTraversable() {
+		return false;
+	}
 
 	@Override
 	public void delete() {
 		super.delete();
 		getPowerUp().ifPresent(arena::add);
+	}
+
+	@Override
+	protected String getPath() {
+		return "ch/heigvd/bomberman/client/img/box.png";
 	}
 }

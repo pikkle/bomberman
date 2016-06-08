@@ -12,8 +12,8 @@ import java.net.URISyntaxException;
 public class Wall extends Element {
 	public Wall() { }
 
-	public Wall(Point position, Arena arena) throws URISyntaxException {
-		super(position, arena, "ch/heigvd/bomberman/client/img/wall.png");
+	public Wall(Point position, Arena arena) {
+		super(position, arena);
 	}
 
 	@Override
@@ -29,5 +29,10 @@ public class Wall extends Element {
 	@Override
 	public boolean isTraversable() {
 		return false;
+	}
+
+	@Override
+	protected String getPath() {
+		return "ch/heigvd/bomberman/client/img/wall.png";
 	}
 }
