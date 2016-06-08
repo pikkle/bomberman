@@ -10,10 +10,12 @@ import javafx.geometry.VPos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 
+import java.io.Serializable;
+
 /**
  * @author akouznet
  */
-public class ImageViewPane extends Region {
+public class ImageViewPane extends Region implements Serializable {
 
 	private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<>();
 
