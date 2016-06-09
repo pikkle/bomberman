@@ -12,6 +12,9 @@ public class TopExplosion extends Explosion {
 		super(position, arena);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getPath() {
 		return "ch/heigvd/bomberman/client/img/explosion/explosionT.png";

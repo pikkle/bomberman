@@ -13,16 +13,25 @@ public abstract class Explosion extends Element {
         super(position, arena);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isDestructible() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isBlastAbsorber() {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isTraversable() {
         return true;
