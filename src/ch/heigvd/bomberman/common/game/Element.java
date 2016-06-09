@@ -64,7 +64,7 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	/**
-	 * Set the arena.
+	 * Sets the arena.
 	 *
 	 * @param arena the arena.
 	 */
@@ -77,7 +77,7 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	/**
-	 * Get the arena where the element is
+	 * Gets the arena of the element.
 	 *
 	 * @return the arena
 	 */
@@ -86,7 +86,7 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	/**
-	 * Get the x value of the position of the element.
+	 * Gets the x value of the position of the element.
 	 *
 	 * @return the x value of the position
 	 */
@@ -95,7 +95,7 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	/**
-	 * Get the y value of the position of the element.
+	 * Gets the y value of the position of the element.
 	 *
 	 * @return the y value of the position
 	 */
@@ -104,7 +104,7 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	/**
-	 * Get the position of the element.
+	 * Gets the position of the element.
 	 *
 	 * @return the position
 	 */
@@ -123,7 +123,6 @@ public abstract class Element extends Observable implements Serializable {
 						((Element) obj).getUuid().equals(getUuid())));
 	}
 
-
 	/**
 	 * Gets if the element can be destroyed.
 	 *
@@ -132,21 +131,21 @@ public abstract class Element extends Observable implements Serializable {
 	public abstract boolean isDestructible();
 
 	/**
-	 * Gets ff the blast can't go through the element.
+	 * Gets if the blast can't go through the element.
 	 *
 	 * @return true if the blast can, false otherwise
 	 */
 	public abstract boolean isBlastAbsorber();
 
 	/**
-	 * Gets ff the element can be traversed.
+	 * Gets if the element can be traversed.
 	 *
-	 * @return true if he can
+	 * @return true if he can, false otherwise
 	 */
 	public abstract boolean isTraversable();
 
 	/**
-	 * Remove the element from the arena.
+	 * Removes the element from the arena.
 	 */
 	public void delete() {
 		arena.remove(this);
