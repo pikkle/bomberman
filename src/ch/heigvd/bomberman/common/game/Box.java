@@ -1,10 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.powerups.FireUpPowerUp;
-import ch.heigvd.bomberman.common.game.powerups.BombUpPowerUp;
-import ch.heigvd.bomberman.common.game.powerups.PowerBombPowerUp;
-import ch.heigvd.bomberman.common.game.powerups.PowerUp;
+import ch.heigvd.bomberman.common.game.powerups.*;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.Entity;
@@ -36,17 +33,30 @@ public class Box extends Element {
 	}
 
 	public Optional<PowerUp> getPowerUp() {
-		if (powerUp == null) {
-			int p = new Random().nextInt(100);
-			if (p < 25) {
-				return Optional.of(new BombUpPowerUp(position, arena));
-			} else if (p < 50) {
-				return Optional.of(new FireUpPowerUp(position, arena));
-			} else if (p < 75) {
-				return Optional.of(new PowerBombPowerUp(position, arena));
-			}
+
+		if (powerUp != null)
+			return Optional.empty();
+
+		int gaps = 25;
+		int p = new Random().nextInt(gaps * 10);
+
+		if (p < gaps) {
+			return Optional.of(new BombDownPowerUp(position, arena));
+		} else if (p < gaps * 2) {
+			return Optional.of(new BombUpPowerUp(position, arena));
+		} else if (p < gaps * 3) {
+			return Optional.of(new FireDownPowerUp(position, arena));
+		} else if (p < gaps * 4) {
+			return Optional.of(new FireUpPowerUp(position, arena));
+		} else if (p < gaps * 5) {
+			return Optional.of(new FullFirePowerUp(position, arena));
+		} else if (p < gaps * 6) {
+			return Optional.of(new PowerBombPowerUp(position, arena));
+		} else if (p < gaps * 7) {
+			return Optional.of(new RedBombPowerUp(position, arena));
+		} else {
+			return Optional.empty();
 		}
-		return Optional.empty();
 	}
 
 	public void setPowerUp(PowerUp powerUp) {
