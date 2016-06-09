@@ -174,7 +174,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		if(roomSession.get().isRunning())
 			return new NoResponse(request.getID());
 
-		if(roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().getId() == requestManager.getPlayer().getId()).findFirst().isPresent())
+		if(roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().id() == requestManager.getPlayer().id()).findFirst().isPresent())
 			return new NoResponse(request.getID());
 
 		if(roomSession.get().getPassword() != null && !roomSession.get().getPassword().isEmpty() && !roomSession.get().getPassword().equals(request.getPassword()))
