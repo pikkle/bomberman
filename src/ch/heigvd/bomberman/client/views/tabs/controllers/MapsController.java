@@ -4,20 +4,16 @@ import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.client.views.tabs.mapEditor.MapEditorController;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -26,98 +22,78 @@ import java.io.IOException;
  */
 public class MapsController {
 
-    private ResponseManager rm;
-    private Client client;
+	@FXML FlowPane mapsContainer;
+	private ResponseManager rm;
+	private Client client;
+	@FXML private AnchorPane mainPane;
 
-    @FXML
-    private AnchorPane mainPane;
+	@FXML
+	public void initalize() {
+		rm = ResponseManager.getInstance();
+		rm.arenasRequest(maps -> {
+			mapsContainer.getChildren().clear();
+			maps.forEach(map -> {
+				ArenaRenderer renderer = new ArenaRenderer(map, 225, 225);
+				AnchorPane grid = renderer.getView();
+				grid.setOnMouseClicked(event -> {
+					if (event.getButton().equals(MouseButton.PRIMARY)) {
+						// double click
+						Stage stage = new Stage();
+						AnchorPane pane;
+						FXMLLoader loader = new FXMLLoader(
+								Client.class.getResource("views/tabs/mapEditor/MapEditor.fxml"));
 
-    @FXML
-    FlowPane mapsContainer;
+						stage.setTitle("MapEditor");
+						stage.setOnCloseRequest(we -> initalize());
+						try {
+							pane = loader.load();
+							MapEditorController controller = loader.getController();
+							controller.loadArena(map);
+							stage.initModality(Modality.APPLICATION_MODAL);
 
-    @FXML
-    public void initalize(){
-        rm = ResponseManager.getInstance();
-        rm.arenasRequest(maps -> {
-            mapsContainer.getChildren().clear();
-            maps.forEach(map -> {
-                ArenaRenderer renderer = new ArenaRenderer(map, 225, 225);
-                AnchorPane grid = renderer.getView();
-                grid.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if(event.getButton().equals(MouseButton.PRIMARY)){
-                            // double click
-                            Stage stage = new Stage();
-                            AnchorPane pane;
-                            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/mapEditor/MapEditor.fxml"));
+							stage.setScene(new Scene(pane));
+							stage.showAndWait();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				final ContextMenu contextMenu = new ContextMenu();
+				MenuItem delete = new MenuItem("Delete");
+				delete.setOnAction(e -> rm.removeArenaRequest(map, message -> initalize()));
+				contextMenu.getItems().add(delete);
+				renderer.getView()
+				        .setOnContextMenuRequested(
+						        e -> contextMenu.show(renderer.getView(), e.getScreenX(), e.getScreenY()));
 
-                            stage.setTitle("MapEditor");
-                            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                                public void handle(WindowEvent we) {
-                                    initalize();
-                                }
-                            });
-                            try {
-                                pane = loader.load();
-                                MapEditorController controller = loader.getController();
-                                controller.loadArena(map);
-                                stage.initModality(Modality.APPLICATION_MODAL);
+				renderer.getView().getStyleClass().add("map");
+				mapsContainer.getChildren().add(renderer.getView());
+			});
+		});
+	}
 
-                                stage.setScene(new Scene(pane));
-                                stage.showAndWait();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-                final ContextMenu contextMenu = new ContextMenu();
-                MenuItem delete = new MenuItem("Delete");
-                delete.setOnAction(new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent e) {
-                        rm.removeArenaRequest(map, message -> {
-                            initalize();
-                        });
-                    }
-                });
-                contextMenu.getItems().add(delete);
-                renderer.getView().setOnContextMenuRequested(e -> {
-                    contextMenu.show(renderer.getView(), e.getScreenX(), e.getScreenY());
-                });
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
-                renderer.getView().getStyleClass().add("map");
-                mapsContainer.getChildren().add(renderer.getView());
-            });
-        });
-    }
+	@FXML
+	private void addArena() {
+		// double click
+		Stage stage = new Stage();
+		AnchorPane pane;
+		FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/mapEditor/MapEditor.fxml"));
 
-    public void setClient(Client client){
-        this.client = client;
-    }
+		stage.setTitle("MapEditor");
+		stage.setOnCloseRequest(we -> initalize());
+		try {
+			pane = loader.load();
+			MapEditorController controller = loader.getController();
+			stage.initModality(Modality.APPLICATION_MODAL);
 
-    @FXML
-    private void addArena(){
-        // double click
-        Stage stage = new Stage();
-        AnchorPane pane;
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/mapEditor/MapEditor.fxml"));
-
-        stage.setTitle("MapEditor");
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                initalize();
-            }
-        });
-        try {
-            pane = loader.load();
-            MapEditorController controller = loader.getController();
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-            stage.setScene(new Scene(pane));
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			stage.setScene(new Scene(pane));
+			stage.showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

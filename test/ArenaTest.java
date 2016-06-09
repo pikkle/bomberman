@@ -57,7 +57,7 @@ public class ArenaTest {
 	public void testUpdate() throws Exception {
 		Arena arena = new Arena();
 		db.arenas().create(arena);
-		arena.remove(arena.getElements().stream().findFirst().get());
+		arena.getElements().stream().findFirst().ifPresent(arena::remove);
 		db.arenas().update(arena);
 
 		Optional<Arena> after = db.arenas().find(arena.getId());

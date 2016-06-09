@@ -19,66 +19,62 @@ import java.io.IOException;
  */
 public class PasswordController {
 
-    private ResponseManager rm;
-    private Client client;
-    private RoomsController roomsController;
+	private ResponseManager rm;
+	private Client client;
+	private RoomsController roomsController;
 
-    @FXML
-    private AnchorPane mainPane;
+	@FXML private AnchorPane mainPane;
 
-    @FXML
-    private PasswordField pwd;
+	@FXML private PasswordField pwd;
 
 
-    @FXML
-    private void initialize() throws IOException {
-        rm = ResponseManager.getInstance();
-    }
+	@FXML
+	private void initialize() throws IOException {
+		rm = ResponseManager.getInstance();
+	}
 
-    public void setClient(Client client){
-        this.client = client;
-    }
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
-    public void setRoomsController(RoomsController roomsController){
-        this.roomsController = roomsController;
-    }
+	public void setRoomsController(RoomsController roomsController) {
+		this.roomsController = roomsController;
+	}
 
-    @FXML
-    private void close(){
-        ( (Stage)mainPane.getScene().getWindow() ).close();
-    }
+	@FXML
+	private void close() {
+		((Stage) mainPane.getScene().getWindow()).close();
+	}
 
-    @FXML
-    public void join(){
-        rm.joinRoomRequest(roomsController.getRoom(), pwd.getText(), r -> {
-            Stage stage = new Stage();
-            stage.setTitle("Bomberman");
+	@FXML
+	public void join() {
+		rm.joinRoomRequest(roomsController.getRoom(), pwd.getText(), r -> {
+			Stage stage = new Stage();
+			stage.setTitle("Bomberman");
 
-            stage.setOnCloseRequest(event -> {
-                rm.readyRequest(false, null);
-                client.getPrimatyStage().show();
-            });
+			stage.setOnCloseRequest(event -> {
+				rm.readyRequest(false, null);
+				client.getPrimatyStage().show();
+			});
 
-            stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initModality(Modality.APPLICATION_MODAL);
 
-            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/ready.fxml"));
-            try
-            {
-                Pane pane = loader.load();
-                ReadyController controller = loader.getController();
-                controller.setClient(client);
-                controller.loadRoom(r);
-                roomsController.addObserver(controller);
-                stage.setScene(new Scene(pane));
+			FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/ready.fxml"));
+			try {
+				Pane pane = loader.load();
+				ReadyController controller = loader.getController();
+				controller.setClient(client);
+				controller.loadRoom(r);
+				roomsController.addObserver(controller);
+				stage.setScene(new Scene(pane));
 
-                client.getPrimatyStage().hide();
-                stage.showAndWait();
+				client.getPrimatyStage().hide();
+				stage.showAndWait();
 
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        });
-        close();
-    }
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		close();
+	}
 }

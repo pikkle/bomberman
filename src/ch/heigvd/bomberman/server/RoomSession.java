@@ -19,6 +19,7 @@ public class RoomSession {
 
 	/**
 	 * Creates a room
+	 *
 	 * @param name
 	 * @param password
 	 */
@@ -29,19 +30,19 @@ public class RoomSession {
 		this.minPlayer = minPlayer;
 	}
 
-	public synchronized void close(){
-		while(!players.isEmpty()){
+	public synchronized void close() {
+		while (!players.isEmpty()) {
 			players.stream().findFirst().get().close();
 		}
 		running = false;
 		Server.getInstance().getRoomSessions().remove(this);
 	}
 
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 
-	public Arena getArena(){
+	public Arena getArena() {
 		return arena;
 	}
 
@@ -49,7 +50,7 @@ public class RoomSession {
 		return password;
 	}
 
-	public int getMinPlayer(){
+	public int getMinPlayer() {
 		return minPlayer;
 	}
 
@@ -58,15 +59,14 @@ public class RoomSession {
 	}
 
 	public synchronized void addPlayer(PlayerSession p) throws Exception {
-		if(!players.contains(p)) {
-			if(players.size() >= 4)
-				throw new Exception("Already 4 players !");
+		if (!players.contains(p)) {
+			if (players.size() >= 4) throw new Exception("Already 4 players !");
 			players.add(p);
 		}
 	}
 
 	public synchronized void removePlayer(PlayerSession p) {
-		if(players.contains(p)) {
+		if (players.contains(p)) {
 			players.remove(p);
 		}
 	}
@@ -74,33 +74,30 @@ public class RoomSession {
 	public synchronized void start() {
 		for (PlayerSession player : players) {
 			Optional<StartPoint> start = arena.getStartPoints().stream().findFirst();
-			if(start.isPresent()) {
+			if (start.isPresent()) {
 				arena.remove(start.get());
-				player.setBomberman(new Bomberman(start.get().position(), Skin.values()[players.indexOf(player)], arena));
-			}
-			else{
+				player.setBomberman(
+						new Bomberman(start.get().position(), Skin.values()[players.indexOf(player)], arena));
+			} else {
 				return;
 			}
 		}
 		arena.getStartPoints().forEach(startPoint -> arena.remove(startPoint));
 		running = true;
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (running){
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					arena.getBombs().forEach(b -> {
-						b.decreaseCountdown();
-						if (b.getCountdown() <= 0) {
-							b.explose();
-						}
-					});
+		new Thread(() -> {
+			while (running) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
+				arena.getBombs().forEach(b -> {
+					b.decreaseCountdown();
+					if (b.getCountdown() <= 0) {
+						b.delete();
+					}
+				});
 			}
 		}).start();
 	}
@@ -114,7 +111,7 @@ public class RoomSession {
 	 */
 	public void update() {
 		for (PlayerSession player : players) {
-			if (! player.isReady()) {
+			if (!player.isReady()) {
 				return;
 			}
 		}

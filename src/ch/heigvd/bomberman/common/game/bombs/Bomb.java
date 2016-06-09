@@ -1,128 +1,123 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.Pair;
 import ch.heigvd.bomberman.common.game.Point;
 import ch.heigvd.bomberman.common.game.explosion.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public abstract class Bomb extends Element {
-    protected int countdown;
-    protected int blastRange;
+	protected int countdown;
+	protected int blastRange;
 
-    public Bomb(Point position, int countdown, int blastRange, Arena arena) {
-        super(position, arena);
-        this.countdown = countdown;
-        this.blastRange = blastRange;
-    }
+	public Bomb(Point position, int countdown, int blastRange, Arena arena) {
+		super(position, arena);
+		this.countdown = countdown;
+		this.blastRange = blastRange;
+	}
 
-    public int getCountdown() {
-        return countdown;
-    }
+	public int getCountdown() {
+		return countdown;
+	}
 
-    public void decreaseCountdown() {
-        countdown--;
-    }
-
-    /**
-     * To call when the bomb explose, will display the explosion
-     */
-    public void explose(){
-        arena.remove(this);
-        getElementsInRange().forEach(element -> arena.destroy(element));
-        setChanged();
-        notifyObservers();
-    }
-
-    /**
-     * To call when the bomb explose, will display the explosion
-     */
-    public void showExplosion(){
+	public void decreaseCountdown() {
+		countdown--;
+	}
 
 
-        int x = position.x();
-        int y = position.y();
+	/**
+	 * To call when the bomb explodes, will display the explosion
+	 */
+	public void showExplosion() {
+		Function<Direction, Supplier<Point>> fakePositionSupplierFactory = d -> () -> {
+			int x = 0;
+			int y = 0;
+			switch (d) {
+				case RIGHT:
+					x = 1;
+					break;
+				case LEFT:
+					x = -1;
+					break;
+				case UP:
+					y = -1;
+					break;
+				case DOWN:
+					y = 1;
+					break;
+			}
+			return new Point(this.x() + x * (blastRange + 1), this.y() + y * (blastRange + 1));
+		};
 
-        boolean exploseRight = true;
-        boolean exploseLeft = true;
-        boolean exploseTop = true;
-        boolean exploseBottom = true;
+		List<Explosion> explosions = arena.elementsInRange(this, blastRange)
+		                                  .map(p -> Pair.of(p.first()
+		                                                     .stream()
+		                                                     .filter(Element::isBlastAbsorber)
+		                                                     .findFirst()
+		                                                     .map(Element::position)
+		                                                     .orElseGet(fakePositionSupplierFactory.apply(p.second())),
+		                                                    p.second()))
+		                                  .flatMap(p -> {
+			                                  Point target = p.first();
+			                                  BiFunction<Point, Arena, Explosion> endExplosionFactory;
+			                                  BiFunction<Point, Arena, Explosion> explosionFactory;
+			                                  switch (p.second()) {
+				                                  case RIGHT:
+					                                  explosionFactory = HorizontalExplosion::new;
+					                                  endExplosionFactory = RightExplosion::new;
+					                                  break;
+				                                  case LEFT:
+					                                  explosionFactory = HorizontalExplosion::new;
+					                                  endExplosionFactory = LeftExplosion::new;
+					                                  break;
+				                                  case UP:
+					                                  explosionFactory = VerticalExplosion::new;
+					                                  endExplosionFactory = TopExplosion::new;
+					                                  break;
+				                                  case DOWN:
+					                                  explosionFactory = VerticalExplosion::new;
+					                                  endExplosionFactory = BottomExplosion::new;
+					                                  break;
+				                                  default:
+					                                  throw new IllegalArgumentException();
+			                                  }
 
-        List<Explosion> explosions = new LinkedList<>();
+			                                  int dx = target.x() - x();
+			                                  int dy = target.y() - y();
+			                                  int d = Math.abs(dx + dy);
 
-        arena.remove(this);
-        arena.getElements(position).stream().filter(element -> element.isDestructible()).forEach(element -> arena.destroy(element));
+			                                  return Stream.iterate(1, i -> i + 1)
+			                                               .limit(d - 1)
+			                                               .map(i -> Pair.of(i, new Point(x() + i * dx / d,
+			                                                                              y() + i * dy / d)))
+			                                               .map(pair -> (pair.first() == d - 1 ? endExplosionFactory :
+					                                               explosionFactory).apply(pair.second(), arena));
+		                                  })
+		                                  .collect(Collectors.toList());
 
-        if(!arena.getElements(position).stream().filter(element -> !element.isBlastAbsorber()).findFirst().isPresent()) {
-            explosions.add(new CentralExplosion(position, arena));
+		// explosion images disapear after a timeout
+		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), ae -> explosions.forEach(Element::delete)));
+		timeline.play();
 
-            for (int i = 1; i <= blastRange && (exploseRight || exploseLeft || exploseTop || exploseBottom); i++) {
-                Point right = new Point(x + i, y);
-                Point left = new Point(x - i, y);
-                Point top = new Point(x, y - i);
-                Point bottom = new Point(x, y + i);
-                if (exploseRight && right.x() < arena.getWidth()) {
-                    if(arena.getElements(right).stream().filter(element -> element.isBlastAbsorber()).findFirst().isPresent())
-                        exploseRight = false;
-                    if (!arena.getElements(right).stream().filter(element -> !element.isDestructible()).findFirst().isPresent()) {
-                        if(exploseRight && right.x() + 1 < arena.getWidth() && i + 1 <= blastRange && !arena.getElements(new Point(right.x() + 1, right.y())).stream().filter(element -> !element.isDestructible()).findFirst().isPresent())
-                            explosions.add(new HorizontalExplosion(right, arena));
-                        else
-                            explosions.add(new RightExplosion(right, arena));
-                    }
-                }
-                if (exploseLeft && left.x() >= 0) {
-                    if(arena.getElements(left).stream().filter(element -> element.isBlastAbsorber()).findFirst().isPresent())
-                        exploseLeft = false;
-                    if(exploseLeft && left.x() >= 0 && i + 1 <= blastRange && !arena.getElements(new Point(left.x() - 1, left.y())).stream().filter(element -> !element.isDestructible()).findFirst().isPresent())
-                        explosions.add(new HorizontalExplosion(left, arena));
-                    else
-                        explosions.add(new LeftExplosion(left, arena));
-                }
-                if (exploseTop && top.y() >= 0) {
-                    if(arena.getElements(top).stream().filter(element -> element.isBlastAbsorber()).findFirst().isPresent())
-                        exploseTop = false;
-                    if(exploseTop && top.x() >= 0 && i + 1 <= blastRange && !arena.getElements(new Point(top.x(), top.y() - 1)).stream().filter(element -> !element.isDestructible()).findFirst().isPresent())
-                        explosions.add(new VerticalExplosion(top, arena));
-                    else
-                        explosions.add(new TopExplosion(top, arena));
-                }
-                if (exploseBottom && bottom.y() < arena.getHeight()) {
-                    if(arena.getElements(bottom).stream().filter(element -> element.isBlastAbsorber()).findFirst().isPresent())
-                        exploseBottom = false;
-                    if (!arena.getElements(bottom).stream().filter(element -> !element.isDestructible()).findFirst().isPresent()) {
-                        if(exploseBottom && bottom.x() + 1 < arena.getHeight() && i + 1 <= blastRange && !arena.getElements(new Point(bottom.x(), bottom.y() + 1)).stream().filter(element -> !element.isDestructible()).findFirst().isPresent())
-                            explosions.add(new VerticalExplosion(bottom, arena));
-                        else
-                            explosions.add(new BottomExplosion(bottom, arena));
-                    }
-                }
-            }
-        }
+		getElementsInRange().forEach(Element::delete);
+	}
 
-        // explosion images disapear after a timeout
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(100),
-                ae -> {
-                    explosions.forEach(explosion -> {
-                        arena.remove(explosion);
-                    });
-                    explosions.clear();
-                }
-        ));
-        timeline.play();
-    }
-
-    /**
-     * @return the elements in range of the blastRange
-     */
-    public abstract List<Element> getElementsInRange();
+	/**
+	 * @return the elements in range of the blastRange
+	 */
+	public abstract List<Element> getElementsInRange();
 
 	@Override
 	public boolean isDestructible() {
@@ -137,5 +132,13 @@ public abstract class Bomb extends Element {
 	@Override
 	public boolean isTraversable() {
 		return false;
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		showExplosion();
+		setChanged();
+		notifyObservers();
 	}
 }

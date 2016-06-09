@@ -1,7 +1,6 @@
 package ch.heigvd.bomberman.common.game.explosion;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.ElementVisitor;
 import ch.heigvd.bomberman.common.game.Point;
 
 /**
@@ -9,13 +8,12 @@ import ch.heigvd.bomberman.common.game.Point;
  */
 public class HorizontalExplosion extends Explosion {
 
-    public HorizontalExplosion(Point position, Arena arena) {
-        super(position, arena);
-        arena.add(this);
-    }
+	public HorizontalExplosion(Point position, Arena arena) {
+		super(position, arena);
+	}
 
-    @Override
-    public void accept(ElementVisitor visitor) {
-        visitor.visit(this);
-    }
+	@Override
+	public String getPath() {
+		return "ch/heigvd/bomberman/client/img/explosion/explosionH.png";
+	}
 }

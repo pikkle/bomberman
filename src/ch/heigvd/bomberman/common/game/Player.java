@@ -28,9 +28,9 @@ public class Player implements Serializable {
 	private String password;
 
 	@Column(name="isAdmin", nullable = false)
-	private boolean isAdmin = false;
+	private Boolean isAdmin = false;
 
-	Player() {
+	protected Player() {
 		// all persisted classes must define a no-arg constructor with at least package visibility
 	}
 
@@ -60,6 +60,6 @@ public class Player implements Serializable {
 	}
 
 	public boolean isAdmin(){
-		return isAdmin;
+		return isAdmin != null && isAdmin;
 	}
 }

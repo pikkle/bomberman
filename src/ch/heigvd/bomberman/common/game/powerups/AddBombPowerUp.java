@@ -2,7 +2,6 @@ package ch.heigvd.bomberman.common.game.powerups;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.ElementVisitor;
 import ch.heigvd.bomberman.common.game.Point;
 
 import javax.persistence.Entity;
@@ -14,12 +13,15 @@ import javax.persistence.Entity;
 @Entity
 public class AddBombPowerUp extends PowerUp {
 
-	public AddBombPowerUp() {
-		super();
-	}
-
 	public AddBombPowerUp(Point position, Arena arena) {
 		super(position, arena);
+	}
+
+	protected AddBombPowerUp() {}
+
+	@Override
+	public String getPath() {
+		return "ch/heigvd/bomberman/client/img/powerups/addBomb.png";
 	}
 
 	/**
@@ -28,13 +30,5 @@ public class AddBombPowerUp extends PowerUp {
 	@Override
 	public void apply(Bomberman bomberman) {
 		bomberman.getBombFactory().addBomb(1);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void accept(ElementVisitor visitor) {
-		visitor.visit(this);
 	}
 }
