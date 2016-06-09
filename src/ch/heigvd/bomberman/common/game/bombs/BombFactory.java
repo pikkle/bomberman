@@ -24,16 +24,31 @@ public abstract class BombFactory implements Observer, Serializable {
 		this.arena = arena;
 	}
 
+	public BombFactory(BombFactory bf) {
+		this(bf.countdown, bf.blastRange, bf.arena, bf.nbBomb);
+	}
+
 	/**
 	 * Create the bomb at the position
 	 *
 	 * @param position the position
 	 * @return the new bomb
 	 */
-	public abstract Optional<? extends Bomb> create(Point position);
+	public Optional<? extends Bomb> create(Point position) {
+		if (nbBomb <= 0)
+			return Optional.empty();
+
+		Bomb b = generate(position);
+
+		b.addObserver(this);
+		nbBomb--;
+		return Optional.of(b);
+	}
+
+	protected abstract Bomb generate(Point position);
 
 	/**
-	 * Called when a bomb explode, will readd the number of bomb.
+	 * Called when a bomb explode, will increase the number of bomb.
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
@@ -46,7 +61,8 @@ public abstract class BombFactory implements Observer, Serializable {
 	 * @param time the time to add
 	 */
 	public void addCountdown(int time) {
-		countdown += time;
+		if (countdown + time > 1)
+			countdown += time;
 	}
 
 	/**
@@ -55,7 +71,8 @@ public abstract class BombFactory implements Observer, Serializable {
 	 * @param range the range to add
 	 */
 	public void addRange(int range) {
-		blastRange += range;
+		if (blastRange + range > 0)
+			blastRange += range;
 	}
 
 	/**
@@ -64,6 +81,7 @@ public abstract class BombFactory implements Observer, Serializable {
 	 * @param n the number of bombs to add
 	 */
 	public void addBomb(int n) {
-		nbBomb += n;
+		if (nbBomb + n > 0)
+			nbBomb += n;
 	}
 }

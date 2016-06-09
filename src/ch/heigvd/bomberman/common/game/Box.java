@@ -1,8 +1,8 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.powerups.AddBlastRangePowerUp;
-import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
+import ch.heigvd.bomberman.common.game.powerups.FireUpPowerUp;
+import ch.heigvd.bomberman.common.game.powerups.BombUpPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerBombPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import org.hibernate.annotations.Cascade;
@@ -39,9 +39,9 @@ public class Box extends Element {
 		if (powerUp == null) {
 			int p = new Random().nextInt(100);
 			if (p < 25) {
-				return Optional.of(new AddBombPowerUp(position, arena));
+				return Optional.of(new BombUpPowerUp(position, arena));
 			} else if (p < 50) {
-				return Optional.of(new AddBlastRangePowerUp(position, arena));
+				return Optional.of(new FireUpPowerUp(position, arena));
 			} else if (p < 75) {
 				return Optional.of(new PowerBombPowerUp(position, arena));
 			}

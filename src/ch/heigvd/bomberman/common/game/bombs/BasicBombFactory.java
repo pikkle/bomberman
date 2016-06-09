@@ -13,25 +13,8 @@ public class BasicBombFactory extends BombFactory {
 		super(3, 1, arena, 1);
 	}
 
-	public BasicBombFactory(BombFactory bf) {
-		super(bf.countdown, bf.blastRange, bf.arena, bf.nbBomb);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Optional<BasicBomb> create(Point position) {
-		if (nbBomb <= 0)
-			return Optional.empty();
-
-		try {
-			BasicBomb b = new BasicBomb(position, countdown, blastRange, arena);
-			b.addObserver(this);
-			nbBomb--;
-			return Optional.of(b);
-		} catch (RuntimeException e) {
-			return Optional.empty();
-		}
+	protected BasicBomb generate(Point position) {
+		return new BasicBomb(position, countdown, blastRange, arena);
 	}
 }
