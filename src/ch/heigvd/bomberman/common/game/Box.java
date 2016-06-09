@@ -32,7 +32,13 @@ public class Box extends Element {
 	public Box() {
 	}
 
-	public Optional<PowerUp> getPowerUp() {
+	/**
+	 * Drops an optional of a power up.
+	 * It can be empty if no power up is in the box.
+	 *
+	 * @return an optional of a power up
+	 */
+	public Optional<PowerUp> dropPowerUp() {
 
 		if (powerUp != null)
 			return Optional.empty();
@@ -59,31 +65,51 @@ public class Box extends Element {
 		}
 	}
 
+	/**
+	 * Sets the power up.
+	 *
+	 * @param powerUp the new power up
+	 */
 	public void setPowerUp(PowerUp powerUp) {
 		this.powerUp = powerUp;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isDestructible() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isBlastAbsorber() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isTraversable() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete() {
 		super.delete();
-		getPowerUp().ifPresent(arena::add);
+		dropPowerUp().ifPresent(arena::add);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getPath() {
 		return "ch/heigvd/bomberman/client/img/box.png";
