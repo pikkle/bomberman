@@ -14,6 +14,6 @@ public class PowerBomb extends BasicBomb {
 
 	@Override
 	public String getPath() {
-		return "ch/heigvd/bomberman/client/img/PowerBomb.png";
+		return "ch/heigvd/bomberman/client/img/bombs/PowerBomb.png";
 	}
 }

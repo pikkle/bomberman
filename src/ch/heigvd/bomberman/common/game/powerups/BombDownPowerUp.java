@@ -4,23 +4,12 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Point;
 
-import javax.persistence.Entity;
-
 /**
- * Projet : GEN_Projet
- * Créé le 02.06.2016.
- *
- * @author Adriano Ruberto
+ * Created by Adriano on 09.06.2016.
  */
-
-@Entity
-public class AddBlastRangePowerUp extends PowerUp {
-
-	public AddBlastRangePowerUp(Point position, Arena arena) {
+public class BombDownPowerUp extends PowerUp {
+	public BombDownPowerUp(Point position, Arena arena) {
 		super(position, arena);
-	}
-
-	protected AddBlastRangePowerUp() {
 	}
 
 	/**
@@ -28,7 +17,7 @@ public class AddBlastRangePowerUp extends PowerUp {
 	 */
 	@Override
 	public void apply(Bomberman bomberman) {
-		bomberman.bombFactory().addRange(1);
+		bomberman.bombFactory().addBomb(-1);
 	}
 
 	/**
@@ -36,7 +25,6 @@ public class AddBlastRangePowerUp extends PowerUp {
 	 */
 	@Override
 	public String getPath() {
-		return "ch/heigvd/bomberman/client/img/powerups/blastRange.png";
+		return "ch/heigvd/bomberman/client/img/powerups/BombDown.png";
 	}
-
 }
