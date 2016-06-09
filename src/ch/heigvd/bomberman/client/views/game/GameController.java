@@ -4,6 +4,7 @@ import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Direction;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -24,8 +25,31 @@ public class GameController {
     private Client client;
 
     public GameController(Bomberman bomberman, Client client){
-        renderer = new ArenaRenderer(bomberman.arena(), bomberman, 750, 750);
         this.client = client;
+        renderer = new ArenaRenderer(bomberman.arena(), 750, 750);
+        renderer.getGrid().setOnKeyPressed(key -> {
+            switch (key.getCode()) {
+                case RIGHT:
+                    rm.moveRequest(Direction.RIGHT, null);
+                    break;
+                case LEFT:
+                    rm.moveRequest(Direction.LEFT, null);
+                    break;
+                case DOWN:
+                    rm.moveRequest(Direction.DOWN, null);
+                    break;
+                case UP:
+                    rm.moveRequest(Direction.UP, null);
+                    break;
+                case SPACE:
+                    rm.dropBombRequest();
+                    break;
+                default:
+                    return;
+            }
+            key.consume();
+        });
+        renderer.getGrid().setFocusTraversable(true);
         mainPane = renderer.getView();
         rm = ResponseManager.getInstance();
         initialize();
@@ -45,7 +69,9 @@ public class GameController {
         Scene scene = new Scene(mainPane);
         stage.setScene(scene);
 
-        rm.moveRequest(null, bomberman -> renderer.getArena().notify(bomberman));
+        rm.moveRequest(null, bomberman -> {
+            renderer.getArena().notify(bomberman);
+        });
 
         rm.addElementRequest(element -> renderer.getArena().add(element));
 

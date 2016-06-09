@@ -2,20 +2,15 @@ package ch.heigvd.bomberman.client.views.render;
 
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Point;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.layout.*;
 
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.stream.Collectors;
 
 /**
  * Created by matthieu.villard on 18.05.2016.
@@ -60,35 +55,6 @@ public class ArenaRenderer implements Observer {
 		container.getChildren().add(center);
 
 		//container.setStyle("-fx-background-color: grey;");
-	}
-
-	public ArenaRenderer(Arena arena, Bomberman bomberman, double width, double height) {
-		this(arena, width, height);
-		if (bomberman.getSprite() != null) {
-			bomberman.getSprite().setOnKeyPressed(key -> {
-				switch (key.getCode()) {
-					case RIGHT:
-						rm.moveRequest(Direction.RIGHT, null);
-						break;
-					case LEFT:
-						rm.moveRequest(Direction.LEFT, null);
-						break;
-					case DOWN:
-						rm.moveRequest(Direction.DOWN, null);
-						break;
-					case UP:
-						rm.moveRequest(Direction.UP, null);
-						break;
-					case SPACE:
-						rm.dropBombRequest();
-						break;
-					default:
-						return;
-				}
-				key.consume();
-			});
-			bomberman.getSprite().setFocusTraversable(true);
-		}
 	}
 
 	public void renderElement(Element element) {
