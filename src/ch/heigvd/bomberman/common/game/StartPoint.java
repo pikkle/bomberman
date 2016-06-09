@@ -43,7 +43,7 @@ public class StartPoint extends Element {
 	 */
 	@Override
 	public boolean isTraversable() {
-		return false;
+		return true;
 	}
 
 	/**
