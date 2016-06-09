@@ -5,49 +5,87 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import java.io.Serializable;
 
 public class Room implements Serializable {
-    private String name;
-    private boolean isPrivate;
-    private int minPlayer;
-    private int playerNumber;
-    private Arena arena;
-    private boolean inRoom;
+	private String name;
+	private boolean isPrivate;
+	private int minPlayer;
+	private int playerNumber;
+	private Arena arena;
+	private boolean inRoom;
 
-    public Room(String name, boolean isPrivate, int minPlayer, int playerNumber, Arena arena, boolean inRoom) {
-        this.name = name;
-        this.isPrivate = isPrivate;
-        this.minPlayer = minPlayer;
-        this.arena = arena;
-        this.inRoom = inRoom;
-        this.playerNumber = playerNumber;
-    }
+	public Room(String name, boolean isPrivate, int minPlayer, int playerNumber, Arena arena, boolean inRoom) {
+		this.name = name;
+		this.isPrivate = isPrivate;
+		this.minPlayer = minPlayer;
+		this.arena = arena;
+		this.inRoom = inRoom;
+		this.playerNumber = playerNumber;
+	}
 
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the name of the room.
+	 *
+	 * @return the name of the room
+	 */
+	public String name() {
+		return name;
+	}
 
-    public boolean isPrivate(){
-        return isPrivate;
-    }
+	/**
+	 * Gets if the room is private.
+	 *
+	 * @return true if the room is private, false otherwise
+	 */
+	public boolean isPrivate() {
+		return isPrivate;
+	}
 
-    public int getMinPlayer(){
-        return minPlayer;
-    }
+	/**
+	 * Gets the minimum player for this room.
+	 *
+	 * @return the minimum player for this room
+	 */
+	public int minPlayer() {
+		return minPlayer;
+	}
 
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
+	/**
+	 * TODO
+	 *
+	 * @return
+	 */
+	public int playerNumber() {
+		return playerNumber;
+	}
 
-    public void addPlayer(){
-        playerNumber++;
-    }
+	/**
+	 * TODO
+	 */
+	public void addPlayer() {
+		playerNumber++;
+	}
 
-    public void removePlayer(){
-        playerNumber = Math.max(0, playerNumber - 1);
-    }
+	/**
+	 * TODO
+	 */
+	public void removePlayer() {
+		playerNumber = Math.max(0, playerNumber - 1);
+	}
 
-    public Arena getArena() {
-        return arena;
-    }
+	/**
+	 * Gets the arena for the room.
+	 *
+	 * @return gets the arena
+	 */
+	public Arena arena() {
+		return arena;
+	}
 
-    public boolean isInRoom(){ return inRoom; }
+	/**
+	 * TODO
+	 *
+	 * @return
+	 */
+	public boolean isInRoom() {
+		return inRoom;
+	}
 }

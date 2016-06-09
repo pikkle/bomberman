@@ -166,7 +166,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		if (request.getRoom() == null)
 			return new NoResponse(request.getID());
 
-		Optional<RoomSession> roomSession = server.getRoomSessions().stream().filter(r -> r.getName().equals(request.getRoom().getName())).findFirst();
+		Optional<RoomSession> roomSession = server.getRoomSessions().stream().filter(r -> r.getName().equals(request.getRoom().name())).findFirst();
 
 		if(!roomSession.isPresent())
 			return new NoResponse(request.getID());
@@ -207,7 +207,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 
 		if(!request.getState()){
 			//if(requestManager.getPlayerSession().get().getRoomSession().isRunning())
-				//requestManager.getPlayerSession().get().getRoomSession().getArena().destroy(requestManager.getPlayerSession().get().getBomberman());
+				//requestManager.getPlayerSession().get().getRoomSession().arena().destroy(requestManager.getPlayerSession().get().getBomberman());
 
 			requestManager.closePlayerSession();
 

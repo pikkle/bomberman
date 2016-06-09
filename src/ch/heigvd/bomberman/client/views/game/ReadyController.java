@@ -39,8 +39,8 @@ public class ReadyController implements Observer {
 
     public void loadRoom(Room room){
         this.room = room;
-        lblRoom.setText("Room \"" + room.getName() + "\"");
-        number.setText(room.getPlayerNumber() + " player" + (room.getPlayerNumber() > 1 ? "s" : ""));
+        lblRoom.setText("Room \"" + room.name() + "\"");
+        number.setText(room.playerNumber() + " player" + (room.playerNumber() > 1 ? "s" : ""));
     }
 
     @FXML
@@ -66,8 +66,8 @@ public class ReadyController implements Observer {
         if(rooms.contains(room)) {
             loadRoom(room);
         }
-        else if(rooms.stream().filter(r -> r.getName().equals(room.getName())).findFirst().isPresent()){
-            loadRoom(rooms.stream().filter(r -> r.getName().equals(room.getName())).findFirst().get());
+        else if(rooms.stream().filter(r -> r.name().equals(room.name())).findFirst().isPresent()){
+            loadRoom(rooms.stream().filter(r -> r.name().equals(room.name())).findFirst().get());
         }
     }
 }
