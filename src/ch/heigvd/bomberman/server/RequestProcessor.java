@@ -297,7 +297,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getPlayerSession().get().getBomberman().dropBomb();
+		requestManager.getPlayerSession().get().getBomberman().dropBomb().ifPresent(c -> requestManager.getPlayerSession().get().getStatistic().dropBomb());
 
 		return new NoResponse(request.getID());
 	}
@@ -346,7 +346,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 	private void checkIfEnded() {
 		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return;
-		if(requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(playerSession -> !playerSession.getRank().isPresent()).count() <= 1){
+		if(requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(playerSession -> playerSession.getStatistic().getSurvivalTime() == null).count() <= 1){
 
 			requestManager.getPlayerSession().get().getRoomSession().close();
 		}

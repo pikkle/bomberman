@@ -19,10 +19,16 @@ public class TabsController
     private Tab mapsTab;
 
     @FXML
+    private Tab statisticsTab;
+
+    @FXML
     private RoomsController roomsController ;
 
     @FXML
     private MapsController mapsController ;
+
+    @FXML
+    private StatisticsController statisticsController ;
 
     @FXML
     private TabPane tabs;
@@ -33,6 +39,9 @@ public class TabsController
                 .addListener((obs, oldTab, newTab) -> {
                     if (newTab == mapsTab) {
                         mapsController.initalize();
+                    }
+                    else if(newTab == statisticsTab){
+                        statisticsController.initalize();
                     }
                 });
     }

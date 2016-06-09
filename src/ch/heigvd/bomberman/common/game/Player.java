@@ -1,7 +1,11 @@
 package ch.heigvd.bomberman.common.game;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Projet : GEN_Projet
@@ -29,6 +33,10 @@ public class Player implements Serializable {
 
 	@Column(name="isAdmin", nullable = false)
 	private Boolean isAdmin = false;
+
+	@OneToMany(targetEntity = Statistic.class, fetch = FetchType.EAGER, mappedBy="player")
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
+	private List<Statistic> statistics = new LinkedList<>();
 
 	Player() {
 		// all persisted classes must define a no-arg constructor with at least package visibility
@@ -61,5 +69,9 @@ public class Player implements Serializable {
 
 	public boolean isAdmin(){
 		return isAdmin != null && isAdmin;
+	}
+
+	public List<Statistic> getStatistics(){
+		return statistics;
 	}
 }
