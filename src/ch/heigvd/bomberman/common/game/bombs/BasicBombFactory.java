@@ -10,7 +10,11 @@ import java.util.Optional;
  */
 public class BasicBombFactory extends BombFactory {
 	public BasicBombFactory(Arena arena) {
-		super(3, 10, arena, 1);
+		super(3, 1, arena, 1);
+	}
+
+	public BasicBombFactory(BombFactory bf) {
+		super(bf.countdown, bf.blastRange, bf.arena, bf.nbBomb);
 	}
 
 	/**

@@ -1,7 +1,9 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.powerups.AddBlastRangePowerUp;
 import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
+import ch.heigvd.bomberman.common.game.powerups.PowerBombPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import org.hibernate.annotations.Cascade;
 
@@ -10,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * Projet : GEN_Projet
@@ -20,7 +23,8 @@ import java.util.Optional;
 @Entity
 public class Box extends Element {
 
-	@OneToOne(fetch = FetchType.EAGER) @JoinColumn(name = "powerup_id", nullable = true)
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "powerup_id", nullable = true)
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
 	private PowerUp powerUp;
 
@@ -28,12 +32,21 @@ public class Box extends Element {
 		super(position, arena);
 	}
 
-	public Box() {}
+	public Box() {
+	}
 
 	public Optional<PowerUp> getPowerUp() {
-		// TODO return random powerup
-		powerUp = new AddBombPowerUp(position, arena);
-		return Optional.ofNullable(powerUp);
+		if (powerUp == null) {
+			int p = new Random().nextInt(100);
+			if (p < 25) {
+				return Optional.of(new AddBombPowerUp(position, arena));
+			} else if (p < 50) {
+				return Optional.of(new AddBlastRangePowerUp(position, arena));
+			} else if (p < 75) {
+				return Optional.of(new PowerBombPowerUp(position, arena));
+			}
+		}
+		return Optional.empty();
 	}
 
 	public void setPowerUp(PowerUp powerUp) {
