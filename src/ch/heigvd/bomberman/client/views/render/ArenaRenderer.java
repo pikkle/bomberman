@@ -60,7 +60,7 @@ public class ArenaRenderer implements Observer {
 	public void renderElement(Element element) {
 		ImageViewPane sprite = element.getSprite();
 		gridPane.getChildren().remove(sprite);
-		gridPane.add(sprite, element.x(), element.y());
+		if (arena.getElements().contains(element)) gridPane.add(sprite, element.x(), element.y());
 	}
 
 	public Arena getArena() {

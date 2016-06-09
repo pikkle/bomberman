@@ -8,10 +8,12 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Observable;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static ch.heigvd.bomberman.common.game.Direction.*;
 
 /**
  * Created by matthieu.villard on 09.05.2016.
@@ -157,5 +159,44 @@ public class Arena extends Observable implements Serializable {
 	public void notify(Element e) {
 		setChanged();
 		notifyObservers(e);
+	}
+
+	/**
+	 * Gets elements in cross radius from the center.
+	 *
+	 * The stream have the different elements in each direction.
+	 * TODO
+	 *
+	 * @param center the center of the cross
+	 * @param radius the radius
+	 * @return elements in cross radius
+	 */
+	public Stream<Pair<List<Element>, Direction>> elementsInRange(Element center, int radius) {
+		int x = center.x();
+		int y = center.y();
+
+		List<Element> up = new ArrayList<>(),
+				left = new ArrayList<>(),
+				right = new ArrayList<>(),
+				down = new ArrayList<>();
+
+		Function<Element, Double> distanceFromCenter = e -> Math.pow(e.x() - x, 2) + Math.pow(e.y() - y, 2);
+
+		elements.stream()
+		     .filter(e -> (e.x() == x || e.y() == y) && e != center)
+		     .filter(e -> {
+			     double pos = (e.x() == x) ? e.y() : e.x();
+			     double ref = (e.x() == x) ? y : x;
+			     return Math.abs(ref - pos) <= radius;
+		     })
+		     .sorted(Comparator.comparing(distanceFromCenter))
+		     .forEach(e -> {
+			     double ex = e.x();
+			     double ey = e.y();
+			     ((ex == x) ? (ey >= y ? down : up) : (ex > x ? right : left)).add(e);
+		     });
+
+		Iterator<Direction> it = Stream.of(UP, LEFT, DOWN, RIGHT).iterator();
+		return Stream.of(up, left, down, right).map(l -> Pair.of(l, it.next()));
 	}
 }
