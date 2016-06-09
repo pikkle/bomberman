@@ -95,7 +95,7 @@ public class Arena extends Observable implements Serializable {
 	 * @return true if nothing is at the position given
 	 */
 	public boolean isEmpty(Point position) {
-		return elements.stream().noneMatch(e -> e.position().equals(position));
+		return elements(position).stream().filter(e -> !e.isTraversable()).count() == 0;
 	}
 
 	/**
