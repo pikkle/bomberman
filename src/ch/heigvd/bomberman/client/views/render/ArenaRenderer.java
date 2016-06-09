@@ -93,26 +93,8 @@ public class ArenaRenderer implements Observer {
 
 	public void renderElement(Element element) {
 		ImageViewPane sprite = element.getSprite();
-		if (sprite != null && gridPane.getChildren().contains(sprite)) {
-			gridPane.getChildren().remove(sprite);
-		}
-		if (arena.getElements().contains(element)) {
-			// display elements, behind existing ones
-			List<Node> mem = gridPane.getChildren()
-			                         .filtered(child -> child instanceof ImageViewPane &&
-			                                            GridPane.getRowIndex(child) == element.y() &&
-			                                            GridPane.getColumnIndex(child) == element.x())
-			                         .stream()
-			                         .collect(Collectors.toList());
-
-			mem.forEach(node -> gridPane.getChildren().remove(node));
-
-			if (sprite != null) {
-				gridPane.add(sprite, element.x(), element.y());
-			}
-
-			mem.forEach(node -> gridPane.add(node, element.x(), element.y()));
-		}
+		gridPane.getChildren().remove(sprite);
+		gridPane.add(sprite, element.x(), element.y());
 	}
 
 	public Arena getArena() {

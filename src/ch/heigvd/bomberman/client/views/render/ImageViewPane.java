@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * @author akouznet
@@ -22,15 +23,17 @@ public class ImageViewPane extends Region implements Serializable {
 
 	private ObjectProperty<ImageView> imageViewProperty;
 	private String path;
+	private UUID uuid;
 
-	public ImageViewPane(String path) {
-		initialize(path);
+	public ImageViewPane(String path, UUID uuid) {
+		initialize(path, uuid);
 	}
 
-	private void initialize(String path) {
+	private void initialize(String path, UUID uuid) {
 		this.path = path;
+		this.uuid = uuid;
+
 		imageViewProperty = new SimpleObjectProperty<>();
-		ImageView imageView = new ImageView(path);
 		imageViewProperty.addListener((arg0, oldIV, newIV) -> {
 			if (oldIV != null) {
 				getChildren().remove(oldIV);
@@ -55,6 +58,11 @@ public class ImageViewPane extends Region implements Serializable {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		return super.equals(o) || (o instanceof ImageViewPane && ((ImageViewPane) o).uuid.equals(this.uuid));
+	}
+
+	@Override
 	protected void layoutChildren() {
 		ImageView imageView = imageViewProperty.get();
 		if (imageView != null) {
@@ -67,9 +75,10 @@ public class ImageViewPane extends Region implements Serializable {
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.writeUTF(path);
+		out.writeObject(uuid);
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		initialize(in.readUTF());
+		initialize(in.readUTF(), (UUID) in.readObject());
 	}
 }

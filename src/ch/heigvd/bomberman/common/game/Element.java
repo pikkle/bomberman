@@ -15,9 +15,9 @@ import java.util.UUID;
 @Table(name = "element")
 public abstract class Element extends Observable implements Serializable {
 
-	@Column(name = "sprite")  private ImageViewPane sprite;
 	@Column(name = "position") protected Point position;
 	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "arena_id", nullable = true) protected Arena arena;
+	@Column(name = "sprite") private ImageViewPane sprite;
 	@Id @Column(name = "id") @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
 	private UUID uuid;
 
@@ -119,7 +119,7 @@ public abstract class Element extends Observable implements Serializable {
 	}
 
 	public ImageViewPane getSprite() {
-		if (sprite == null) sprite = new ImageViewPane(getPath());
+		if (sprite == null) sprite = new ImageViewPane(getPath(), uuid);
 		return sprite;
 	}
 
