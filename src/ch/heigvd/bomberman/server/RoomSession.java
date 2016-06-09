@@ -95,7 +95,7 @@ public class RoomSession {
 				}
 				arena.elements(Bomb.class).forEach(b -> {
 					b.decreaseCountdown();
-					if (b.getCountdown() <= 0) {
+					if (b.countdown() <= 0) {
 						b.delete();
 					}
 				});

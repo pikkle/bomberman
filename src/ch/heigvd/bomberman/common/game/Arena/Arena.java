@@ -117,9 +117,9 @@ public class Arena extends Observable implements Serializable {
 	@SuppressWarnings("unchecked")
 	public <T extends Element> List<T> elements(Class<T> type) {
 		return elements.stream()
-				.filter(e -> type.isAssignableFrom(e.getClass()))
-				.map(e -> (T) e)
-				.collect(Collectors.toList());
+		               .filter(e -> type.isAssignableFrom(e.getClass()))
+		               .map(e -> (T) e)
+		               .collect(Collectors.toList());
 	}
 
 	/**
@@ -130,8 +130,8 @@ public class Arena extends Observable implements Serializable {
 	 */
 	public List<Element> elements(Point position) {
 		return elements.stream()
-				.filter(e -> e.position().equals(position))
-				.collect(Collectors.toList());
+		               .filter(e -> e.position().equals(position))
+		               .collect(Collectors.toList());
 	}
 
 	/**
@@ -185,18 +185,18 @@ public class Arena extends Observable implements Serializable {
 		Function<Element, Double> distanceFromCenter = e -> Math.pow(e.x() - x, 2) + Math.pow(e.y() - y, 2);
 
 		elements.stream()
-				.filter(e -> (e.x() == x || e.y() == y) && e != center)
-				.filter(e -> {
-					double pos = (e.x() == x) ? e.y() : e.x();
-					double ref = (e.x() == x) ? y : x;
-					return Math.abs(ref - pos) <= radius;
-				})
-				.sorted(Comparator.comparing(distanceFromCenter))
-				.forEach(e -> {
-					double ex = e.x();
-					double ey = e.y();
-					((ex == x) ? (ey >= y ? down : up) : (ex > x ? right : left)).add(e);
-				});
+		        .filter(e -> (e.x() == x || e.y() == y) && e != center)
+		        .filter(e -> {
+			        double pos = (e.x() == x) ? e.y() : e.x();
+			        double ref = (e.x() == x) ? y : x;
+			        return Math.abs(ref - pos) <= radius;
+		        })
+		        .sorted(Comparator.comparing(distanceFromCenter))
+		        .forEach(e -> {
+			        double ex = e.x();
+			        double ey = e.y();
+			        ((ex == x) ? (ey >= y ? down : up) : (ex > x ? right : left)).add(e);
+		        });
 
 		Iterator<Direction> it = Stream.of(UP, LEFT, DOWN, RIGHT).iterator();
 		return Stream.of(up, left, down, right).map(l -> Pair.of(l, it.next()));

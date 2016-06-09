@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 
 public abstract class Bomb extends Element {
-	protected int countdown;
+	private int countdown;
 	protected int blastRange;
 
 	public Bomb(Point position, int countdown, int blastRange, Arena arena) {
@@ -28,17 +28,24 @@ public abstract class Bomb extends Element {
 		this.blastRange = blastRange;
 	}
 
-	public int getCountdown() {
+	/**
+	 * Gets the countdown for the bomb
+	 *
+	 * @return the countdown
+	 */
+	public int countdown() {
 		return countdown;
 	}
 
+	/**
+	 * Decease by one the countdown
+	 */
 	public void decreaseCountdown() {
 		countdown--;
 	}
 
-
 	/**
-	 * To call when the bomb explodes, will display the explosion
+	 * Displays the explosion of the bomb
 	 */
 	public void showExplosion() {
 		Function<Direction, Supplier<Point>> fakePositionSupplierFactory = d -> () -> {
@@ -119,26 +126,37 @@ public abstract class Bomb extends Element {
 	 */
 	public abstract List<Element> getElementsInRange();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isDestructible() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isBlastAbsorber() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isTraversable() {
 		return false;
 	}
 
+	/**
+	 * Show the explosion
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete() {
 		super.delete();
 		showExplosion();
-		setChanged();
-		notifyObservers();
 	}
 }

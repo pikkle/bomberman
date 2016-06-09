@@ -13,6 +13,9 @@ public class BasicBombFactory extends BombFactory {
 		super(3, 10, arena, 1);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Optional<BasicBomb> create(Point position) {
 		if (nbBomb <= 0)

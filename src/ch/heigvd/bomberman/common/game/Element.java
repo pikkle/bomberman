@@ -150,6 +150,8 @@ public abstract class Element extends Observable implements Serializable {
 	 */
 	public void delete() {
 		arena.remove(this);
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
