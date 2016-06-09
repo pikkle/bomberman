@@ -327,7 +327,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 	private void updateElement(Element element){
 		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return;
-		if(requestManager.getPlayerSession().get().getRoomSession().getArena().getElements().contains(element)){
+		if(requestManager.getPlayerSession().get().getRoomSession().getArena().elements().contains(element)){
 			requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getAddUuid() != null).forEach(player -> {
 				player.getRequestManager().send(new AddElementResponse(player.getAddUuid(), element));
 			});

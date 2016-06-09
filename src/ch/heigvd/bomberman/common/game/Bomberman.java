@@ -55,8 +55,8 @@ public class Bomberman extends Element {
 		if (position.x() < arena.width() && position.x() >= 0 && position.x() < arena.height() && position.x() >= 0) {
 			if (arena.isEmpty(position)) {
 				this.position = position;
-			} else if (arena.getElements(position).stream().allMatch(element -> element instanceof PowerUp)) {
-				arena.getElements(position).forEach(element -> {
+			} else if (arena.elements(position).stream().allMatch(element -> element instanceof PowerUp)) {
+				arena.elements(position).forEach(element -> {
 					((PowerUp) element).apply(this);
 					arena.remove(element);
 				});

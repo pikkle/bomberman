@@ -57,10 +57,10 @@ public class ArenaTest {
 	public void testUpdate() throws Exception {
 		Arena arena = new Arena();
 		db.arenas().create(arena);
-		arena.getElements().stream().findFirst().ifPresent(arena::remove);
+		arena.elements().stream().findFirst().ifPresent(arena::remove);
 		db.arenas().update(arena);
 
 		Optional<Arena> after = db.arenas().find(arena.getId());
-		assertEquals(68, after.get().getElements().size());
+		assertEquals(68, after.get().elements().size());
 	}
 }
