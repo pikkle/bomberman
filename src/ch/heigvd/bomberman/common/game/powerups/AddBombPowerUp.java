@@ -17,7 +17,8 @@ public class AddBombPowerUp extends PowerUp {
 		super(position, arena);
 	}
 
-	protected AddBombPowerUp() {}
+	protected AddBombPowerUp() {
+	}
 
 	@Override
 	public String getPath() {
@@ -29,6 +30,6 @@ public class AddBombPowerUp extends PowerUp {
 	 */
 	@Override
 	public void apply(Bomberman bomberman) {
-		bomberman.getBombFactory().addBomb(1);
+		bomberman.bombFactory().addBomb(1);
 	}
 }

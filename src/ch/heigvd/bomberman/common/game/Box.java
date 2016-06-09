@@ -1,6 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import org.hibernate.annotations.Cascade;
 
@@ -31,6 +32,7 @@ public class Box extends Element {
 
 	public Optional<PowerUp> getPowerUp() {
 		// TODO return random powerup
+		powerUp = new AddBombPowerUp(position, arena);
 		return Optional.ofNullable(powerUp);
 	}
 
