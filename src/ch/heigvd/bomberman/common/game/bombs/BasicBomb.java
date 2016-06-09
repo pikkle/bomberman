@@ -19,6 +19,9 @@ public class BasicBomb extends Bomb {
 		super(position, countdown, blastRange, arena);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Element> getElementsInRange() {
 		return arena.elementsInRange(this, blastRange).reduce(new LinkedList<>(), (res, elems) -> {
@@ -34,6 +37,9 @@ public class BasicBomb extends Bomb {
 		}, (a, b) -> a);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getPath() {
 		return "ch/heigvd/bomberman/client/img/bomb.png";

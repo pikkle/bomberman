@@ -45,7 +45,7 @@ public class ArenaRenderer implements Observer {
 			resize();
 		});
 
-		arena.getElements().stream().forEach(this::renderElement);
+		arena.elements().stream().forEach(this::renderElement);
 
 		BorderPane center = new BorderPane(gridPane);
 		AnchorPane.setTopAnchor(center, 0.0);
@@ -60,7 +60,7 @@ public class ArenaRenderer implements Observer {
 	public void renderElement(Element element) {
 		ImageViewPane sprite = element.getSprite();
 		gridPane.getChildren().remove(sprite);
-		if (arena.getElements().contains(element)) gridPane.add(sprite, element.x(), element.y());
+		if (arena.elements().contains(element)) gridPane.add(sprite, element.x(), element.y());
 	}
 
 	public Arena getArena() {

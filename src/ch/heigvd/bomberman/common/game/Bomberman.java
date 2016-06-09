@@ -17,7 +17,6 @@ import java.util.Optional;
 public class Bomberman extends Element {
 	private BombFactory bombFactory = new BasicBombFactory(arena);
 	private List<PowerUp> powerUps = new LinkedList<>();
-
 	private Skin skin;
 
 	/**
@@ -32,7 +31,7 @@ public class Bomberman extends Element {
 	}
 
 	/**
-	 * Move the bomberman in the direction wanted
+	 * Moves the bomberman in the direction wanted
 	 *
 	 * @param direction the direction
 	 */
@@ -52,63 +51,81 @@ public class Bomberman extends Element {
 				position = position.add(0, 1);
 				break;
 		}
-		if (position.x() < arena.width() && position.x() >= 0 && position.x() < arena.height() && position.x() >= 0) {
-			if (arena.isEmpty(position)) {
-				this.position = position;
-			} else if (arena.getElements(position).stream().allMatch(element -> element instanceof PowerUp)) {
-				arena.getElements(position).forEach(element -> {
-					((PowerUp) element).apply(this);
-					arena.remove(element);
-				});
-				this.position = position;
-			}
-		}
-		if (arena.isEmpty(position) && position.x() < arena.width() && position.x() >= 0 &&
-		    position.x() < arena.height() && position.x() >= 0) {
+
+		if (arena.isEmpty(position)) {
 			this.position = position;
+			// if the bomberman is on power ups, he takes it
+			final Point pos = position;
+			arena.elements(PowerUp.class)
+			     .stream()
+			     .filter(p -> p.position.equals(pos))
+			     .forEach(this::givePowerup);
 		}
 	}
 
 	/**
-	 * Drop the bomb
+	 * Drops a bomb
 	 */
 	public Optional<? extends Bomb> dropBomb() {
 		return bombFactory.create(position);
 	}
 
 	/**
-	 * Add a power to the bomberman and apply it.
+	 * Adds a power to the bomberman and apply it.
 	 *
 	 * @param powerUp the power up
 	 */
 	public void givePowerup(PowerUp powerUp) {
 		powerUps.add(powerUp);
 		powerUp.apply(this);
+		powerUp.delete();
 	}
 
+	/**
+	 * Changes the bomb factory.
+	 *
+	 * @param bombFactory the bomb factory
+	 */
 	public void changeBombFactory(BombFactory bombFactory) {
 		this.bombFactory = bombFactory;
 	}
 
-	public BombFactory getBombFactory() {
+	/**
+	 * Gets the bomb factory
+	 *
+	 * @return the bomb factory
+	 */
+	public BombFactory bombFactory() {
 		return bombFactory;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isDestructible() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isBlastAbsorber() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isTraversable() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getPath() {
 		return "ch/heigvd/bomberman/client/img/skins/" + skin + ".png";

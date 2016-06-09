@@ -32,20 +32,37 @@ public abstract class BombFactory implements Observer, Serializable {
 	 */
 	public abstract Optional<? extends Bomb> create(Point position);
 
-
+	/**
+	 * Called when a bomb explode, will readd the number of bomb.
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		nbBomb++;
 	}
 
-	public void addCountdown(int n) {
-		countdown += n;
+	/**
+	 * Adds n time to countdown.
+	 *
+	 * @param time the time to add
+	 */
+	public void addCountdown(int time) {
+		countdown += time;
 	}
 
-	public void addRange(int n) {
-		blastRange += n;
+	/**
+	 * Adds range to the bomb.
+	 *
+	 * @param range the range to add
+	 */
+	public void addRange(int range) {
+		blastRange += range;
 	}
 
+	/**
+	 * Adds n bombs to the max bombs.
+	 *
+	 * @param n the number of bombs to add
+	 */
 	public void addBomb(int n) {
 		nbBomb += n;
 	}

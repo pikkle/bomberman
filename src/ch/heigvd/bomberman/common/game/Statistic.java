@@ -7,13 +7,23 @@ import java.io.Serializable;
  */
 public class Statistic implements Serializable {
 
-    private long rank;
+	private long rank;
 
-    public Statistic(long rank){
-        this.rank = rank;
-    }
+	/**
+	 * TODO
+	 *
+	 * @param rank
+	 */
+	public Statistic(long rank) {
+		this.rank = rank;
+	}
 
-    public long getRank(){
-        return rank;
-    }
+	/**
+	 * TODO
+	 *
+	 * @return
+	 */
+	public long getRank() {
+		return rank;
+	}
 }

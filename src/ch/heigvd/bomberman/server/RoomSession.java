@@ -4,6 +4,7 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Skin;
 import ch.heigvd.bomberman.common.game.StartPoint;
+import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -73,7 +74,7 @@ public class RoomSession {
 
 	public synchronized void start() {
 		for (PlayerSession player : players) {
-			Optional<StartPoint> start = arena.getStartPoints().stream().findFirst();
+			Optional<StartPoint> start = arena.elements(StartPoint.class).stream().findFirst();
 			if (start.isPresent()) {
 				arena.remove(start.get());
 				player.setBomberman(
@@ -82,7 +83,7 @@ public class RoomSession {
 				return;
 			}
 		}
-		arena.getStartPoints().forEach(startPoint -> arena.remove(startPoint));
+		arena.elements(StartPoint.class).forEach(startPoint -> arena.remove(startPoint));
 		running = true;
 
 		new Thread(() -> {
@@ -92,9 +93,9 @@ public class RoomSession {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				arena.getBombs().forEach(b -> {
+				arena.elements(Bomb.class).forEach(b -> {
 					b.decreaseCountdown();
-					if (b.getCountdown() <= 0) {
+					if (b.countdown() <= 0) {
 						b.delete();
 					}
 				});

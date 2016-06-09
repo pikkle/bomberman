@@ -19,23 +19,36 @@ public class StartPoint extends Element {
 		super(position, arena);
 	}
 
-	public StartPoint() {}
+	public StartPoint() {
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isDestructible() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isBlastAbsorber() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isTraversable() {
-		return false;
+		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getPath() {
 		return "ch/heigvd/bomberman/client/img/skins/" + Skin.values()[0] + ".png";

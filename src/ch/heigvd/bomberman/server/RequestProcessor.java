@@ -166,7 +166,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		if (request.getRoom() == null)
 			return new NoResponse(request.getID());
 
-		Optional<RoomSession> roomSession = server.getRoomSessions().stream().filter(r -> r.getName().equals(request.getRoom().getName())).findFirst();
+		Optional<RoomSession> roomSession = server.getRoomSessions().stream().filter(r -> r.getName().equals(request.getRoom().name())).findFirst();
 
 		if(!roomSession.isPresent())
 			return new NoResponse(request.getID());
@@ -174,7 +174,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		if(roomSession.get().isRunning())
 			return new NoResponse(request.getID());
 
-		if(roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().getId() == requestManager.getPlayer().getId()).findFirst().isPresent())
+		if(roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().id() == requestManager.getPlayer().id()).findFirst().isPresent())
 			return new NoResponse(request.getID());
 
 		if(roomSession.get().getPassword() != null && !roomSession.get().getPassword().isEmpty() && !roomSession.get().getPassword().equals(request.getPassword()))
@@ -207,7 +207,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 
 		if(!request.getState()){
 			//if(requestManager.getPlayerSession().get().getRoomSession().isRunning())
-				//requestManager.getPlayerSession().get().getRoomSession().getArena().destroy(requestManager.getPlayerSession().get().getBomberman());
+				//requestManager.getPlayerSession().get().getRoomSession().arena().destroy(requestManager.getPlayerSession().get().getBomberman());
 
 			requestManager.closePlayerSession();
 
@@ -327,7 +327,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 	private void updateElement(Element element){
 		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return;
-		if(requestManager.getPlayerSession().get().getRoomSession().getArena().getElements().contains(element)){
+		if(requestManager.getPlayerSession().get().getRoomSession().getArena().elements().contains(element)){
 			requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getAddUuid() != null).forEach(player -> {
 				player.getRequestManager().send(new AddElementResponse(player.getAddUuid(), element));
 			});

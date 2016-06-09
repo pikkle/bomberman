@@ -14,12 +14,11 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 public abstract class Bomb extends Element {
-	protected int countdown;
+	private int countdown;
 	protected int blastRange;
 
 	public Bomb(Point position, int countdown, int blastRange, Arena arena) {
@@ -28,17 +27,24 @@ public abstract class Bomb extends Element {
 		this.blastRange = blastRange;
 	}
 
-	public int getCountdown() {
+	/**
+	 * Gets the countdown for the bomb
+	 *
+	 * @return the countdown
+	 */
+	public int countdown() {
 		return countdown;
 	}
 
+	/**
+	 * Decease by one the countdown
+	 */
 	public void decreaseCountdown() {
 		countdown--;
 	}
 
-
 	/**
-	 * To call when the bomb explodes, will display the explosion
+	 * Displays the explosion of the bomb
 	 */
 	public void showExplosion() {
 		Function<Direction, Supplier<Point>> fakePositionSupplierFactory = d -> () -> {
@@ -61,57 +67,62 @@ public abstract class Bomb extends Element {
 			return new Point(this.x() + x * (blastRange + 1), this.y() + y * (blastRange + 1));
 		};
 
-		List<Explosion> explosions = arena.elementsInRange(this, blastRange)
-		                                  .map(p -> Pair.of(p.first()
-		                                                     .stream()
-		                                                     .filter(Element::isBlastAbsorber)
-		                                                     .findFirst()
-		                                                     .map(Element::position)
-		                                                     .orElseGet(fakePositionSupplierFactory.apply(p.second())),
-		                                                    p.second()))
-		                                  .flatMap(p -> {
-			                                  Point target = p.first();
-			                                  BiFunction<Point, Arena, Explosion> endExplosionFactory;
-			                                  BiFunction<Point, Arena, Explosion> explosionFactory;
-			                                  switch (p.second()) {
-				                                  case RIGHT:
-					                                  explosionFactory = HorizontalExplosion::new;
-					                                  endExplosionFactory = RightExplosion::new;
-					                                  break;
-				                                  case LEFT:
-					                                  explosionFactory = HorizontalExplosion::new;
-					                                  endExplosionFactory = LeftExplosion::new;
-					                                  break;
-				                                  case UP:
-					                                  explosionFactory = VerticalExplosion::new;
-					                                  endExplosionFactory = TopExplosion::new;
-					                                  break;
-				                                  case DOWN:
-					                                  explosionFactory = VerticalExplosion::new;
-					                                  endExplosionFactory = BottomExplosion::new;
-					                                  break;
-				                                  default:
-					                                  throw new IllegalArgumentException();
-			                                  }
+		deleteAfter(new CentralExplosion(position, arena));
 
-			                                  int dx = target.x() - x();
-			                                  int dy = target.y() - y();
-			                                  int d = Math.abs(dx + dy);
+		arena.elementsInRange(this, blastRange)
+		     .map(p -> Pair.of(p.first()
+		                        .stream()
+		                        .filter(Element::isBlastAbsorber)
+		                        .findFirst()
+		                        .map(Element::position)
+		                        .orElseGet(fakePositionSupplierFactory.apply(p.second())),
+		                       p.second()))
+		     .flatMap(p -> {
+			     Point target = p.first();
+			     BiFunction<Point, Arena, Explosion> endExplosionFactory;
+			     BiFunction<Point, Arena, Explosion> explosionFactory;
+			     switch (p.second()) {
+				     case RIGHT:
+					     explosionFactory = HorizontalExplosion::new;
+					     endExplosionFactory = RightExplosion::new;
+					     break;
+				     case LEFT:
+					     explosionFactory = HorizontalExplosion::new;
+					     endExplosionFactory = LeftExplosion::new;
+					     break;
+				     case UP:
+					     explosionFactory = VerticalExplosion::new;
+					     endExplosionFactory = TopExplosion::new;
+					     break;
+				     case DOWN:
+					     explosionFactory = VerticalExplosion::new;
+					     endExplosionFactory = BottomExplosion::new;
+					     break;
+				     default:
+					     throw new IllegalArgumentException();
+			     }
 
-			                                  return Stream.iterate(1, i -> i + 1)
-			                                               .limit(d - 1)
-			                                               .map(i -> Pair.of(i, new Point(x() + i * dx / d,
-			                                                                              y() + i * dy / d)))
-			                                               .map(pair -> (pair.first() == d - 1 ? endExplosionFactory :
-					                                               explosionFactory).apply(pair.second(), arena));
-		                                  })
-		                                  .collect(Collectors.toList());
+			     int dx = target.x() - x();
+			     int dy = target.y() - y();
+			     int d = Math.abs(dx + dy);
 
-		// explosion images disapear after a timeout
-		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), ae -> explosions.forEach(Element::delete)));
-		timeline.play();
+			     return Stream.iterate(1, i -> i + 1)
+			                  .limit(d - 1)
+			                  .map(i -> Pair.of(i, new Point(x() + i * dx / d,
+			                                                 y() + i * dy / d)))
+			                  .map(pair -> (pair.first() == d - 1 ? endExplosionFactory :
+					                  explosionFactory).apply(pair.second(), arena));
+		     })
+		     .forEach(this::deleteAfter);
+	}
 
-		getElementsInRange().forEach(Element::delete);
+	/**
+	 * Delete the element after a short time
+	 *
+	 * @param e the element to destroy
+	 */
+	private void deleteAfter(Element e) {
+		new Timeline(new KeyFrame(Duration.millis(100), ae -> e.delete())).play();
 	}
 
 	/**
@@ -119,26 +130,38 @@ public abstract class Bomb extends Element {
 	 */
 	public abstract List<Element> getElementsInRange();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isDestructible() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isBlastAbsorber() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isTraversable() {
 		return false;
 	}
 
+	/**
+	 * Show the explosion
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete() {
 		super.delete();
 		showExplosion();
-		setChanged();
-		notifyObservers();
+		getElementsInRange().forEach(Element::delete);
 	}
 }

@@ -14,7 +14,8 @@ public abstract class PowerUp extends Element {
 		super(position, arena);
 	}
 
-	protected PowerUp() {}
+	protected PowerUp() {
+	}
 
 	/**
 	 * Apply the power-up on a bomberman.

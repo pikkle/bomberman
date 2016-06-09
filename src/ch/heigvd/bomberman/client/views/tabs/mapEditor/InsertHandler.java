@@ -93,7 +93,7 @@ public class InsertHandler extends Observable {
 		dst.setOnDragOver(t -> {
 			try {
 				if (!(clazz.newInstance() instanceof PowerUp) || renderer.getArena()
-				                                                         .getElements(
+				                                                         .elements(
 						                                                         renderer.getCell(t.getX(), t.getY())).stream()
 				                                                         .filter(element -> element instanceof Box)
 				                                                         .findFirst()

@@ -85,7 +85,7 @@ public class MapEditorController implements Observer {
 			if (oldArena != null) {
 				for (int x = 1; x < oldArena.width() - 1 && x < arena.width() - 1; x++) {
 					for (int y = 1; y < oldArena.height() - 1 && y < arena.height() - 1; y++) {
-						oldArena.getElements(new Point(x, y)).forEach(element -> {
+						oldArena.elements(new Point(x, y)).forEach(element -> {
 							if (arena.isEmpty(element.position())) {
 								element.setArena(arena);
 								registerDeleteDragEvents(element);
