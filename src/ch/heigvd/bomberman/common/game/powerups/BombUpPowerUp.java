@@ -11,18 +11,13 @@ import javax.persistence.Entity;
  */
 
 @Entity
-public class AddBombPowerUp extends PowerUp {
+public class BombUpPowerUp extends PowerUp {
 
-	public AddBombPowerUp(Point position, Arena arena) {
+	public BombUpPowerUp(Point position, Arena arena) {
 		super(position, arena);
 	}
 
-	protected AddBombPowerUp() {
-	}
-
-	@Override
-	public String getPath() {
-		return "ch/heigvd/bomberman/client/img/powerups/addBomb.png";
+	protected BombUpPowerUp() {
 	}
 
 	/**
@@ -31,5 +26,13 @@ public class AddBombPowerUp extends PowerUp {
 	@Override
 	public void apply(Bomberman bomberman) {
 		bomberman.bombFactory().addBomb(1);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getPath() {
+		return "ch/heigvd/bomberman/client/img/powerups/BombUp.png";
 	}
 }

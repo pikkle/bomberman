@@ -6,7 +6,7 @@ import ch.heigvd.bomberman.client.views.render.ImageViewPane;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.*;
-import ch.heigvd.bomberman.common.game.powerups.AddBombPowerUp;
+import ch.heigvd.bomberman.common.game.powerups.BombUpPowerUp;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
@@ -65,7 +65,7 @@ public class MapEditorController implements Observer {
 		elements.put(wall, Wall.class);
 		elements.put(box, Box.class);
 		elements.put(startPoint, StartPoint.class);
-		elements.put(addBombPowerUp, AddBombPowerUp.class);
+		elements.put(addBombPowerUp, BombUpPowerUp.class);
 	}
 
 	public void loadArena(Arena arena) {

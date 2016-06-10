@@ -10,24 +10,11 @@ import java.util.Optional;
  */
 public class BasicBombFactory extends BombFactory {
 	public BasicBombFactory(Arena arena) {
-		super(3, 10, arena, 1);
+		super(3, 1, arena, 1);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Optional<BasicBomb> create(Point position) {
-		if (nbBomb <= 0)
-			return Optional.empty();
-
-		try {
-			BasicBomb b = new BasicBomb(position, countdown, blastRange, arena);
-			b.addObserver(this);
-			nbBomb--;
-			return Optional.of(b);
-		} catch (RuntimeException e) {
-			return Optional.empty();
-		}
+	protected BasicBomb generate(Point position) {
+		return new BasicBomb(position, countdown, blastRange, arena);
 	}
 }
