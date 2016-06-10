@@ -21,7 +21,7 @@ public class Player implements Serializable {
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 
 	private Bomberman bomberman;
 
@@ -47,7 +47,7 @@ public class Player implements Serializable {
 		this.password = password;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -69,6 +69,12 @@ public class Player implements Serializable {
 
 	public boolean isAdmin(){
 		return isAdmin != null && isAdmin;
+	}
+
+	public  void addStatistic(Statistic statistic){
+		if(!statistics.contains(statistic)){
+			statistics.add(statistic);
+		}
 	}
 
 	public List<Statistic> getStatistics(){

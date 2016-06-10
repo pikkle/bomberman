@@ -46,9 +46,9 @@
       </Pane>
       <AnchorPane prefHeight="241.0" prefWidth="600.0" style="-fx-background-color: #000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
-            <TableView fx:id="table" editable="true" mouseTransparent="true" prefHeight="308.0" prefWidth="659.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TableView fx:id="table" editable="true" prefHeight="308.0" prefWidth="659.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <columns>
-                  <TableColumn prefWidth="40.0" text="#" />
+                  <TableColumn fx:id="game" prefWidth="40.0" text="#" />
                   <TableColumn fx:id="survivalTime" prefWidth="110.0" text="temps" />
                   <TableColumn prefWidth="75.0" text="kills">
                      <cellValueFactory><PropertyValueFactory property="kills" /></cellValueFactory>

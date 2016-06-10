@@ -42,6 +42,10 @@ public class Statistic implements Serializable {
         game.addStatistic(this);
     }
 
+    public Game getGame(){
+        return game;
+    }
+
     public void setSurvivalTime(Duration survivalTime){
         this.survivalTime = survivalTime;
     }

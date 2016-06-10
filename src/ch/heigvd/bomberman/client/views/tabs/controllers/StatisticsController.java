@@ -37,17 +37,17 @@ public class StatisticsController {
     private TableView<Statistic> table;
 
     @FXML
-    private TableColumn<Statistic, Integer> deaths;
-
-    @FXML
-    private TableColumn<Statistic, Long> survivalTime;
+    private TableColumn<Statistic, Long> survivalTime, deaths, game;
 
 
     @FXML
     public void initalize(){
         table.setItems(statistics);
+        game.setCellValueFactory(param -> {
+            return new SimpleObjectProperty<Long>(param.getValue().getGame().getId());
+        });
         deaths.setCellValueFactory(param -> {
-            return new SimpleObjectProperty<Integer>(param.getValue().getRank() != 1 ? 1 : 0);
+            return new SimpleObjectProperty<Long>(param.getValue().getRank() != 1 ? 1l : 0);
         });
         survivalTime.setCellValueFactory(param -> {
             return new SimpleObjectProperty<Long>(param.getValue().getSurvivalTime().getSeconds());

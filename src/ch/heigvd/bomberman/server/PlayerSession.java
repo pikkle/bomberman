@@ -40,6 +40,7 @@ public class PlayerSession {
 		if(roomSession.getPlayers().contains(this)) {
 			if (roomSession.isRunning()) {
 				statistic.setSurvivalTime(Duration.between(roomSession.getStart(), Instant.now()));
+				player.addStatistic(statistic);
 				try {
 					Server.getInstance().getDatabase().games().createOrUpdate(roomSession.getGame());
 				} catch (SQLException e) {
