@@ -2,12 +2,14 @@ package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Game;
 import ch.heigvd.bomberman.common.game.Skin;
 import ch.heigvd.bomberman.common.game.StartPoint;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class RoomSession {
@@ -17,6 +19,8 @@ public class RoomSession {
 	private int minPlayer;
 	private ObservableList<PlayerSession> players = FXCollections.observableArrayList();
 	private boolean running = false;
+	private Game game = new Game();
+	private Instant start;
 
 	/**
 	 * Creates a room
@@ -31,8 +35,16 @@ public class RoomSession {
 		this.minPlayer = minPlayer;
 	}
 
-	public synchronized void close() {
-		while (!players.isEmpty()) {
+	public Instant getStart(){
+		return start;
+	}
+
+	public Game getGame(){
+		return game;
+	}
+
+	public synchronized void close(){
+		while(!players.isEmpty()){
 			players.stream().findFirst().get().close();
 		}
 		running = false;
@@ -73,18 +85,23 @@ public class RoomSession {
 	}
 
 	public synchronized void start() {
+		game.getStatistics().clear();
 		for (PlayerSession player : players) {
 			Optional<StartPoint> start = arena.elements(StartPoint.class).stream().findFirst();
 			if (start.isPresent()) {
 				arena.remove(start.get());
 				player.setBomberman(
-						new Bomberman(start.get().position(), Skin.values()[players.indexOf(player)], arena));
-			} else {
+						new Bomberman(start.get().position(), Skin.values()[players.indexOf(player)], arena)
+				);
+				game.addStatistic(player.getStatistic());
+			}
+			else{
 				return;
 			}
 		}
 		arena.elements(StartPoint.class).forEach(startPoint -> arena.remove(startPoint));
 		running = true;
+		start = Instant.now();
 
 		new Thread(() -> {
 			while (running) {

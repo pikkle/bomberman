@@ -140,8 +140,10 @@ public class Arena extends Observable implements Serializable {
 	 * @param e The element to add
 	 */
 	public void add(Element e) {
-		elements.add(e);
-		notify(e);
+		if(!elements.contains(e)) {
+			elements.add(e);
+			notify(e);
+		}
 	}
 
 	/**

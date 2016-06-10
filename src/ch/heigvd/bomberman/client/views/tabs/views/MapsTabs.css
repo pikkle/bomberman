@@ -19,9 +19,9 @@
 
 .map {
     -fx-padding: 10;
+    -fx-background-color: #6e6e6e;
     -fx-border-color: #141510;
     -fx-border-width: 2;
-    -fx-background-color: #6e6e6e;
     -fx-background-radius: 5px;
     -fx-border-radius: 5px;
     -fx-cursor: hand;

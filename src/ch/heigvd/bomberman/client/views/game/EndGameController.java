@@ -20,8 +20,8 @@ public class EndGameController {
     @FXML
     private AnchorPane mainPane;
 
-    public void setClient(Client client){
-        this.client = client;
+    public EndGameController(){
+        client = Client.getInstance();
     }
 
     public void setStatistic(Statistic statistic){

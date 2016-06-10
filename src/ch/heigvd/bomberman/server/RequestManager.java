@@ -1,17 +1,23 @@
 package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.communication.requests.Request;
+import ch.heigvd.bomberman.common.communication.responses.AddElementResponse;
+import ch.heigvd.bomberman.common.communication.responses.DestroyElementsResponse;
 import ch.heigvd.bomberman.common.communication.responses.Response;
+import ch.heigvd.bomberman.common.game.Bomberman;
+import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Player;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Optional;
 import java.util.UUID;
 
-public class RequestManager extends Thread {
+public class RequestManager extends Thread implements Observer {
     private Socket socket;
     private ObjectOutputStream writer;
     private ObjectInputStream reader;
@@ -45,7 +51,6 @@ public class RequestManager extends Thread {
                     writer.writeObject(response);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
                 try {
                     disconnect();
                 } catch (IOException e1) {
@@ -131,5 +136,40 @@ public class RequestManager extends Thread {
 
     public UUID getRoomsCallback(){
         return roomsCallback;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Element element = (Element)arg;
+        updateElement(element);
+    }
+
+    private void updateElement(Element element){
+        if(!getPlayerSession().isPresent() || playerSession.getRoomSession() == null)
+            return;
+        getPlayerSession().ifPresent(p -> {
+            if(p.getRoomSession().getArena().elements().contains(element)){
+                if(p.getAddUuid() != null)
+                    send(new AddElementResponse(p.getAddUuid(), element));
+            }
+            else {
+                if(element instanceof Bomberman) {
+                    if(p.getBomberman().equals(element))
+                        p.close();
+                }
+                if(p.getDestroyUuid() != null)
+                    send(new DestroyElementsResponse(p.getDestroyUuid(), element));
+            }
+        });
+        checkIfEnded();
+    }
+
+    private void checkIfEnded() {
+        if(!getPlayerSession().isPresent() || playerSession.getRoomSession() == null)
+            return;
+        if(getPlayerSession().get().getRoomSession().getPlayers().stream().filter(playerSession -> playerSession.getStatistic().getSurvivalTime() == null).count() <= 1){
+
+            getPlayerSession().get().getRoomSession().close();
+        }
     }
 }

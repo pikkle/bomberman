@@ -1,7 +1,11 @@
 package ch.heigvd.bomberman.common.game;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Projet : GEN_Projet
@@ -17,7 +21,7 @@ public class Player implements Serializable {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 
 	private Bomberman bomberman;
 
@@ -27,9 +31,12 @@ public class Player implements Serializable {
 	@Column(name = "password", nullable = true)
 	private String password;
 
-	@Column(name = "isAdmin", nullable = false)
+	@Column(name="isAdmin", nullable = false)
 	private Boolean isAdmin = false;
 
+	@OneToMany(targetEntity = Statistic.class, fetch = FetchType.EAGER, mappedBy="player")
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
+	private List<Statistic> statistics = new LinkedList<>();
 	/**
 	 * Constructor for Hibernate
 	 */
@@ -47,7 +54,7 @@ public class Player implements Serializable {
 	 *
 	 * @return the ID of the player
 	 */
-	public int id() {
+	public Long id() {
 		return id;
 	}
 
@@ -92,7 +99,17 @@ public class Player implements Serializable {
 	 *
 	 * @return true if it's an admin
 	 */
-	public boolean isAdmin() {
+	public boolean isAdmin(){
 		return isAdmin != null && isAdmin;
+	}
+
+	public  void addStatistic(Statistic statistic){
+		if(!statistics.contains(statistic)){
+			statistics.add(statistic);
+		}
+	}
+
+	public List<Statistic> getStatistics(){
+		return statistics;
 	}
 }

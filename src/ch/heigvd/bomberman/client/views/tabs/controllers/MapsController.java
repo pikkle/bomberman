@@ -22,10 +22,18 @@ import java.io.IOException;
  */
 public class MapsController {
 
-	@FXML FlowPane mapsContainer;
 	private ResponseManager rm;
 	private Client client;
-	@FXML private AnchorPane mainPane;
+
+	@FXML
+	private AnchorPane mainPane;
+
+	@FXML
+	FlowPane mapsContainer;
+
+	public MapsController(){
+		client = Client.getInstance();
+	}
 
 	@FXML
 	public void initalize() {

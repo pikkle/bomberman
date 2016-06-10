@@ -40,6 +40,10 @@ public class DBManager {
         return new ArenaDao();
     }
 
+    public GameDao games() throws SQLException {
+        return new GameDao();
+    }
+
     /**
      * Constructs a new Singleton SessionFactory
      * @return
