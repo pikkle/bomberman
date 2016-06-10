@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 
-
-<AnchorPane prefHeight="491.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="491.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.tabs.controllers.StatisticsController">
    <children>
       <Pane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -38,28 +31,32 @@
                   <Label text="Total" GridPane.columnIndex="2" />
                   <Label text="Bombs" GridPane.rowIndex="4" />
                   <Label text="Total games" GridPane.columnIndex="3" />
-                  <TextField accessibleRole="TEXT" alignment="CENTER_RIGHT" cacheShape="false" centerShape="false" editable="false" focusTraversable="false" mouseTransparent="true" pickOnBounds="false" scaleShape="false" text="asdasd" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <TextField alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <TextField alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <TextField alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                  <TextField alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="4" />
+                  <TextField fx:id="aSurvivalTime" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="tSurvivalTime" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="aKills" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="tKills" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <TextField fx:id="aDeaths" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="tDeaths" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <TextField fx:id="aBombs"  alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="tBombs" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <TextField fx:id="total" alignment="CENTER_RIGHT" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="4" />
                </children>
             </GridPane>
          </children>
       </Pane>
       <AnchorPane prefHeight="241.0" prefWidth="600.0" style="-fx-background-color: #000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
-            <TableView editable="true" mouseTransparent="true" prefHeight="308.0" prefWidth="659.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TableView fx:id="table" editable="true" prefHeight="308.0" prefWidth="659.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <columns>
-                  <TableColumn prefWidth="40.0" text="#" />
-                  <TableColumn prefWidth="110.0" text="temps" />
-                  <TableColumn prefWidth="75.0" text="kills" />
-                  <TableColumn prefWidth="75.0" text="morts" />
-                  <TableColumn prefWidth="75.0" text="bombes" />
+                  <TableColumn fx:id="game" prefWidth="40.0" text="#" />
+                  <TableColumn fx:id="survivalTime" prefWidth="110.0" text="temps" />
+                  <TableColumn prefWidth="75.0" text="kills">
+                     <cellValueFactory><PropertyValueFactory property="kills" /></cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="deaths" prefWidth="75.0" text="morts" />
+                  <TableColumn prefWidth="75.0" text="bombes">
+                     <cellValueFactory><PropertyValueFactory property="bombs" /></cellValueFactory>
+                  </TableColumn>
                </columns>
             </TableView>
          </children>

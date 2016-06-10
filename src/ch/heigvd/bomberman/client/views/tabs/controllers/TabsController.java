@@ -1,7 +1,6 @@
 package ch.heigvd.bomberman.client.views.tabs.controllers;
 
 import ch.heigvd.bomberman.client.Client;
-import ch.heigvd.bomberman.client.views.room.RoomsController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -20,10 +19,16 @@ public class TabsController
     private Tab mapsTab;
 
     @FXML
+    private Tab statisticsTab;
+
+    @FXML
     private RoomsController roomsController ;
 
     @FXML
     private MapsController mapsController ;
+
+    @FXML
+    private StatisticsController statisticsController ;
 
     @FXML
     private TabPane tabs;
@@ -35,11 +40,9 @@ public class TabsController
                     if (newTab == mapsTab) {
                         mapsController.initalize();
                     }
+                    else if(newTab == statisticsTab){
+                        statisticsController.initalize();
+                    }
                 });
-    }
-
-    public void setClient(Client client){
-        this.client = client;
-        roomsController.setClient(client);
     }
 }

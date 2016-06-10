@@ -2,16 +2,16 @@ package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
-import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Player;
+import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.server.database.DBManager;
 
 import java.sql.SQLException;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class RequestProcessor implements RequestVisitor, Observer{
+public class RequestProcessor implements RequestVisitor{
 	private RequestManager requestManager;
 	private static Server server = Server.getInstance();
 	private static DBManager db;
@@ -95,7 +95,6 @@ public class RequestProcessor implements RequestVisitor, Observer{
 
 	@Override
 	public Response visit(SaveArenaRequest request) {
-		System.out.println(request.getArena());
 		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
 			return new ErrorResponse(request.getID(), "Permission denied");
 
@@ -166,7 +165,10 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		if (request.getRoom() == null)
 			return new NoResponse(request.getID());
 
-		Optional<RoomSession> roomSession = server.getRoomSessions().stream().filter(r -> r.getName().equals(request.getRoom().name())).findFirst();
+		Optional<RoomSession> roomSession = server.getRoomSessions()
+		                                          .stream()
+		                                          .filter(r -> r.getName().equals(request.getRoom().getName()))
+		                                          .findFirst();
 
 		if(!roomSession.isPresent())
 			return new NoResponse(request.getID());
@@ -188,7 +190,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 
 		if(roomSession.get().getPlayers().size() >= roomSession.get().getMinPlayer()){
 			roomSession.get().getPlayers().stream().filter(player -> player.getReadyUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && ! roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().size(), roomSession.get().getArena(), roomSession.get().getPlayers().contains(player))));
+				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && ! roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().stream().map(p -> p.getPlayer().getPseudo()).collect(Collectors.toList()), roomSession.get().getArena(), roomSession.get().getPlayers().contains(player))));
 				player.setReadyUuid(null);
 			});
 		}
@@ -220,9 +222,8 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getPlayerSession().get().getRoomSession().getArena().addObserver(this);
-
 		requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getStartUuid() != null).forEach(player -> {
+			player.getRoomSession().getArena().addObserver(player.getRequestManager());
 			player.getRequestManager().send(new ReadyResponse(player.getStartUuid(), player.getBomberman()));
 			player.setStartUuid(null);
 		});
@@ -297,7 +298,7 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getPlayerSession().get().getBomberman().dropBomb();
+		requestManager.getPlayerSession().get().getBomberman().dropBomb().ifPresent(c -> requestManager.getPlayerSession().get().getStatistic().dropBomb());
 
 		return new NoResponse(request.getID());
 	}
@@ -316,39 +317,5 @@ public class RequestProcessor implements RequestVisitor, Observer{
 		requestManager.getPlayerSession().get().setEndUuid(request.getID());
 
 		return new NoResponse(request.getID());
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		Element element = (Element)arg;
-		updateElement(element);
-	}
-
-	private void updateElement(Element element){
-		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
-			return;
-		if(requestManager.getPlayerSession().get().getRoomSession().getArena().elements().contains(element)){
-			requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getAddUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new AddElementResponse(player.getAddUuid(), element));
-			});
-		}
-		else {
-			if(element instanceof Bomberman) {
-				requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(playerSession -> playerSession.getBomberman().equals(element)).findFirst().ifPresent(playerSession -> playerSession.close());
-			}
-			requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getDestroyUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new DestroyElementsResponse(player.getDestroyUuid(), element));
-			});
-		}
-		checkIfEnded();
-	}
-
-	private void checkIfEnded() {
-		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
-			return;
-		if(requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(playerSession -> !playerSession.getRank().isPresent()).count() <= 1){
-
-			requestManager.getPlayerSession().get().getRoomSession().close();
-		}
 	}
 }

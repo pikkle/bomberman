@@ -45,7 +45,6 @@
                     <buttons>
                         <Button fx:id="login" mnemonicParsing="false" onAction="#login" text="Login" />
                         <Button mnemonicParsing="false" onAction="#closeApp" text="Exit" />
-                        <Button mnemonicParsing="false" onAction="#bypass" text="ByPass" />
                     </buttons>
                 </ButtonBar>
                 <HBox alignment="CENTER" prefHeight="34.0" prefWidth="335.0">

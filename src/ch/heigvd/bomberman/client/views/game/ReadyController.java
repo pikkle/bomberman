@@ -4,10 +4,14 @@ import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -27,20 +31,20 @@ public class ReadyController implements Observer {
     @FXML
     private AnchorPane mainPane;
 
+    public ReadyController(){
+        client = Client.getInstance();
+    }
+
     @FXML
     private void initialize()
     {
         rm = ResponseManager.getInstance();
     }
 
-    public void setClient(Client client){
-        this.client = client;
-    }
-
     public void loadRoom(Room room){
         this.room = room;
-        lblRoom.setText("Room \"" + room.name() + "\"");
-        number.setText(room.playerNumber() + " player" + (room.playerNumber() > 1 ? "s" : ""));
+        lblRoom.setText("Room \"" + room.getName() + "\"");
+        number.setText(room.getPlayerNumber() + " player" + (room.getPlayerNumber() > 1 ? "s" : ""));
     }
 
     @FXML
@@ -54,8 +58,33 @@ public class ReadyController implements Observer {
     private void ready(){
         rm.readyRequest(true, bomberman -> {
             if(bomberman != null){
-                GameController controller = new GameController(bomberman, client);
-                ((Stage)mainPane.getScene().getWindow()).close();
+                Stage stage = new Stage();
+                AnchorPane pane;
+                GameController controller;
+                FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/GameView.fxml"));
+
+                stage.setTitle("Bomberman");
+
+                stage.setOnCloseRequest(event -> {
+                    rm.readyRequest(false, null);
+                    event.consume();
+                });
+
+                try {
+                    pane = loader.load();
+
+                    controller = loader.getController();
+                    controller.loadGame(bomberman, room);
+
+                    stage.initModality(Modality.APPLICATION_MODAL);
+
+                    stage.setScene(new Scene(pane));
+
+                    ((Stage)mainPane.getScene().getWindow()).close();
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -66,8 +95,8 @@ public class ReadyController implements Observer {
         if(rooms.contains(room)) {
             loadRoom(room);
         }
-        else if(rooms.stream().filter(r -> r.name().equals(room.name())).findFirst().isPresent()){
-            loadRoom(rooms.stream().filter(r -> r.name().equals(room.name())).findFirst().get());
+        else if(rooms.stream().filter(r -> r.getName().equals(room.getName())).findFirst().isPresent()){
+            loadRoom(rooms.stream().filter(r -> r.getName().equals(room.getName())).findFirst().get());
         }
     }
 }

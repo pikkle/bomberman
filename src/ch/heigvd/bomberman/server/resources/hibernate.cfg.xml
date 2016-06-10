@@ -19,6 +19,8 @@
         <mapping class="ch.heigvd.bomberman.common.game.Player"/>
         <mapping class="ch.heigvd.bomberman.common.game.StartPoint"/>
         <mapping class="ch.heigvd.bomberman.common.game.Arena.Arena"/>
+        <mapping class="ch.heigvd.bomberman.common.game.Game"/>
+        <mapping class="ch.heigvd.bomberman.common.game.Statistic"/>
 
     </session-factory>
 

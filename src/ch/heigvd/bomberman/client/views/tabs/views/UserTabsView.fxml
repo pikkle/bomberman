@@ -6,7 +6,7 @@
 <TabPane fx:id="tabs" prefHeight="317.0" prefWidth="368.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.tabs.controllers.TabsController">
    <tabs>
       <Tab fx:id="roomsTab" text="Salles"><fx:include source="RoomsTab.fxml" fx:id="rooms" /></Tab>
-      <Tab text="Statistiques"><fx:include source="StatsTab.fxml" /></Tab>
+      <Tab fx:id="statisticsTab" text="Statistiques"><fx:include source="StatsTab.fxml" fx:id="statistics" /></Tab>
       <Tab text="Profil"><fx:include source="ProfileTab.fxml" /></Tab>
    </tabs>
 </TabPane>

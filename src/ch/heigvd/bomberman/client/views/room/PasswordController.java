@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.client.views.room;
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.game.ReadyController;
+import ch.heigvd.bomberman.client.views.tabs.controllers.RoomsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,31 +24,32 @@ public class PasswordController {
 	private Client client;
 	private RoomsController roomsController;
 
-	@FXML private AnchorPane mainPane;
+	@FXML
+	private AnchorPane mainPane;
 
-	@FXML private PasswordField pwd;
+	@FXML
+	private PasswordField pwd;
 
+	public PasswordController(){
+		client = Client.getInstance();
+	}
 
 	@FXML
 	private void initialize() throws IOException {
 		rm = ResponseManager.getInstance();
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	public void setRoomsController(RoomsController roomsController) {
+	public void setRoomsController(RoomsController roomsController){
 		this.roomsController = roomsController;
 	}
 
 	@FXML
-	private void close() {
-		((Stage) mainPane.getScene().getWindow()).close();
+	private void close(){
+		( (Stage)mainPane.getScene().getWindow() ).close();
 	}
 
 	@FXML
-	public void join() {
+	public void join(){
 		rm.joinRoomRequest(roomsController.getRoom(), pwd.getText(), r -> {
 			Stage stage = new Stage();
 			stage.setTitle("Bomberman");
@@ -60,10 +62,10 @@ public class PasswordController {
 			stage.initModality(Modality.APPLICATION_MODAL);
 
 			FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/ready.fxml"));
-			try {
+			try
+			{
 				Pane pane = loader.load();
 				ReadyController controller = loader.getController();
-				controller.setClient(client);
 				controller.loadRoom(r);
 				roomsController.addObserver(controller);
 				stage.setScene(new Scene(pane));
@@ -71,7 +73,8 @@ public class PasswordController {
 				client.getPrimatyStage().hide();
 				stage.showAndWait();
 
-			} catch (IOException e) {
+			} catch (IOException e)
+			{
 				e.printStackTrace();
 			}
 		});

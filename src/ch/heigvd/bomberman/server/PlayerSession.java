@@ -5,7 +5,9 @@ import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Player;
 import ch.heigvd.bomberman.common.game.Statistic;
 
-import java.util.Optional;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 public class PlayerSession {
@@ -14,26 +16,37 @@ public class PlayerSession {
 	private Player player;
 	private boolean ready = false;
 	private Bomberman bomberman;
-	private Long rank;
 	private UUID readyUuid;
 	private UUID startUuid;
 	private UUID moveUuid;
 	private UUID addUuid;
 	private UUID destroyUuid;
 	private UUID endUuid;
+	private Statistic statistic;
 
 	public PlayerSession(Player player, RoomSession roomSession, UUID readyUuid, RequestManager requestManager) throws Exception {
 		this.player = player;
 		this.roomSession = roomSession;
 		this.readyUuid = readyUuid;
 		this.requestManager = requestManager;
+		statistic = new Statistic(player, roomSession.getGame());
+	}
+
+	public Statistic getStatistic(){
+		return statistic;
 	}
 
 	public synchronized void close(){
 		if(roomSession.getPlayers().contains(this)) {
 			if (roomSession.isRunning()) {
-				rank = roomSession.getPlayers().stream().filter(p -> !p.getRank().isPresent()).count();
-				requestManager.send(new EndGameResponse(endUuid, new Statistic(rank)));
+				statistic.setSurvivalTime(Duration.between(roomSession.getStart(), Instant.now()));
+				player.addStatistic(statistic);
+				try {
+					Server.getInstance().getDatabase().games().createOrUpdate(roomSession.getGame());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				requestManager.send(new EndGameResponse(endUuid, statistic));
 
 			}
 			roomSession.removePlayer(this);
@@ -121,13 +134,5 @@ public class PlayerSession {
 	public void ready(boolean state) {
 		ready = state;
 		roomSession.update();
-	}
-
-	public Optional<Long> getRank(){
-		return Optional.ofNullable(rank);
-	}
-
-	public void setRank(long rank){
-		this.rank = rank;
 	}
 }
