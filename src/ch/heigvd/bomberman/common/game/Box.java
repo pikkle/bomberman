@@ -39,9 +39,8 @@ public class Box extends Element {
 	 * @return an optional of a power up
 	 */
 	public Optional<PowerUp> dropPowerUp() {
-
 		if (powerUp != null)
-			return Optional.empty();
+			return Optional.of(powerUp);
 
 		int gaps = 25;
 		int p = new Random().nextInt(gaps * 10);
