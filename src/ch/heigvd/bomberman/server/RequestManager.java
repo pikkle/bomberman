@@ -7,6 +7,7 @@ import ch.heigvd.bomberman.common.communication.responses.Response;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Player;
+import ch.heigvd.bomberman.common.game.bombs.Bomb;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -56,6 +57,7 @@ public class RequestManager extends Thread implements Observer {
                 } catch (IOException e1) {
                     if (running)
                         e.printStackTrace();
+                    e.printStackTrace();
                 }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -140,8 +142,10 @@ public class RequestManager extends Thread implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        Element element = (Element)arg;
-        updateElement(element);
+        if(arg != null && arg instanceof Element)
+            updateElement((Element)arg);
+        else if(o instanceof Bomb)
+            checkKills((Bomb)o);
     }
 
     private void updateElement(Element element){
@@ -171,5 +175,18 @@ public class RequestManager extends Thread implements Observer {
 
             getPlayerSession().get().getRoomSession().close();
         }
+    }
+
+    private void checkKills(Bomb bomb){
+        if(!getPlayerSession().isPresent() || playerSession.getRoomSession() == null)
+            return;
+        getPlayerSession().ifPresent(p -> {
+            if(!p.getRoomSession().getArena().elements().contains(bomb)){
+                bomb.getElementsInRange()
+                    .stream()
+                    .filter(element -> element instanceof Bomberman)
+                    .forEach(bomberman -> playerSession.getStatistic().kill());
+            }
+        });
     }
 }

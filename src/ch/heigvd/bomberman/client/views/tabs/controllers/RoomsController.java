@@ -5,14 +5,14 @@ import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.game.ReadyController;
 import ch.heigvd.bomberman.client.views.room.PasswordController;
 import ch.heigvd.bomberman.common.game.Room;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -32,6 +32,7 @@ public class RoomsController extends Observable
     private ObservableList<Room> rooms = FXCollections.observableArrayList();
     private Client client;
     private Room room;
+    private static RoomsController instance;
 
     @FXML
     private TableView<Room> roomsTableView;
@@ -44,6 +45,17 @@ public class RoomsController extends Observable
 
     public RoomsController(){
         client = Client.getInstance();
+        synchronized(RoomsController.class){
+            if(instance != null) throw new UnsupportedOperationException(
+                    getClass()+" is singleton but constructor called more than once");
+            instance = this;
+        }
+    }
+
+    public static RoomsController getInstance() {
+        if (instance == null)
+            instance = new RoomsController();
+        return instance;
     }
 
     @FXML
@@ -68,6 +80,26 @@ public class RoomsController extends Observable
                 return new SimpleObjectProperty<ImageView>(new ImageView(new Image(Client.class.getResourceAsStream("img/unlock.png"))));
 
         });
+
+        roomsTableView.setRowFactory( tv -> {
+            TableRow<Room> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    join(row.getItem());
+                }
+            });
+            final ContextMenu contextMenu = new ContextMenu();
+            MenuItem leave = new MenuItem("Leave");
+            leave.setOnAction(e -> rm.readyRequest(false, null));
+            contextMenu.getItems().add(leave);
+
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu)null)
+                            .otherwise(contextMenu)
+            );
+            return row ;
+        });
     }
 
     public Room getRoom(){
@@ -86,8 +118,7 @@ public class RoomsController extends Observable
         }
     }
 
-    @FXML
-    public void join(){
+    private void join(Room room){
         room = roomsTableView.getSelectionModel().getSelectedItem();
         if(room.isPrivate()){
             Stage stage = new Stage();
@@ -108,7 +139,7 @@ public class RoomsController extends Observable
             }
         }
         else {
-            rm.joinRoomRequest(room, r -> {
+            rm.joinRoomRequest(room.getName(), r -> {
                 Stage stage = new Stage();
                 stage.setTitle("Bomberman");
 

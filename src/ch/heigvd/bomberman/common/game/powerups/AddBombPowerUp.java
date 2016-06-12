@@ -17,7 +17,7 @@ public class AddBombPowerUp extends PowerUp {
 		super(position, arena);
 	}
 
-	protected AddBombPowerUp() {
+	public AddBombPowerUp() {
 	}
 
 	@Override

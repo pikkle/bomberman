@@ -103,6 +103,12 @@ public class ResponseManager extends Observable
         send(r, callback);
     }
 
+    public void modifyAccountRequest(String username, String pwd, Consumer<Message> callback)
+    {
+        AccountModifyRequest r = new AccountModifyRequest(username, pwd);
+        send(r, callback);
+    }
+
     public void playerRequest(Consumer<Player> callback)
     {
         PlayerRequest r = new PlayerRequest();
@@ -139,13 +145,13 @@ public class ResponseManager extends Observable
         send(r, callback);
     }
 
-    public void joinRoomRequest(Room room, Consumer<Room> callback)
+    public void joinRoomRequest(String room, Consumer<Room> callback)
     {
         JoinRoomRequest r = new JoinRoomRequest(room, null);
         send(r, callback);
     }
 
-    public void joinRoomRequest(Room room, String password, Consumer<Room> callback)
+    public void joinRoomRequest(String room, String password, Consumer<Room> callback)
     {
         JoinRoomRequest r = new JoinRoomRequest(room, password);
         send(r, callback);

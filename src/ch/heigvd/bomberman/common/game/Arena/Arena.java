@@ -4,7 +4,7 @@ import ch.heigvd.bomberman.common.game.*;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Function;
@@ -203,4 +203,21 @@ public class Arena extends Observable implements Serializable {
 		Iterator<Direction> it = Stream.of(UP, LEFT, DOWN, RIGHT).iterator();
 		return Stream.of(up, left, down, right).map(l -> Pair.of(l, it.next()));
 	}
+
+	public Arena clone() {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(this);
+
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			return (Arena) ois.readObject();
+		} catch (IOException e) {
+			return null;
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
+
 }

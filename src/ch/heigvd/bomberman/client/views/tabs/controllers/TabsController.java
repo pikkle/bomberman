@@ -22,13 +22,19 @@ public class TabsController
     private Tab statisticsTab;
 
     @FXML
-    private RoomsController roomsController ;
+    private Tab profileTab;
 
     @FXML
-    private MapsController mapsController ;
+    private RoomsController roomsController;
 
     @FXML
-    private StatisticsController statisticsController ;
+    private MapsController mapsController;
+
+    @FXML
+    private StatisticsController statisticsController;
+
+    @FXML
+    private ProfileController profileController ;
 
     @FXML
     private TabPane tabs;
@@ -42,6 +48,9 @@ public class TabsController
                     }
                     else if(newTab == statisticsTab){
                         statisticsController.initalize();
+                    }
+                    else if(newTab == profileTab){
+                        profileController.initialize();
                     }
                 });
     }

@@ -50,7 +50,7 @@ public class PasswordController {
 
 	@FXML
 	public void join(){
-		rm.joinRoomRequest(roomsController.getRoom(), pwd.getText(), r -> {
+		rm.joinRoomRequest(roomsController.getRoom().getName(), pwd.getText(), r -> {
 			Stage stage = new Stage();
 			stage.setTitle("Bomberman");
 

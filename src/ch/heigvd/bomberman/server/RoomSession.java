@@ -1,10 +1,7 @@
 package ch.heigvd.bomberman.server;
 
+import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Game;
-import ch.heigvd.bomberman.common.game.Skin;
-import ch.heigvd.bomberman.common.game.StartPoint;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +18,7 @@ public class RoomSession {
 	private boolean running = false;
 	private Game game = new Game();
 	private Instant start;
+	private Player owner;
 
 	/**
 	 * Creates a room
@@ -28,11 +26,16 @@ public class RoomSession {
 	 * @param name
 	 * @param password
 	 */
-	public RoomSession(String name, String password, int minPlayer, Arena arena) {
+	public RoomSession(String name, String password, int minPlayer, Arena arena, Player owner) {
 		this.name = name;
 		this.password = password;
 		this.arena = arena;
 		this.minPlayer = minPlayer;
+		this.owner = owner;
+	}
+
+	public Player getOwner(){
+		return owner;
 	}
 
 	public Instant getStart(){
