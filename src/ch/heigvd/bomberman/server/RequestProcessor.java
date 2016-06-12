@@ -5,6 +5,8 @@ import ch.heigvd.bomberman.common.communication.responses.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Player;
 import ch.heigvd.bomberman.common.game.Room;
+import ch.heigvd.bomberman.common.game.StartPoint;
+import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.server.database.DBManager;
 
 import java.sql.SQLException;
@@ -55,6 +57,40 @@ public class RequestProcessor implements RequestVisitor{
 	}
 
 	@Override
+	public Response visit(AccountModifyRequest request) {
+		if (!requestManager.isLoggedIn())
+			return new ErrorResponse(request.getID(), "You are not logged in");
+		if((request.getUsername() == null || request.getUsername().isEmpty()) && (request.getPassword() == null ||
+				request.getPassword().isEmpty()))
+			return new ErrorResponse(request.getID(), "Wrong values");
+
+		if(request.getUsername() != null && !request.getUsername().isEmpty()){
+			Optional<Player> player;
+			try {
+				player = db.players()
+				           .findOneByPseudo(request.getUsername())
+				           .filter(p -> !p.id().equals(requestManager.getPlayer().id()));
+			} catch (SQLException e) {
+				return new ErrorResponse(request.getID(), "Internal error");
+			}
+			if(player.isPresent())
+				return new ErrorResponse(request.getID(), "Account name already exists !");
+			requestManager.getPlayer().setPseudo(request.getUsername());
+		}
+
+		if(request.getPassword() != null && !request.getPassword().isEmpty()){
+			requestManager.getPlayer().setPassword(request.getPassword());
+		}
+
+		try {
+			db.players().update(requestManager.getPlayer());
+		} catch (SQLException e) {
+			return new ErrorResponse(request.getID(), "Error while updating the user");
+		}
+		return new SuccessResponse(request.getID(), "Account successfully updated !");
+	}
+
+	@Override
 	public Response visit(LoginRequest request) {
 		if (requestManager.isLoggedIn())
 			return new ErrorResponse(request.getID(), "Already logged in");
@@ -98,6 +134,9 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
 			return new ErrorResponse(request.getID(), "Permission denied");
 
+		if (request.getArena().elements(StartPoint.class).size() < 4)
+			return new ErrorResponse(request.getID(), "You have to specify 4 start points");
+
 		try {
 			db.arenas().createOrUpdate(request.getArena());
 		} catch (SQLException e) {
@@ -140,7 +179,8 @@ public class RequestProcessor implements RequestVisitor{
 
 		return arena.filter(a-> a .getId() != null && a.getId().equals(request.getArena()))
 				.map(a->{
-					server.addRoom(new RoomSession(request.getName(), request.getPassword(), request.getMinPlayer(), a));
+					server.addRoom(new RoomSession(request.getName(), request.getPassword(), request.getMinPlayer(),
+					                               a, requestManager.getPlayer()));
 					return (Response) new SuccessResponse(request.getID(), "Room successfully created !");
 				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
@@ -166,9 +206,9 @@ public class RequestProcessor implements RequestVisitor{
 			return new NoResponse(request.getID());
 
 		Optional<RoomSession> roomSession = server.getRoomSessions()
-		                                          .stream()
-		                                          .filter(r -> r.getName().equals(request.getRoom().getName()))
-		                                          .findFirst();
+		                                                      .stream()
+		                                                      .filter(r -> r.getName().equals(request.getRoom()))
+		                                                      .findFirst();
 
 		if(!roomSession.isPresent())
 			return new NoResponse(request.getID());
@@ -298,7 +338,11 @@ public class RequestProcessor implements RequestVisitor{
 		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		requestManager.getPlayerSession().get().getBomberman().dropBomb().ifPresent(c -> requestManager.getPlayerSession().get().getStatistic().dropBomb());
+		Optional<? extends Bomb> bomb = requestManager.getPlayerSession().get().getBomberman().dropBomb();
+		bomb.ifPresent(c -> {
+			bomb.get().addObserver(requestManager);
+			requestManager.getPlayerSession().get().getStatistic().dropBomb();
+		});
 
 		return new NoResponse(request.getID());
 	}

@@ -1,14 +1,22 @@
 package ch.heigvd.bomberman.client.views.room;
 
+import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
+import ch.heigvd.bomberman.client.views.game.ReadyController;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
+import ch.heigvd.bomberman.client.views.tabs.controllers.RoomsController;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -109,14 +117,47 @@ public class NewViewController
         }
         else if(arenas != null && !arenas.isEmpty()) {
             String hashPasswd = password.getText();
-            rm.createRoomRequest(roomName.getText(), arenas.get(selected).getId(), minPlayer.getValue(), hashPasswd, message -> {
+            String name = roomName.getText();
+            rm.createRoomRequest(name, arenas.get(selected).getId(), minPlayer.getValue(), hashPasswd, message -> {
                 if (message.state()) {
-                    ((Stage)mainPane.getScene().getWindow()).close();
+                    createSuccess(name, hashPasswd);
                 } else {
                     createFailure(message);
                 }
             });
         }
+    }
+
+    private void createSuccess(String name, String password){
+        rm.joinRoomRequest(name, password, r -> {
+            Stage stage = new Stage();
+            stage.setTitle("Bomberman");
+
+            stage.setOnCloseRequest(event -> {
+                rm.readyRequest(false, null);
+                Client.getInstance().getPrimatyStage().show();
+            });
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/ready.fxml"));
+            try
+            {
+                Pane pane = loader.load();
+                ReadyController controller = loader.getController();
+                controller.loadRoom(r);
+                RoomsController.getInstance().addObserver(controller);
+                stage.setScene(new Scene(pane));
+
+                Client.getInstance().getPrimatyStage().hide();
+                stage.showAndWait();
+
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        });
+        close();
     }
 
     private void createFailure(Message message){

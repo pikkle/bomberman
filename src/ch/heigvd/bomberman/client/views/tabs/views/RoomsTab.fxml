@@ -1,39 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="310.0" prefWidth="457.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.tabs.controllers.RoomsController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="310.0" prefWidth="457.0" stylesheets="@RoomsTab.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.tabs.controllers.RoomsController">
    <children>
-      <HBox prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#join" text="Join">
-               <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </HBox.margin>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#showRooms" text="refresh">
-               <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-      <TableView fx:id="roomsTableView" layoutX="53.0" layoutY="58.0" prefHeight="338.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <TableView fx:id="roomsTableView" layoutX="53.0" layoutY="58.0" prefHeight="338.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columns>
-            <TableColumn fx:id="inRoom" prefWidth="26.0" />
-            <TableColumn prefWidth="159.0" text="Name">
+            <TableColumn fx:id="inRoom" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" resizable="false" />
+            <TableColumn id="nameCol" prefWidth="159.0" text="Name">
                <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="189.0" text="Number of players">
+            <TableColumn id="playerNumberCol" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" text="Number of players">
                <cellValueFactory><PropertyValueFactory property="playerNumber" /></cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="isPrivate" prefWidth="40.0" text="Private">
+            <TableColumn id="privateCol" fx:id="isPrivate" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" text="Private">
                <cellValueFactory><PropertyValueFactory property="isPrivate" /></cellValueFactory>
             </TableColumn>
          </columns>

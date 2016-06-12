@@ -6,6 +6,7 @@ public interface RequestVisitor {
 	// simple requests
 	Response visit(HelloRequest request);
 	Response visit(AccountCreationRequest request);
+	Response visit(AccountModifyRequest request);
 	Response visit(LoginRequest request);
 	Response visit(PlayerRequest request);
 	Response visit(ArenasRequest request);

@@ -14,7 +14,7 @@ public abstract class PowerUp extends Element {
 		super(position, arena);
 	}
 
-	protected PowerUp() {
+	public PowerUp() {
 	}
 
 	/**

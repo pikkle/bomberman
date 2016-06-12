@@ -56,7 +56,7 @@ public class MapsController {
 						try {
 							pane = loader.load();
 							MapEditorController controller = loader.getController();
-							controller.loadArena(map);
+							controller.loadArena(map.clone());
 							stage.initModality(Modality.APPLICATION_MODAL);
 
 							stage.setScene(new Scene(pane));
@@ -78,10 +78,6 @@ public class MapsController {
 				mapsContainer.getChildren().add(renderer.getView());
 			});
 		});
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
 	}
 
 	@FXML

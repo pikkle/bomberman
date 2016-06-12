@@ -57,8 +57,8 @@ public class MapEditorController implements Observer {
 	@FXML
 	private void initialize() {
 		rm = ResponseManager.getInstance();
-		width.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
-		height.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
+		width.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
+		height.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE));
 		width.valueProperty().addListener((obs, oldValue, newValue) -> changeDimension(newValue, height.getValue()));
 		height.valueProperty().addListener((obs, oldValue, newValue) -> changeDimension(width.getValue(), newValue));
 
@@ -69,6 +69,8 @@ public class MapEditorController implements Observer {
 	}
 
 	public void loadArena(Arena arena) {
+		width.getValueFactory().setValue(arena.width());
+		height.getValueFactory().setValue(arena.height());
 		this.arena = arena;
 		changeDimension(arena.width(), arena.height());
 	}
@@ -140,7 +142,7 @@ public class MapEditorController implements Observer {
 
 	@FXML
 	private void confirm() {
-		rm.saveArenaRequest(arena, message -> {
+		rm.saveArenaRequest(arena.clone(), message -> {
 			if (message.state()) {
 				success(message);
 			} else {

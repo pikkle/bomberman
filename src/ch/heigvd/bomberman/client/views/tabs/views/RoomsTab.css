@@ -1,0 +1,7 @@
+#privateCol, #playerNumberCol{
+    -fx-alignment: center;
+}
+
+#nameCol{
+    -fx-alignment: center-left;
+}

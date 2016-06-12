@@ -7,6 +7,6 @@
    <tabs>
       <Tab fx:id="roomsTab" text="Salles"><fx:include source="RoomsTab.fxml" fx:id="rooms" /></Tab>
       <Tab fx:id="statisticsTab" text="Statistiques"><fx:include source="StatsTab.fxml" fx:id="statistics" /></Tab>
-      <Tab text="Profil"><fx:include source="ProfileTab.fxml" /></Tab>
+      <Tab fx:id="profileTab" text="Profil"><fx:include source="ProfileTab.fxml" fx:id="profile" /></Tab>
    </tabs>
 </TabPane>

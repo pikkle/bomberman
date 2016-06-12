@@ -10,6 +10,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+import java.time.Duration;
+
 /**
  * Created by matthieu.villard on 09.06.2016.
  */
@@ -37,7 +39,10 @@ public class StatisticsController {
     private TableView<Statistic> table;
 
     @FXML
-    private TableColumn<Statistic, Long> survivalTime, deaths, game;
+    private TableColumn<Statistic, Long> deaths, game;
+
+    @FXML
+    private TableColumn<Statistic, String> survivalTime;
 
 
     @FXML
@@ -50,15 +55,23 @@ public class StatisticsController {
             return new SimpleObjectProperty<Long>(param.getValue().getRank() != 1 ? 1l : 0);
         });
         survivalTime.setCellValueFactory(param -> {
-            return new SimpleObjectProperty<Long>(param.getValue().getSurvivalTime().getSeconds());
+            return new SimpleObjectProperty<String>(durationToString(param.getValue().getSurvivalTime()));
         });
 
         rm = ResponseManager.getInstance();
         rm.playerRequest(player -> {
             total.setText(String.valueOf(player.getStatistics().size()));
 
-            tSurvivalTime.setText(String.valueOf(player.getStatistics().stream().mapToLong(s -> s.getSurvivalTime().getSeconds()).sum()));
-            player.getStatistics().stream().mapToLong(s -> s.getSurvivalTime().getSeconds()).average().ifPresent(avg -> aSurvivalTime.setText(String.valueOf(avg)));
+            tSurvivalTime.setText(durationToString(Duration.ofSeconds(
+                    player.getStatistics()
+                          .stream()
+                          .mapToLong(s -> s.getSurvivalTime().getSeconds()).sum()
+            )));
+            player.getStatistics()
+                  .stream()
+                  .mapToLong(s -> s.getSurvivalTime().getSeconds())
+                  .average()
+                  .ifPresent(avg -> aSurvivalTime.setText(durationToString(Duration.ofSeconds((long)avg))));
 
             tKills.setText(String.valueOf(player.getStatistics().stream().mapToLong(s -> s.getKills()).sum()));
             player.getStatistics().stream().mapToLong(s -> s.getKills()).average().ifPresent(avg -> aKills.setText(String.valueOf(avg)));
@@ -71,5 +84,10 @@ public class StatisticsController {
 
             statistics.setAll(player.getStatistics());
         });
+    }
+
+    private String durationToString(Duration duration){
+        long time = duration.getSeconds();
+        return (time / 60 < 10 ? "0" : "") + time / 60 + ":" + (time % 60 < 10 ? "0" : "") + time % 60;
     }
 }
