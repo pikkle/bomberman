@@ -172,7 +172,6 @@ public class RequestManager extends Thread implements Observer {
         if(!getPlayerSession().isPresent() || playerSession.getRoomSession() == null)
             return;
         if(getPlayerSession().get().getRoomSession().getPlayers().stream().filter(playerSession -> playerSession.getStatistic().getSurvivalTime() == null).count() <= 1){
-
             getPlayerSession().get().getRoomSession().close();
         }
     }

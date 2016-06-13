@@ -71,6 +71,7 @@ public class Statistic implements Serializable {
     }
 
     public int getRank(){
-        return game.getStatistics().stream().sorted(Comparator.nullsFirst((a, b) -> (a.survivalTime != null && b.survivalTime != null) ? b.survivalTime.compareTo(a.survivalTime) : -1)).collect(Collectors.toList()).indexOf(this) + 1;
+        return game.getStatistics().stream().sorted(Comparator.nullsFirst((a, b) -> (a.survivalTime != null && b
+                .survivalTime != null) ? b.survivalTime.compareTo(a.survivalTime) : 1)).collect(Collectors.toList()).indexOf(this) + 1;
     }
 }
