@@ -6,6 +6,7 @@ import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.game.Direction;
 import ch.heigvd.bomberman.common.game.Room;
+import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -119,6 +120,11 @@ public class GameController {
         rm.addElementRequest(element -> renderer.getArena().add(element));
 
         rm.destroyElementsRequest(element -> {
+            if(element instanceof Bomb) {
+                element.setArena(renderer.getArena());
+                ((Bomb) element).showExplosion();
+            }
+
             renderer.getArena().remove(element);
         });
 

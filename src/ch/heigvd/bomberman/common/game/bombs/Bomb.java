@@ -104,7 +104,7 @@ public abstract class Bomb extends Element {
 
 			     int dx = target.x() - x();
 			     int dy = target.y() - y();
-			     int d = Math.abs(dx + dy);
+			     int d = Math.max(Math.abs(dx + dy), 1);
 
 			     return Stream.iterate(1, i -> i + 1)
 			                  .limit(d - 1)
@@ -161,7 +161,7 @@ public abstract class Bomb extends Element {
 	@Override
 	public void delete() {
 		super.delete();
-		showExplosion();
-		getElementsInRange().forEach(Element::delete);
+		//showExplosion();
+		getElementsInRange().stream().filter(element -> !(element instanceof Explosion)).forEach(Element::delete);
 	}
 }
