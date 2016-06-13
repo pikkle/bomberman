@@ -9,6 +9,7 @@ import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.game.Player;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -33,68 +34,86 @@ public class RequestManager extends Thread implements Observer {
     public RequestManager(Socket socket) {
         this.socket = socket;
         this.requestProcessor = new RequestProcessor(this);
+        System.out.println("Client connecting (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")...");
         try {
             this.writer = new ObjectOutputStream(socket.getOutputStream());
             this.reader = new ObjectInputStream(socket.getInputStream());
+            System.out.println("Client connected (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ").");
         } catch (IOException e) {
+            System.out.println("Client connection error (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") : ");
             e.printStackTrace();
         }
     }
 
     @Override
     public void run() {
-        while (running && socket != null && socket.isConnected()) {
+        while (isConnected()) {
             try {
                 Request request = (Request) reader.readObject();
+                System.out.println("Request received from client (" + socket.getInetAddress().getHostAddress() + ":"
+                                           + socket.getPort() + ") : " + request.getClass().getSimpleName());
                 Response response = request.accept(requestProcessor);
                 if (response.isSendable()) {
                     writer.reset();
                     writer.writeObject(response);
+                    System.out.println("Response sent to client (" + socket.getInetAddress().getHostAddress() + ":"
+                                               + socket.getPort() + ") : " + response.getClass().getSimpleName());
                 }
+            } catch (EOFException e){
+                disconnect();
             } catch (IOException e) {
-                try {
-                    disconnect();
-                } catch (IOException e1) {
-                    if (running)
-                        e.printStackTrace();
-                    e.printStackTrace();
-                }
+                System.out.println("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") : ");
+                disconnect();
             } catch (ClassNotFoundException e) {
+                System.out.println("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") : ");
                 e.printStackTrace();
             }
         }
     }
 
     public void send(Response response){
-        if(running && socket != null && socket.isConnected()) {
+        if(isConnected()) {
             try {
                 if (response.isSendable()) {
                     writer.reset();
                     writer.writeObject(response);
+                    System.out.println("Response sent to client (" + socket.getInetAddress().getHostAddress() + ":"
+                                               + socket.getPort() + ") : " + response.getClass().getSimpleName());
                 }
+            } catch (EOFException e){
+                disconnect();
             } catch (IOException e) {
-                try {
-                    disconnect();
-                } catch (IOException e1) {
-                    if (running)
-                        e.printStackTrace();
-                }
+                System.out.println("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") : ");
+                disconnect();
             }
         }
     }
 
-    public void disconnect() throws IOException
+    public boolean isConnected(){
+        return running && socket != null && !socket.isClosed() && socket.isConnected();
+    }
+
+    public void disconnect()
     {
-        interrupt();
-        socket.close();
-        writer.close();
-        reader.close();
-        loggedIn = false;
-        running = false;
-        if(playerSession != null)
-            playerSession.close();
-        Server.getInstance().getClients().remove(this);
-        System.out.println("Client closed the connection");
+        System.out.println("Closing connection (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")...");
+        try {
+            socket.close();
+            if(writer != null)
+                writer.close();
+            if(reader != null)
+                reader.close();
+            loggedIn = false;
+            running = false;
+            if(playerSession != null)
+                playerSession.close();
+            interrupt();
+            Server.getInstance().getClients().remove(this);
+            System.out.println("Connection closed (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ").");
+        } catch (IOException e) {
+            System.out.println("Closing connection error (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") : ");
+            e.printStackTrace();
+        }
+
     }
 
     public boolean isLoggedIn() {

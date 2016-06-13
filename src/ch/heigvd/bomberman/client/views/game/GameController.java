@@ -32,7 +32,6 @@ public class GameController {
 
     private ResponseManager rm;
     private ArenaRenderer renderer;
-    private Client client;
     private Timer timer;
     private Instant start;
 
@@ -49,7 +48,6 @@ public class GameController {
     private Label duration;
 
     public GameController() {
-        this.client = client;
         rm = ResponseManager.getInstance();
     }
 
@@ -132,7 +130,7 @@ public class GameController {
             final Stage results = new Stage();
             results.setTitle("Results");
 
-            results.setOnCloseRequest(event -> client.getPrimatyStage().show());
+            results.setOnCloseRequest(event -> Client.getInstance().getPrimatyStage().show());
 
             results.initModality(Modality.APPLICATION_MODAL);
 

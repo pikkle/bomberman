@@ -33,6 +33,7 @@ public class Server extends Application {
 	private DBManager database;
 
 	public Server() {
+		System.out.println("Starting server..");
 		this.port = DEFAULT_PORT;
 		try {
 			database = DBManager.getInstance();
@@ -42,6 +43,7 @@ public class Server extends Application {
 					sendRooms();
 				}
 			});
+			System.out.println("Server started.");
 		} catch (SQLException e) {
 			System.out.println("Database error:");
 			e.printStackTrace();
