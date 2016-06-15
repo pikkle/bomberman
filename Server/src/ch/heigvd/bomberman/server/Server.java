@@ -25,7 +25,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -141,14 +140,8 @@ public class Server extends Application {
 					logger.error("Waiting on closing connection", e);
 				}
 			});
-			Set<Thread> threadSet = Thread.getAllStackTraces().keySet().stream().filter(t -> t != Thread
-					.currentThread()).collect(Collectors.toSet());
-			if(!threadSet.isEmpty()){
-				logger.warn("Threads are still running : " + threadSet.stream().map(t -> t.getName()).collect(Collectors.joining(", ")));
-			}
-			else {
-				logger.info("Server closed.");
-			}
+			database.closeFactory();
+			logger.info("Server closed.");
 		} catch (IOException e) {
 			logger.error("Closing server error", e);
 		}

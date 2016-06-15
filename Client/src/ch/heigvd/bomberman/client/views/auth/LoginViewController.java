@@ -80,6 +80,13 @@ public class LoginViewController {
         createAcount.setDisable(true);
     }
 
+    private void enableAll() {
+        userId.setDisable(false);
+        pwd.setDisable(false);
+        login.setDisable(false);
+        createAcount.setDisable(false);
+    }
+
 
     @FXML
     private void login()
@@ -96,6 +103,7 @@ public class LoginViewController {
         }
         else {
             String hashPasswd = pwd.getText();
+            disableAll();
             rm.loginRequest(userId.getText(), hashPasswd, message -> {
                 if (message.state()) {
                     try
@@ -123,6 +131,7 @@ public class LoginViewController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(message.getMessage());
         alert.showAndWait();
+        enableAll();
     }
 
     @FXML

@@ -96,6 +96,15 @@ public class RequestProcessor implements RequestVisitor{
 	public Response visit(ArenasRequest request) {
 		if (!requestManager.isLoggedIn())
 			return new ArenasResponse(request.getID(), null);
+		logger.info("test3");
+		try{
+			db.arenas().findAll();
+		} catch (Throwable e){
+			logger.fatal("test4 " + e.getMessage(), e);
+			for(StackTraceElement el : e.getStackTrace()){
+				logger.fatal(el.getClassName() + " - " + el.getLineNumber());
+			}
+		}
 		return new ArenasResponse(request.getID(), db.arenas().findAll());
 	}
 

@@ -26,7 +26,6 @@ public class PlayerDao extends MainDao<Player> {
         } catch (DataAccessLayerException e) {
             handleException(e);
         } finally {
-            tx = null;
             db.close(session);
         }
         return Optional.ofNullable(player);

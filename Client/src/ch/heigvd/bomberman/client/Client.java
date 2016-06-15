@@ -6,12 +6,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.IOException;
 
 /**
  * Client executable class
  */
 public class Client extends Application {
-
+    private static Log logger = LogFactory.getLog(Client.class);
     private static Client instance;
     private Stage primaryStage;
     private Pane mainLayout;
@@ -42,28 +46,34 @@ public class Client extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-
+    public void start(Stage primaryStage) throws IOException {
+        logger.info("Starting client...");
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Bomberman");
         FXMLLoader loader = new FXMLLoader();
 
         loader.setLocation(Client.class.getResource("views/auth/LoginView.fxml"));
 
-        mainLayout = loader.load();
+        try {
+            mainLayout = loader.load();
+        } catch (IOException e) {
+            logger.fatal("Couldn't create console", e);
+            throw e;
+        }
 
         LoginViewController controller = loader.getController();
 
         primaryStage.setScene(new Scene(mainLayout));
         primaryStage.show();
+        logger.info("Client started");
     }
 
     @Override
     public void stop(){
-        System.out.println("Stage is closing");
+        logger.info("Closing client...");
         if(rm.isConnected())
-            rm.disconnect();
-        // Save file
+            rm.stop();
+        logger.info("Client closed");
     }
 
     public void changeScene(Pane pane){

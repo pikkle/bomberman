@@ -3,22 +3,26 @@ package ch.heigvd.bomberman.client;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.Response;
-import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.*;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.*;
 import java.util.function.Consumer;
 
 
 public class ResponseManager extends Observable
 {
+    private static Log logger = LogFactory.getLog(ResponseManager.class);
     private static ResponseManager instance;
     private Socket socket;
     private ObjectOutputStream writer;
@@ -61,44 +65,61 @@ public class ResponseManager extends Observable
                             Consumer callback = callbacks.get(response.getID());
                             Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
                         }
-
                     } catch (EOFException e){
                         disconnect();
-                        Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setHeaderText("Server error");
-                            alert.setTitle("Server error");
-                            alert.setContentText("Server is unreachable. Try to connect again.");
-                            alert.showAndWait();
-                        });
+                    } catch (SocketException e){
+                        disconnect();
                     } catch (IOException e) {
-                        System.out.println("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") : ");
+                        logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
+                                .getPort() + ")", e);
                         disconnect();
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
+                                .getPort() + ")", e);
                     }
                 }
             }
         };
         receiver.start();
+    }
 
+    public void stop(){
+        if(isConnected()) {
+            logger.info("Closing connection (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")...");
+            closeRequest = true;
+            receiver.interrupt();
+            try {
+                socket.close();
+                if (writer != null)
+                    writer.close();
+                if (reader != null)
+                    reader.close();
+                logger.info("Connection closed (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() +
+                                    ").");
+            } catch (IOException e) {
+                logger.error("Closing connection error (" + socket.getInetAddress().getHostAddress() + ":" + socket
+                        .getPort() + ")", e);
+            }
+        }
     }
 
     public void disconnect()
     {
-        System.out.println("Closing connection (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")...");
-        try {
-            socket.close();
-            if(writer != null)
-                writer.close();
-            if(reader != null)
-                reader.close();
-            closeRequest = false;
-            receiver.interrupt();
-            System.out.println("Connection closed (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ").");
-        } catch (IOException e) {
-            System.out.println("Closing connection error (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") : ");
-            e.printStackTrace();
+        if(isConnected()) {
+            stop();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Server error");
+                alert.setTitle("Server error");
+                alert.setContentText("Server is unreachable. Try to connect again.");
+                alert.showAndWait();
+                try {
+                    Client.getInstance().start(Client.getInstance().getPrimatyStage());
+                } catch (IOException e) {
+                    logger.fatal("Unable to reload the application", e);
+                    Platform.exit();
+                }
+            });
         }
     }
 
@@ -215,8 +236,10 @@ public class ResponseManager extends Observable
                 writer.writeObject(r);
                 if (callback != null)
                     callbacks.put(r.getID(), callback);
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+            catch (IOException e) {
+                logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
+                        .getPort() + ")", e);
             }
         }
     }

@@ -76,7 +76,6 @@ public class RequestManager extends Thread implements Observer {
             } catch (ClassNotFoundException e) {
                 logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
                         .getPort() + ")", e);
-                e.printStackTrace();
             }
         }
         try {
@@ -99,7 +98,10 @@ public class RequestManager extends Thread implements Observer {
                 }
             } catch (EOFException e){
                 disconnect();
-            } catch (IOException e) {
+            } catch (SocketException e){
+                disconnect();
+            }
+            catch (IOException e) {
                 logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
                         .getPort() + ")", e);
                 disconnect();
@@ -111,7 +113,7 @@ public class RequestManager extends Thread implements Observer {
         return running && socket != null && !socket.isClosed() && socket.isConnected();
     }
 
-    public synchronized void disconnect()
+    public void disconnect()
     {
         if(isConnected()) {
             logger.info("Closing connection (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")...");

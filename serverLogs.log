@@ -3177,3 +3177,530 @@ java.net.SocketException: socket closed
 2016-06-15 14:21:36 INFO  RequestManager:117 - Closing connection (127.0.0.1:51150)...
 2016-06-15 14:21:36 INFO  RequestManager:84 - Connection closed (127.0.0.1:51150).
 2016-06-15 14:21:36 WARN  Server:147 - Threads are still running : Monitor Ctrl-Break, pool-2-thread-1, Thread-2, Signal Dispatcher, Prism Font Disposer, JavaFX-Launcher, QuantumRenderer-0, Attach Listener, main, Thread-3, Finalizer, Reference Handler
+2016-06-15 14:32:34 INFO  Server:74 - Starting server...
+2016-06-15 14:32:35 INFO  Server:125 - Server started.
+2016-06-15 14:32:37 INFO  RequestManager:41 - Client connecting (127.0.0.1:51258)...
+2016-06-15 14:32:37 INFO  RequestManager:45 - Client connected (127.0.0.1:51258).
+2016-06-15 14:32:45 INFO  RequestManager:58 - Request received from client (127.0.0.1:51258) : LoginRequest
+2016-06-15 14:32:45 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:32:45 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:32:45 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:32:45 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:32:45 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:32:45 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:32:45 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:32:45 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:32:45 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:32:46 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:32:47 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:32:47 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:32:52 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:32:52 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51258) : SuccessResponse
+2016-06-15 14:32:52 INFO  RequestManager:58 - Request received from client (127.0.0.1:51258) : PlayerRequest
+2016-06-15 14:32:52 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51258) : PlayerResponse
+2016-06-15 14:32:53 INFO  RequestManager:58 - Request received from client (127.0.0.1:51258) : RoomsRequest
+2016-06-15 14:32:53 INFO  RequestManager:97 - Response sent to client (127.0.0.1:51258) : RoomsResponse
+2016-06-15 14:32:53 INFO  RequestManager:58 - Request received from client (127.0.0.1:51258) : PlayerRequest
+2016-06-15 14:32:53 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51258) : PlayerResponse
+2016-06-15 14:32:56 INFO  RequestManager:58 - Request received from client (127.0.0.1:51258) : ArenasRequest
+2016-06-15 14:32:57 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51258) : ArenasResponse
+2016-06-15 14:32:58 INFO  Server:131 - Closing server...
+2016-06-15 14:32:58 INFO  RequestManager:117 - Closing connection (127.0.0.1:51258)...
+2016-06-15 14:32:58 INFO  RequestManager:84 - Connection closed (127.0.0.1:51258).
+2016-06-15 14:32:58 WARN  Server:147 - Threads are still running : Thread-3, main, Attach Listener, QuantumRenderer-0, JavaFX-Launcher, Finalizer, Signal Dispatcher, pool-2-thread-1, Reference Handler, Monitor Ctrl-Break, Prism Font Disposer, Thread-2
+2016-06-15 14:32:58 INFO  Server:150 - sun.misc.Unsafe.park(Native Method)
+2016-06-15 14:32:58 INFO  Server:150 - java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+2016-06-15 14:32:58 INFO  Server:150 - java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+2016-06-15 14:32:58 INFO  Server:150 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1093)
+2016-06-15 14:32:58 INFO  Server:150 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:809)
+2016-06-15 14:32:58 INFO  Server:150 - java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1067)
+2016-06-15 14:32:58 INFO  Server:150 - java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1127)
+2016-06-15 14:32:58 INFO  Server:150 - java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+2016-06-15 14:32:58 INFO  Server:150 - java.lang.Thread.run(Thread.java:745)
+2016-06-15 14:34:58 INFO  Server:74 - Starting server...
+2016-06-15 14:34:59 INFO  Server:125 - Server started.
+2016-06-15 14:35:01 INFO  Server:131 - Closing server...
+2016-06-15 14:35:01 WARN  Server:147 - Threads are still running : Signal Dispatcher, Reference Handler, JavaFX-Launcher, Finalizer, main, Prism Font Disposer, Thread-3, QuantumRenderer-0, Attach Listener, Monitor Ctrl-Break, Thread-2
+2016-06-15 14:35:04 INFO  Server:74 - Starting server...
+2016-06-15 14:35:05 INFO  Server:125 - Server started.
+2016-06-15 14:35:11 INFO  RequestManager:41 - Client connecting (127.0.0.1:51282)...
+2016-06-15 14:35:11 INFO  RequestManager:45 - Client connected (127.0.0.1:51282).
+2016-06-15 14:35:16 INFO  RequestManager:58 - Request received from client (127.0.0.1:51282) : LoginRequest
+2016-06-15 14:35:16 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:35:16 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:35:16 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:35:17 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:35:17 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:35:17 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:35:17 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:35:17 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:35:17 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:35:17 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:35:18 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:35:18 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:35:21 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:35:21 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51282) : SuccessResponse
+2016-06-15 14:35:21 INFO  RequestManager:58 - Request received from client (127.0.0.1:51282) : PlayerRequest
+2016-06-15 14:35:22 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51282) : PlayerResponse
+2016-06-15 14:35:22 INFO  RequestManager:58 - Request received from client (127.0.0.1:51282) : RoomsRequest
+2016-06-15 14:35:22 INFO  RequestManager:97 - Response sent to client (127.0.0.1:51282) : RoomsResponse
+2016-06-15 14:35:22 INFO  RequestManager:58 - Request received from client (127.0.0.1:51282) : PlayerRequest
+2016-06-15 14:35:22 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51282) : PlayerResponse
+2016-06-15 14:35:26 INFO  Server:131 - Closing server...
+2016-06-15 14:35:26 INFO  RequestManager:117 - Closing connection (127.0.0.1:51282)...
+2016-06-15 14:35:26 INFO  RequestManager:84 - Connection closed (127.0.0.1:51282).
+2016-06-15 14:35:26 WARN  Server:147 - Threads are still running : Thread-2, Finalizer, Prism Font Disposer, Monitor Ctrl-Break, Attach Listener, main, pool-2-thread-1, Reference Handler, Thread-3, Signal Dispatcher, QuantumRenderer-0, JavaFX-Launcher
+2016-06-15 14:35:26 INFO  Server:149 - sun.misc.Launcher$AppClassLoader@27c170f0
+2016-06-15 14:35:26 INFO  Server:151 - sun.misc.Unsafe.park(Native Method)
+2016-06-15 14:35:26 INFO  Server:151 - java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+2016-06-15 14:35:26 INFO  Server:151 - java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+2016-06-15 14:35:26 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1093)
+2016-06-15 14:35:26 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:809)
+2016-06-15 14:35:26 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1067)
+2016-06-15 14:35:26 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1127)
+2016-06-15 14:35:26 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+2016-06-15 14:35:26 INFO  Server:151 - java.lang.Thread.run(Thread.java:745)
+2016-06-15 14:37:29 INFO  Server:74 - Starting server...
+2016-06-15 14:37:30 INFO  Server:125 - Server started.
+2016-06-15 14:37:32 INFO  RequestManager:41 - Client connecting (127.0.0.1:51298)...
+2016-06-15 14:37:32 INFO  RequestManager:45 - Client connected (127.0.0.1:51298).
+2016-06-15 14:37:37 INFO  RequestManager:58 - Request received from client (127.0.0.1:51298) : LoginRequest
+2016-06-15 14:37:37 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:37:37 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:37:37 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:37:37 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:37:37 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:37:37 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:37:37 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:37:37 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:37:37 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:37:38 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:37:38 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:37:38 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:37:42 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:37:42 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51298) : SuccessResponse
+2016-06-15 14:37:42 INFO  RequestManager:58 - Request received from client (127.0.0.1:51298) : PlayerRequest
+2016-06-15 14:37:42 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51298) : PlayerResponse
+2016-06-15 14:37:42 INFO  RequestManager:58 - Request received from client (127.0.0.1:51298) : RoomsRequest
+2016-06-15 14:37:43 INFO  RequestManager:58 - Request received from client (127.0.0.1:51298) : PlayerRequest
+2016-06-15 14:37:43 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51298) : PlayerResponse
+2016-06-15 14:37:47 INFO  Server:131 - Closing server...
+2016-06-15 14:37:47 INFO  RequestManager:117 - Closing connection (127.0.0.1:51298)...
+2016-06-15 14:37:47 INFO  RequestManager:84 - Connection closed (127.0.0.1:51298).
+2016-06-15 14:37:47 WARN  Server:147 - Threads are still running : QuantumRenderer-0, Signal Dispatcher, Thread-2, Finalizer, Attach Listener, Monitor Ctrl-Break, Prism Font Disposer, JavaFX-Launcher, Thread-3, pool-2-thread-1, Reference Handler, main
+2016-06-15 14:37:47 INFO  Server:149 - sun.misc.Launcher$AppClassLoader@27c170f0
+2016-06-15 14:37:47 INFO  Server:151 - sun.misc.Unsafe.park(Native Method)
+2016-06-15 14:37:47 INFO  Server:151 - java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+2016-06-15 14:37:47 INFO  Server:151 - java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+2016-06-15 14:37:47 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1093)
+2016-06-15 14:37:47 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:809)
+2016-06-15 14:37:47 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1067)
+2016-06-15 14:37:47 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1127)
+2016-06-15 14:37:47 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+2016-06-15 14:37:47 INFO  Server:151 - java.lang.Thread.run(Thread.java:745)
+2016-06-15 14:38:25 INFO  Server:74 - Starting server...
+2016-06-15 14:38:25 INFO  Server:125 - Server started.
+2016-06-15 14:38:38 INFO  RequestManager:41 - Client connecting (127.0.0.1:51306)...
+2016-06-15 14:38:38 INFO  RequestManager:45 - Client connected (127.0.0.1:51306).
+2016-06-15 14:38:45 INFO  RequestManager:58 - Request received from client (127.0.0.1:51306) : LoginRequest
+2016-06-15 14:38:45 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:38:45 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:38:45 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:38:46 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:38:46 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:38:46 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:38:46 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:38:46 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:38:46 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:38:47 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:38:47 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:38:47 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:38:52 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:38:53 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51306) : SuccessResponse
+2016-06-15 14:38:53 INFO  RequestManager:58 - Request received from client (127.0.0.1:51306) : PlayerRequest
+2016-06-15 14:39:12 INFO  Server:131 - Closing server...
+2016-06-15 14:39:12 INFO  RequestManager:117 - Closing connection (127.0.0.1:51306)...
+2016-06-15 14:39:12 INFO  RequestManager:84 - Connection closed (127.0.0.1:51306).
+2016-06-15 14:39:12 WARN  Server:147 - Threads are still running : QuantumRenderer-0, Monitor Ctrl-Break, Prism Font Disposer, Attach Listener, Finalizer, pool-2-thread-1, Reference Handler, Signal Dispatcher, JavaFX-Launcher, Thread-2, Thread-3, main
+2016-06-15 14:39:12 INFO  Server:149 - sun.misc.Launcher$AppClassLoader@27c170f0
+2016-06-15 14:39:12 INFO  Server:151 - sun.misc.Unsafe.park(Native Method)
+2016-06-15 14:39:12 INFO  Server:151 - java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+2016-06-15 14:39:12 INFO  Server:151 - java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+2016-06-15 14:39:12 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1093)
+2016-06-15 14:39:12 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:809)
+2016-06-15 14:39:12 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1067)
+2016-06-15 14:39:12 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1127)
+2016-06-15 14:39:12 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+2016-06-15 14:39:12 INFO  Server:151 - java.lang.Thread.run(Thread.java:745)
+2016-06-15 14:43:03 INFO  Server:74 - Starting server...
+2016-06-15 14:43:03 INFO  Server:125 - Server started.
+2016-06-15 14:43:06 INFO  RequestManager:41 - Client connecting (127.0.0.1:51327)...
+2016-06-15 14:43:06 INFO  RequestManager:45 - Client connected (127.0.0.1:51327).
+2016-06-15 14:43:12 INFO  RequestManager:58 - Request received from client (127.0.0.1:51327) : LoginRequest
+2016-06-15 14:43:12 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:43:12 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:43:12 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:43:12 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:43:12 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:43:12 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:43:12 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:43:12 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:43:12 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:43:13 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:43:13 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:43:13 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:43:16 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:43:17 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51327) : SuccessResponse
+2016-06-15 14:43:17 INFO  RequestManager:58 - Request received from client (127.0.0.1:51327) : PlayerRequest
+2016-06-15 14:43:17 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51327) : PlayerResponse
+2016-06-15 14:43:17 INFO  RequestManager:58 - Request received from client (127.0.0.1:51327) : RoomsRequest
+2016-06-15 14:43:18 INFO  RequestManager:97 - Response sent to client (127.0.0.1:51327) : RoomsResponse
+2016-06-15 14:43:18 INFO  RequestManager:58 - Request received from client (127.0.0.1:51327) : PlayerRequest
+2016-06-15 14:43:18 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51327) : PlayerResponse
+2016-06-15 14:43:26 INFO  RequestManager:117 - Closing connection (127.0.0.1:51327)...
+2016-06-15 14:43:26 INFO  RequestManager:84 - Connection closed (127.0.0.1:51327).
+2016-06-15 14:43:48 INFO  Server:131 - Closing server...
+2016-06-15 14:43:48 WARN  Server:147 - Threads are still running : Thread-3, Reference Handler, pool-2-thread-1, Attach Listener, Signal Dispatcher, Prism Font Disposer, Monitor Ctrl-Break, Thread-2, JavaFX-Launcher, Finalizer, QuantumRenderer-0, main
+2016-06-15 14:43:48 INFO  Server:149 - sun.misc.Launcher$AppClassLoader@27c170f0
+2016-06-15 14:43:48 INFO  Server:151 - sun.misc.Unsafe.park(Native Method)
+2016-06-15 14:43:48 INFO  Server:151 - java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+2016-06-15 14:43:48 INFO  Server:151 - java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+2016-06-15 14:43:48 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1093)
+2016-06-15 14:43:48 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:809)
+2016-06-15 14:43:48 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1067)
+2016-06-15 14:43:48 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1127)
+2016-06-15 14:43:48 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+2016-06-15 14:43:48 INFO  Server:151 - java.lang.Thread.run(Thread.java:745)
+2016-06-15 14:44:11 INFO  Server:74 - Starting server...
+2016-06-15 14:44:11 INFO  Server:125 - Server started.
+2016-06-15 14:44:13 INFO  RequestManager:41 - Client connecting (127.0.0.1:51338)...
+2016-06-15 14:44:13 INFO  RequestManager:45 - Client connected (127.0.0.1:51338).
+2016-06-15 14:44:21 INFO  RequestManager:58 - Request received from client (127.0.0.1:51338) : LoginRequest
+2016-06-15 14:44:21 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:44:21 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:44:21 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:44:21 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:44:21 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:44:21 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:44:21 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:44:21 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:44:21 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:44:22 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:44:22 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:44:22 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:44:28 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:44:28 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51338) : SuccessResponse
+2016-06-15 14:44:28 INFO  RequestManager:58 - Request received from client (127.0.0.1:51338) : PlayerRequest
+2016-06-15 14:44:28 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51338) : PlayerResponse
+2016-06-15 14:44:29 INFO  RequestManager:58 - Request received from client (127.0.0.1:51338) : RoomsRequest
+2016-06-15 14:44:29 INFO  RequestManager:97 - Response sent to client (127.0.0.1:51338) : RoomsResponse
+2016-06-15 14:44:29 INFO  RequestManager:58 - Request received from client (127.0.0.1:51338) : PlayerRequest
+2016-06-15 14:44:29 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51338) : PlayerResponse
+2016-06-15 14:44:36 INFO  RequestManager:117 - Closing connection (127.0.0.1:51338)...
+2016-06-15 14:44:36 INFO  RequestManager:84 - Connection closed (127.0.0.1:51338).
+2016-06-15 14:45:16 INFO  Server:131 - Closing server...
+2016-06-15 14:45:16 WARN  Server:147 - Threads are still running : Attach Listener, Prism Font Disposer, QuantumRenderer-0, Finalizer, Thread-3, Monitor Ctrl-Break, JavaFX-Launcher, Signal Dispatcher, pool-2-thread-1, Thread-2, Reference Handler, main
+2016-06-15 14:45:16 INFO  Server:149 - sun.misc.Launcher$AppClassLoader@27c170f0
+2016-06-15 14:45:16 INFO  Server:151 - sun.misc.Unsafe.park(Native Method)
+2016-06-15 14:45:16 INFO  Server:151 - java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+2016-06-15 14:45:16 INFO  Server:151 - java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+2016-06-15 14:45:16 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1093)
+2016-06-15 14:45:16 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:809)
+2016-06-15 14:45:16 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1067)
+2016-06-15 14:45:16 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1127)
+2016-06-15 14:45:16 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+2016-06-15 14:45:16 INFO  Server:151 - java.lang.Thread.run(Thread.java:745)
+2016-06-15 14:45:30 INFO  Server:74 - Starting server...
+2016-06-15 14:45:30 INFO  Server:125 - Server started.
+2016-06-15 14:45:32 INFO  RequestManager:41 - Client connecting (127.0.0.1:51351)...
+2016-06-15 14:45:32 INFO  RequestManager:45 - Client connected (127.0.0.1:51351).
+2016-06-15 14:45:37 INFO  RequestManager:58 - Request received from client (127.0.0.1:51351) : LoginRequest
+2016-06-15 14:45:37 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:45:37 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:45:37 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:45:38 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:45:38 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:45:38 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:45:38 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:45:38 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:45:38 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:45:38 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:45:39 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:45:39 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:45:42 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:45:43 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51351) : ErrorResponse
+2016-06-15 14:45:47 INFO  Server:131 - Closing server...
+2016-06-15 14:45:47 INFO  RequestManager:117 - Closing connection (127.0.0.1:51351)...
+2016-06-15 14:45:47 INFO  RequestManager:84 - Connection closed (127.0.0.1:51351).
+2016-06-15 14:45:47 WARN  Server:147 - Threads are still running : Finalizer, Monitor Ctrl-Break, Reference Handler, JavaFX-Launcher, Signal Dispatcher, QuantumRenderer-0, Attach Listener, Thread-2, pool-2-thread-1, Prism Font Disposer, main, Thread-3
+2016-06-15 14:45:47 INFO  Server:149 - sun.misc.Launcher$AppClassLoader@27c170f0
+2016-06-15 14:45:47 INFO  Server:151 - sun.misc.Unsafe.park(Native Method)
+2016-06-15 14:45:47 INFO  Server:151 - java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+2016-06-15 14:45:47 INFO  Server:151 - java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+2016-06-15 14:45:47 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1093)
+2016-06-15 14:45:47 INFO  Server:151 - java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:809)
+2016-06-15 14:45:47 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1067)
+2016-06-15 14:45:47 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1127)
+2016-06-15 14:45:47 INFO  Server:151 - java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+2016-06-15 14:45:47 INFO  Server:151 - java.lang.Thread.run(Thread.java:745)
+2016-06-15 14:46:03 INFO  Server:74 - Starting server...
+2016-06-15 14:46:04 INFO  Server:125 - Server started.
+2016-06-15 14:46:06 INFO  RequestManager:41 - Client connecting (127.0.0.1:51362)...
+2016-06-15 14:46:06 INFO  RequestManager:45 - Client connected (127.0.0.1:51362).
+2016-06-15 14:46:12 INFO  RequestManager:58 - Request received from client (127.0.0.1:51362) : LoginRequest
+2016-06-15 14:46:12 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51362) : ErrorResponse
+2016-06-15 14:46:20 INFO  Server:131 - Closing server...
+2016-06-15 14:46:20 INFO  RequestManager:117 - Closing connection (127.0.0.1:51362)...
+2016-06-15 14:46:20 INFO  RequestManager:84 - Connection closed (127.0.0.1:51362).
+2016-06-15 14:46:20 WARN  Server:147 - Threads are still running : Prism Font Disposer, Thread-2, Attach Listener, Thread-3, Finalizer, QuantumRenderer-0, main, Monitor Ctrl-Break, Reference Handler, Signal Dispatcher, JavaFX-Launcher
+2016-06-15 14:48:36 INFO  Server:74 - Starting server...
+2016-06-15 14:48:36 INFO  Server:125 - Server started.
+2016-06-15 14:48:41 INFO  RequestManager:41 - Client connecting (127.0.0.1:51382)...
+2016-06-15 14:48:41 INFO  RequestManager:45 - Client connected (127.0.0.1:51382).
+2016-06-15 14:48:47 INFO  RequestManager:58 - Request received from client (127.0.0.1:51382) : LoginRequest
+2016-06-15 14:48:47 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:48:47 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:48:47 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:48:47 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:48:47 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:48:47 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:48:47 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:48:47 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:48:47 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:48:48 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:48:49 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:48:49 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:48:52 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:48:53 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51382) : SuccessResponse
+2016-06-15 14:48:53 INFO  RequestManager:58 - Request received from client (127.0.0.1:51382) : PlayerRequest
+2016-06-15 14:48:53 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51382) : PlayerResponse
+2016-06-15 14:48:53 INFO  RequestManager:58 - Request received from client (127.0.0.1:51382) : RoomsRequest
+2016-06-15 14:48:53 INFO  RequestManager:97 - Response sent to client (127.0.0.1:51382) : RoomsResponse
+2016-06-15 14:48:53 INFO  RequestManager:58 - Request received from client (127.0.0.1:51382) : PlayerRequest
+2016-06-15 14:48:53 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51382) : PlayerResponse
+2016-06-15 14:48:58 INFO  Server:131 - Closing server...
+2016-06-15 14:48:58 INFO  RequestManager:117 - Closing connection (127.0.0.1:51382)...
+2016-06-15 14:48:58 INFO  RequestManager:84 - Connection closed (127.0.0.1:51382).
+2016-06-15 14:48:58 INFO  connections:235 - HHH10001008: Cleaning up connection pool [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:48:58 WARN  Server:148 - Threads are still running : Thread-2, Finalizer, QuantumRenderer-0, main, Thread-3, Signal Dispatcher, Prism Font Disposer, Reference Handler, Attach Listener, JavaFX-Launcher, Monitor Ctrl-Break
+2016-06-15 14:50:16 INFO  Server:73 - Starting server...
+2016-06-15 14:50:16 INFO  Server:124 - Server started.
+2016-06-15 14:50:22 INFO  RequestManager:41 - Client connecting (127.0.0.1:51394)...
+2016-06-15 14:50:22 INFO  RequestManager:45 - Client connected (127.0.0.1:51394).
+2016-06-15 14:50:29 INFO  RequestManager:58 - Request received from client (127.0.0.1:51394) : LoginRequest
+2016-06-15 14:50:29 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:50:29 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:50:29 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:50:29 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:50:29 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:50:29 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:50:29 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:50:29 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:50:29 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:50:30 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:50:30 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:50:30 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:50:34 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:50:34 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51394) : SuccessResponse
+2016-06-15 14:50:34 INFO  RequestManager:58 - Request received from client (127.0.0.1:51394) : PlayerRequest
+2016-06-15 14:50:35 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51394) : PlayerResponse
+2016-06-15 14:50:35 INFO  RequestManager:58 - Request received from client (127.0.0.1:51394) : RoomsRequest
+2016-06-15 14:50:35 INFO  RequestManager:97 - Response sent to client (127.0.0.1:51394) : RoomsResponse
+2016-06-15 14:50:35 INFO  RequestManager:58 - Request received from client (127.0.0.1:51394) : PlayerRequest
+2016-06-15 14:50:35 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51394) : PlayerResponse
+2016-06-15 14:50:42 INFO  Server:130 - Closing server...
+2016-06-15 14:50:42 INFO  RequestManager:117 - Closing connection (127.0.0.1:51394)...
+2016-06-15 14:50:42 INFO  RequestManager:84 - Connection closed (127.0.0.1:51394).
+2016-06-15 14:50:42 INFO  Server:144 - Server closed.
+2016-06-15 14:51:03 INFO  Server:73 - Starting server...
+2016-06-15 14:51:03 INFO  Server:124 - Server started.
+2016-06-15 14:51:09 INFO  RequestManager:41 - Client connecting (127.0.0.1:51408)...
+2016-06-15 14:51:09 INFO  RequestManager:45 - Client connected (127.0.0.1:51408).
+2016-06-15 14:51:14 INFO  RequestManager:58 - Request received from client (127.0.0.1:51408) : LoginRequest
+2016-06-15 14:51:14 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 14:51:14 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 14:51:14 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 14:51:14 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 14:51:14 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 14:51:14 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:51:14 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 14:51:14 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 14:51:14 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 14:51:15 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 14:51:15 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:51:15 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 14:51:19 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 14:51:19 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51408) : SuccessResponse
+2016-06-15 14:51:19 INFO  RequestManager:58 - Request received from client (127.0.0.1:51408) : PlayerRequest
+2016-06-15 14:51:19 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51408) : PlayerResponse
+2016-06-15 14:51:20 INFO  RequestManager:58 - Request received from client (127.0.0.1:51408) : RoomsRequest
+2016-06-15 14:51:20 INFO  RequestManager:97 - Response sent to client (127.0.0.1:51408) : RoomsResponse
+2016-06-15 14:51:20 INFO  RequestManager:58 - Request received from client (127.0.0.1:51408) : PlayerRequest
+2016-06-15 14:51:20 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51408) : PlayerResponse
+2016-06-15 14:51:25 INFO  Server:130 - Closing server...
+2016-06-15 14:51:25 INFO  RequestManager:117 - Closing connection (127.0.0.1:51408)...
+2016-06-15 14:51:25 INFO  RequestManager:84 - Connection closed (127.0.0.1:51408).
+2016-06-15 14:51:25 INFO  connections:235 - HHH10001008: Cleaning up connection pool [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 14:51:25 INFO  Server:144 - Server closed.
+2016-06-15 15:11:37 INFO  Server:73 - Starting server...
+2016-06-15 15:11:37 INFO  Server:124 - Server started.
+2016-06-15 15:11:39 INFO  RequestManager:41 - Client connecting (127.0.0.1:51591)...
+2016-06-15 15:11:39 INFO  RequestManager:45 - Client connected (127.0.0.1:51591).
+2016-06-15 15:12:20 INFO  RequestManager:58 - Request received from client (127.0.0.1:51591) : LoginRequest
+2016-06-15 15:12:20 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 15:12:20 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 15:12:20 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 15:12:20 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 15:12:21 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 15:12:21 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:12:21 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 15:12:21 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 15:12:21 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 15:12:21 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 15:12:22 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:12:22 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:12:25 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 15:12:25 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51591) : SuccessResponse
+2016-06-15 15:12:25 INFO  RequestManager:58 - Request received from client (127.0.0.1:51591) : PlayerRequest
+2016-06-15 15:12:25 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51591) : PlayerResponse
+2016-06-15 15:12:26 INFO  RequestManager:58 - Request received from client (127.0.0.1:51591) : RoomsRequest
+2016-06-15 15:12:26 INFO  RequestManager:96 - Response sent to client (127.0.0.1:51591) : RoomsResponse
+2016-06-15 15:12:26 INFO  RequestManager:58 - Request received from client (127.0.0.1:51591) : PlayerRequest
+2016-06-15 15:12:26 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51591) : PlayerResponse
+2016-06-15 15:12:35 INFO  Server:130 - Closing server...
+2016-06-15 15:12:35 INFO  RequestManager:119 - Closing connection (127.0.0.1:51591)...
+2016-06-15 15:12:35 INFO  RequestManager:83 - Connection closed (127.0.0.1:51591).
+2016-06-15 15:12:35 INFO  connections:235 - HHH10001008: Cleaning up connection pool [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:12:35 INFO  Server:144 - Server closed.
+2016-06-15 15:17:02 INFO  Server:73 - Starting server...
+2016-06-15 15:17:02 INFO  Server:124 - Server started.
+2016-06-15 15:17:06 INFO  RequestManager:41 - Client connecting (127.0.0.1:51620)...
+2016-06-15 15:17:06 INFO  RequestManager:45 - Client connected (127.0.0.1:51620).
+2016-06-15 15:17:11 INFO  RequestManager:58 - Request received from client (127.0.0.1:51620) : LoginRequest
+2016-06-15 15:17:11 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 15:17:11 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 15:17:11 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 15:17:12 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 15:17:12 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 15:17:12 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:17:12 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 15:17:12 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 15:17:12 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 15:17:12 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 15:17:13 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:17:13 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:17:16 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 15:17:16 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51620) : ErrorResponse
+2016-06-15 15:17:23 INFO  RequestManager:119 - Closing connection (127.0.0.1:51620)...
+2016-06-15 15:17:23 INFO  RequestManager:83 - Connection closed (127.0.0.1:51620).
+2016-06-15 15:22:01 INFO  Server:130 - Closing server...
+2016-06-15 15:22:01 INFO  connections:235 - HHH10001008: Cleaning up connection pool [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:22:01 INFO  Server:144 - Server closed.
+2016-06-15 15:30:18 INFO  Server:73 - Starting server...
+2016-06-15 15:30:18 INFO  Server:124 - Server started.
+2016-06-15 15:30:22 INFO  RequestManager:41 - Client connecting (127.0.0.1:51754)...
+2016-06-15 15:30:22 INFO  RequestManager:45 - Client connected (127.0.0.1:51754).
+2016-06-15 15:30:29 INFO  RequestManager:119 - Closing connection (127.0.0.1:51754)...
+2016-06-15 15:30:29 INFO  RequestManager:83 - Connection closed (127.0.0.1:51754).
+2016-06-15 15:30:57 INFO  Server:130 - Closing server...
+2016-06-15 15:30:57 INFO  Server:144 - Server closed.
+2016-06-15 15:31:05 INFO  Server:73 - Starting server...
+2016-06-15 15:31:05 INFO  Server:124 - Server started.
+2016-06-15 15:31:09 INFO  RequestManager:41 - Client connecting (127.0.0.1:51781)...
+2016-06-15 15:31:09 INFO  RequestManager:45 - Client connected (127.0.0.1:51781).
+2016-06-15 15:31:14 INFO  RequestManager:58 - Request received from client (127.0.0.1:51781) : LoginRequest
+2016-06-15 15:31:14 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 15:31:14 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 15:31:14 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 15:31:15 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 15:31:15 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 15:31:15 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:31:15 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 15:31:15 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 15:31:15 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 15:31:15 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 15:31:16 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:31:16 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:31:20 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 15:31:20 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51781) : SuccessResponse
+2016-06-15 15:31:20 INFO  RequestManager:58 - Request received from client (127.0.0.1:51781) : PlayerRequest
+2016-06-15 15:31:20 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51781) : PlayerResponse
+2016-06-15 15:31:20 INFO  RequestManager:58 - Request received from client (127.0.0.1:51781) : RoomsRequest
+2016-06-15 15:31:20 INFO  RequestManager:96 - Response sent to client (127.0.0.1:51781) : RoomsResponse
+2016-06-15 15:31:21 INFO  RequestManager:58 - Request received from client (127.0.0.1:51781) : PlayerRequest
+2016-06-15 15:31:21 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51781) : PlayerResponse
+2016-06-15 15:33:09 INFO  Server:130 - Closing server...
+2016-06-15 15:33:09 INFO  RequestManager:119 - Closing connection (127.0.0.1:51781)...
+2016-06-15 15:33:09 INFO  RequestManager:83 - Connection closed (127.0.0.1:51781).
+2016-06-15 15:33:09 INFO  connections:235 - HHH10001008: Cleaning up connection pool [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:33:09 INFO  Server:144 - Server closed.
+2016-06-15 15:33:26 INFO  Server:73 - Starting server...
+2016-06-15 15:33:26 INFO  Server:124 - Server started.
+2016-06-15 15:33:34 INFO  RequestManager:41 - Client connecting (127.0.0.1:51829)...
+2016-06-15 15:33:34 INFO  RequestManager:45 - Client connected (127.0.0.1:51829).
+2016-06-15 15:33:40 INFO  RequestManager:58 - Request received from client (127.0.0.1:51829) : LoginRequest
+2016-06-15 15:33:40 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 15:33:40 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 15:33:40 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 15:33:41 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 15:33:41 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 15:33:41 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:33:41 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 15:33:41 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 15:33:41 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 15:33:43 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 15:33:43 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:33:43 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:33:48 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 15:33:48 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51829) : SuccessResponse
+2016-06-15 15:33:48 INFO  RequestManager:58 - Request received from client (127.0.0.1:51829) : PlayerRequest
+2016-06-15 15:33:48 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51829) : PlayerResponse
+2016-06-15 15:33:49 INFO  RequestManager:58 - Request received from client (127.0.0.1:51829) : RoomsRequest
+2016-06-15 15:33:49 INFO  RequestManager:96 - Response sent to client (127.0.0.1:51829) : RoomsResponse
+2016-06-15 15:33:49 INFO  RequestManager:58 - Request received from client (127.0.0.1:51829) : PlayerRequest
+2016-06-15 15:33:49 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51829) : PlayerResponse
+2016-06-15 15:33:57 INFO  RequestManager:119 - Closing connection (127.0.0.1:51829)...
+2016-06-15 15:33:57 INFO  RequestManager:83 - Connection closed (127.0.0.1:51829).
+2016-06-15 15:34:05 INFO  Server:73 - Starting server...
+2016-06-15 15:34:05 INFO  Server:124 - Server started.
+2016-06-15 15:34:07 INFO  RequestManager:41 - Client connecting (127.0.0.1:51847)...
+2016-06-15 15:34:07 INFO  RequestManager:45 - Client connected (127.0.0.1:51847).
+2016-06-15 15:34:10 INFO  RequestManager:41 - Client connecting (127.0.0.1:51850)...
+2016-06-15 15:34:10 INFO  RequestManager:45 - Client connected (127.0.0.1:51850).
+2016-06-15 15:34:49 INFO  RequestManager:58 - Request received from client (127.0.0.1:51847) : LoginRequest
+2016-06-15 15:34:49 INFO  Version:37 - HHH000412: Hibernate Core {5.1.0.Final}
+2016-06-15 15:34:49 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2016-06-15 15:34:49 INFO  Environment:317 - HHH000021: Bytecode provider name : javassist
+2016-06-15 15:34:49 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2016-06-15 15:34:49 WARN  connections:71 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2016-06-15 15:34:49 INFO  connections:127 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:34:49 INFO  connections:136 - HHH10001001: Connection properties: {user=bomber_server, password=****}
+2016-06-15 15:34:49 INFO  connections:141 - HHH10001003: Autocommit mode: false
+2016-06-15 15:34:49 INFO  DriverManagerConnectionProviderImpl:39 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2016-06-15 15:34:50 INFO  Dialect:156 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-06-15 15:34:51 WARN  RootClass:285 - HHH000038: Composite-id class does not override equals(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:34:51 WARN  RootClass:288 - HHH000039: Composite-id class does not override hashCode(): ch.heigvd.bomberman.common.game.Statistic
+2016-06-15 15:34:57 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2016-06-15 15:34:58 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51847) : SuccessResponse
+2016-06-15 15:34:58 INFO  RequestManager:58 - Request received from client (127.0.0.1:51847) : PlayerRequest
+2016-06-15 15:34:58 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51847) : PlayerResponse
+2016-06-15 15:34:58 INFO  RequestManager:58 - Request received from client (127.0.0.1:51847) : RoomsRequest
+2016-06-15 15:34:58 INFO  RequestManager:96 - Response sent to client (127.0.0.1:51847) : RoomsResponse
+2016-06-15 15:34:58 INFO  RequestManager:58 - Request received from client (127.0.0.1:51847) : PlayerRequest
+2016-06-15 15:34:58 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51847) : PlayerResponse
+2016-06-15 15:35:09 INFO  RequestManager:58 - Request received from client (127.0.0.1:51850) : LoginRequest
+2016-06-15 15:35:10 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51850) : SuccessResponse
+2016-06-15 15:35:10 INFO  RequestManager:58 - Request received from client (127.0.0.1:51850) : PlayerRequest
+2016-06-15 15:35:10 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51850) : PlayerResponse
+2016-06-15 15:35:10 INFO  RequestManager:58 - Request received from client (127.0.0.1:51850) : RoomsRequest
+2016-06-15 15:35:10 INFO  RequestManager:96 - Response sent to client (127.0.0.1:51847) : RoomsResponse
+2016-06-15 15:35:10 INFO  RequestManager:96 - Response sent to client (127.0.0.1:51850) : RoomsResponse
+2016-06-15 15:35:10 INFO  RequestManager:58 - Request received from client (127.0.0.1:51850) : PlayerRequest
+2016-06-15 15:35:10 INFO  RequestManager:65 - Response sent to client (127.0.0.1:51850) : PlayerResponse
+2016-06-15 15:36:32 INFO  RequestManager:119 - Closing connection (127.0.0.1:51850)...
+2016-06-15 15:36:32 INFO  RequestManager:83 - Connection closed (127.0.0.1:51850).
+2016-06-15 15:36:36 INFO  Server:130 - Closing server...
+2016-06-15 15:36:36 INFO  RequestManager:119 - Closing connection (127.0.0.1:51847)...
+2016-06-15 15:36:36 INFO  RequestManager:83 - Connection closed (127.0.0.1:51847).
+2016-06-15 15:36:36 INFO  connections:235 - HHH10001008: Cleaning up connection pool [jdbc:mysql://limayankee.com/bomber_man?createDatabaseIfNotExist=true]
+2016-06-15 15:36:36 INFO  Server:144 - Server closed.
