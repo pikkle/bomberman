@@ -120,13 +120,7 @@ public class RequestProcessor implements RequestVisitor{
 	public Response visit(ArenasRequest request) {
 		if (!requestManager.isLoggedIn())
 			return new ArenasResponse(request.getID(), null);
-
-		try {
-			return new ArenasResponse(request.getID(), db.arenas().findAll());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return new ArenasResponse(request.getID(), null);
-		}
+		return new ArenasResponse(request.getID(), db.arenas().findAll());
 	}
 
 	@Override
