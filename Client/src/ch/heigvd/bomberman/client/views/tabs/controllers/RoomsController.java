@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.client.views.tabs.controllers;
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.game.ReadyController;
+import ch.heigvd.bomberman.client.views.room.NewViewController;
 import ch.heigvd.bomberman.client.views.room.PasswordController;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.beans.binding.Bindings;
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -116,6 +118,23 @@ public class RoomsController extends Observable
                 notifyObservers(r);
             });
         }
+    }
+
+    @FXML
+    private void addRoom() throws Exception
+    {
+        Stage stage = new Stage();
+        AnchorPane pane;
+        NewViewController controller;
+        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/room/NewView.fxml"));
+
+        stage.setTitle("Room");
+        pane = loader.load();
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.setScene(new Scene(pane));
+        stage.showAndWait();
     }
 
     private void join(Room room){

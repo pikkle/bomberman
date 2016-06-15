@@ -49,7 +49,15 @@ public class Client extends Application {
     public void start(Stage primaryStage) throws IOException {
         logger.info("Starting client...");
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Bomberman");
+        reset();
+        logger.info("Client started");
+    }
+
+    public void reset() throws IOException{
+        primaryStage.setTitle("Bomberman");
+
+        primaryStage.setResizable(false);
+
         FXMLLoader loader = new FXMLLoader();
 
         loader.setLocation(Client.class.getResource("views/auth/LoginView.fxml"));
@@ -57,7 +65,7 @@ public class Client extends Application {
         try {
             mainLayout = loader.load();
         } catch (IOException e) {
-            logger.fatal("Couldn't create console", e);
+            logger.fatal("Couldn't create login form", e);
             throw e;
         }
 
@@ -65,7 +73,6 @@ public class Client extends Application {
 
         primaryStage.setScene(new Scene(mainLayout));
         primaryStage.show();
-        logger.info("Client started");
     }
 
     @Override

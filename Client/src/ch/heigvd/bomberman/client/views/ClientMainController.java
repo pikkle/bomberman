@@ -2,7 +2,6 @@ package ch.heigvd.bomberman.client.views;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
-import ch.heigvd.bomberman.client.views.room.NewViewController;
 import ch.heigvd.bomberman.client.views.tabs.controllers.TabsController;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
@@ -83,48 +82,29 @@ public class ClientMainController {
     }
 
     @FXML
+    private void about() {
+        Stage stage = new Stage();
+        AnchorPane pane;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/About.fxml"));
+
+            stage.setTitle("Bomberman - About");
+            pane = loader.load();
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+
+            stage.setScene(new Scene(pane));
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void closeApp () throws Exception
     {
         Platform.exit();
-    }
-
-    @FXML
-    private void arena()
-    {
-
-    }
-
-    @FXML
-    private void mapEditor() throws Exception
-    {
-        Stage stage = new Stage();
-        AnchorPane pane;
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/mapEditor/MapEditor.fxml"));
-
-        stage.setTitle("MapEditor");
-        pane = loader.load();
-
-        stage.initModality(Modality.APPLICATION_MODAL);
-
-        stage.setScene(new Scene(pane));
-        stage.showAndWait();
-    }
-
-    @FXML
-    private void room() throws Exception
-    {
-        Stage stage = new Stage();
-        AnchorPane pane;
-        NewViewController controller;
-        FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/room/NewView.fxml"));
-
-        stage.setTitle("Salle");
-        pane = loader.load();
-        controller = loader.getController();
-
-        stage.initModality(Modality.APPLICATION_MODAL);
-
-        stage.setScene(new Scene(pane));
-        stage.showAndWait();
     }
 }

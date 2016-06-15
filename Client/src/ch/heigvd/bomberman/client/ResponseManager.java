@@ -29,7 +29,7 @@ public class ResponseManager extends Observable
     private ObjectInputStream reader;
     private Map<UUID, Consumer> callbacks;
     private Thread receiver;
-    private boolean closeRequest = false;
+    private boolean closeRequest = true;
 
     private ResponseManager()
     {
@@ -45,42 +45,40 @@ public class ResponseManager extends Observable
 
     public void connect(String address, int port) throws IOException
     {
+        if(!isConnected()) {
+            closeRequest = false;
+            socket = new Socket(address, port);
+            writer = new ObjectOutputStream(socket.getOutputStream());
+            reader = new ObjectInputStream(socket.getInputStream());
 
-        socket = new Socket(address, port);
-        writer = new ObjectOutputStream(socket.getOutputStream());
-        reader = new ObjectInputStream(socket.getInputStream());
+            receiver = new Thread() {
+                @Override
+                public void run() {
+                    while (isConnected()) {
+                        try {
+                            Response response = (Response) reader.readObject();
 
-        receiver = new Thread()
-        {
-            @Override
-            public void run()
-            {
-                while (isConnected())
-                {
-                    try
-                    {
-                        Response response = (Response) reader.readObject();
-
-                        if(callbacks.get(response.getID()) != null) {
-                            Consumer callback = callbacks.get(response.getID());
-                            Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
+                            if (callbacks.get(response.getID()) != null) {
+                                Consumer callback = callbacks.get(response.getID());
+                                Platform.runLater(() -> callback.accept(response.accept(ResponseProcessor.getInstance())));
+                            }
+                        } catch (EOFException e) {
+                            disconnect();
+                        } catch (SocketException e) {
+                            disconnect();
+                        } catch (IOException e) {
+                            logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
+                                    .getPort() + ")", e);
+                            disconnect();
+                        } catch (ClassNotFoundException e) {
+                            logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
+                                    .getPort() + ")", e);
                         }
-                    } catch (EOFException e){
-                        disconnect();
-                    } catch (SocketException e){
-                        disconnect();
-                    } catch (IOException e) {
-                        logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
-                                .getPort() + ")", e);
-                        disconnect();
-                    } catch (ClassNotFoundException e) {
-                        logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
-                                .getPort() + ")", e);
                     }
                 }
-            }
-        };
-        receiver.start();
+            };
+            receiver.start();
+        }
     }
 
     public void stop(){
@@ -114,7 +112,7 @@ public class ResponseManager extends Observable
                 alert.setContentText("Server is unreachable. Try to connect again.");
                 alert.showAndWait();
                 try {
-                    Client.getInstance().start(Client.getInstance().getPrimatyStage());
+                    Client.getInstance().reset();
                 } catch (IOException e) {
                     logger.fatal("Unable to reload the application", e);
                     Platform.exit();

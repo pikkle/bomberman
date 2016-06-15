@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.tabs.controllers.ProfileController">
+<AnchorPane stylesheets="@ProfileTab.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.tabs.controllers.ProfileController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <GridPane maxHeight="200.0" maxWidth="320.0" prefHeight="192.0" prefWidth="318.0" BorderPane.alignment="TOP_LEFT">
+            <GridPane maxHeight="200.0" maxWidth="320.0" prefHeight="192.0" prefWidth="318.0" styleClass="profile" BorderPane.alignment="TOP_LEFT">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

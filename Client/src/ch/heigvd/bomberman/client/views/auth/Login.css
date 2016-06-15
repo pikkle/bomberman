@@ -1,0 +1,8 @@
+.aButton{
+    -fx-background-color: none;
+    -fx-text-fill: #135CAE;
+}
+
+.aButton:hover{
+    -fx-underline: true;
+}

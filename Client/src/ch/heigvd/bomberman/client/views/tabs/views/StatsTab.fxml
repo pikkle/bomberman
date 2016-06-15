@@ -57,6 +57,9 @@
                   <TableColumn prefWidth="75.0" text="bombes">
                      <cellValueFactory><PropertyValueFactory property="bombs" /></cellValueFactory>
                   </TableColumn>
+                  <TableColumn prefWidth="75.0" text="rank">
+                     <cellValueFactory><PropertyValueFactory property="rank" /></cellValueFactory>
+                  </TableColumn>
                </columns>
             </TableView>
          </children>

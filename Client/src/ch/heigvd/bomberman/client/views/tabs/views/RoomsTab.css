@@ -5,3 +5,22 @@
 #nameCol{
     -fx-alignment: center-left;
 }
+
+.root{
+    -fx-background-color: lightgray;
+}
+
+.footer{
+    -fx-background-color: #141510;
+}
+
+.button{
+    -fx-background-color :  #6e6e6e;
+    -fx-border-color :  #8b8b8b;
+}
+
+.button:hover{
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #6e6e6e;
+    -fx-cursor: hand;
+}

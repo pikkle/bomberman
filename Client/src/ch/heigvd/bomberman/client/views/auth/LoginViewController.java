@@ -14,6 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -22,6 +24,7 @@ import java.io.UncheckedIOException;
  * Created by julien on 08.05.16.
  */
 public class LoginViewController {
+    private static Log logger = LogFactory.getLog(LoginViewController.class);
     private Client client;
     private static final int DEFAULT_PORT = 3737;
     private static final String DEFAULT_ADDRESS = "127.0.0.1";
@@ -58,14 +61,18 @@ public class LoginViewController {
         testServer();
     }
 
-    public void testServer(){
+    @FXML
+    private void testServer(){
+        logger.info("Client connecting...");
         try
         {
             rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
             serverStatusLabel.setText("Online");
             serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
-        } catch (IOException e)
-        {
+            enableAll();
+            logger.info("Client connected");
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
             serverStatusLabel.setText("Offline");
             serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ko_sign.png")));
             disableAll();
@@ -153,6 +160,7 @@ public class LoginViewController {
         controller = loader.getController();
 
         stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
 
         stage.setScene(new Scene(pane));
         stage.showAndWait();

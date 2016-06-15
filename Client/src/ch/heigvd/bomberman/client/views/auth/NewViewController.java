@@ -19,7 +19,7 @@ public class NewViewController {
     @FXML
     private Pane mainPane;
 
-    @FXML private TextField userId, email;
+    @FXML private TextField userId;
     @FXML private PasswordField pwd, pwdc;
 
     @FXML
@@ -41,12 +41,6 @@ public class NewViewController {
             alert.setContentText("The user name is empty");
             alert.showAndWait();
         }
-        else if (email.getText().isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("The email is empty");
-            alert.showAndWait();
-        }
-
         else if (pwd.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("The password name is empty");
