@@ -7,6 +7,7 @@ import ch.heigvd.bomberman.server.controllers.ConsoleController;
 import ch.heigvd.bomberman.server.database.DBManager;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -21,10 +22,10 @@ import org.apache.commons.logging.LogFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +43,7 @@ public class Server extends Application {
 	private DBManager database;
 	private ServerSocket socket;
 	private TextArea console = new TextArea();
+	private Thread thread;
 
 	public Server() {
 		synchronized(Server.class){
@@ -68,7 +70,7 @@ public class Server extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws IOException, SQLException {
+	public void start(Stage primaryStage) throws IOException {
 		logger.info("Starting server...");
 
 		primaryStage.setTitle("Server");
@@ -89,17 +91,7 @@ public class Server extends Application {
 
 		primaryStage.setScene(new Scene(mainLayout));
 		primaryStage.setOnCloseRequest(event -> {
-			logger.info("Closing server...");
-			running = false;
-			try {
-				if(socket != null)
-					socket.close();
-				clients.forEach(client -> client.disconnect());
-			} catch (IOException e) {
-				logger.error("Server closing error", e);
-				e.printStackTrace();
-				event.consume();
-			}
+			Platform.exit();
 		});
 
 		database = DBManager.getInstance();
@@ -110,7 +102,7 @@ public class Server extends Application {
 			}
 		});
 
-		new Thread(() -> {
+		thread = new Thread(() -> {
 			while (running) {
 				try {
 					socket = new ServerSocket(port);
@@ -125,19 +117,41 @@ public class Server extends Application {
 					running = false;
 				} catch (IOException e) {
 					logger.error("Server error", e);
-					e.printStackTrace();
 				}
 			}
-		}).start();
+		});
+		thread.start();
 
 		logger.info("Server started.");
 		primaryStage.show();
 	}
 
 	@Override
-	public synchronized void stop() {
-		clients.forEach(client -> client.disconnect());
-		logger.info("Server closed...");
+	public void stop() {
+		logger.info("Closing server...");
+		running = false;
+		thread.interrupt();
+		try {
+			socket.close();
+			clients.forEach(client -> {
+				client.disconnect();
+				try {
+					client.join();
+				} catch (InterruptedException e) {
+					logger.error("Waiting on closing connection", e);
+				}
+			});
+			Set<Thread> threadSet = Thread.getAllStackTraces().keySet().stream().filter(t -> t != Thread
+					.currentThread()).collect(Collectors.toSet());
+			if(!threadSet.isEmpty()){
+				logger.warn("Threads are still running : " + threadSet.stream().map(t -> t.getName()).collect(Collectors.joining(", ")));
+			}
+			else {
+				logger.info("Server closed.");
+			}
+		} catch (IOException e) {
+			logger.error("Closing server error", e);
+		}
 	}
 
 	public DBManager getDatabase() {

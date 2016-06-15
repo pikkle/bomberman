@@ -16,13 +16,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 import java.util.UUID;
 
 public class RequestManager extends Thread implements Observer {
-    private static Log logger = LogFactory.getLog(Server.class);
+    private static Log logger = LogFactory.getLog(RequestManager.class);
     private Socket socket;
     private ObjectOutputStream writer;
     private ObjectInputStream reader;
@@ -56,9 +57,8 @@ public class RequestManager extends Thread implements Observer {
                 Request request = (Request) reader.readObject();
                 logger.info("Request received from client (" + socket.getInetAddress().getHostAddress() + ":"
                                            + socket.getPort() + ") : " + request.getClass().getSimpleName());
-                logger.info("test1");
+
                 Response response = request.accept(requestProcessor);
-                logger.info("test2");
                 if (response.isSendable()) {
                     writer.reset();
                     writer.writeObject(response);
@@ -66,6 +66,8 @@ public class RequestManager extends Thread implements Observer {
                                                + socket.getPort() + ") : " + response.getClass().getSimpleName());
                 }
             } catch (EOFException e){
+                disconnect();
+            } catch (SocketException e){
                 disconnect();
             } catch (IOException e) {
                 logger.error("Communication error (" + socket.getInetAddress().getHostAddress() + ":" + socket
@@ -76,6 +78,13 @@ public class RequestManager extends Thread implements Observer {
                         .getPort() + ")", e);
                 e.printStackTrace();
             }
+        }
+        try {
+            socket.close();
+            logger.info("Connection closed (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ").");
+        } catch (IOException e) {
+            logger.error("Closing connection error (" + socket.getInetAddress().getHostAddress() + ":" + socket
+                    .getPort() + ")", e);
         }
     }
 
@@ -102,26 +111,27 @@ public class RequestManager extends Thread implements Observer {
         return running && socket != null && !socket.isClosed() && socket.isConnected();
     }
 
-    public void disconnect()
+    public synchronized void disconnect()
     {
-        logger.info("Closing connection (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")...");
-        try {
-            socket.close();
-            if(writer != null)
-                writer.close();
-            if(reader != null)
-                reader.close();
-            loggedIn = false;
+        if(isConnected()) {
+            logger.info("Closing connection (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")...");
             running = false;
-            if(playerSession != null)
-                playerSession.close();
             interrupt();
+            loggedIn = false;
+            if (playerSession != null)
+                playerSession.close();
+            if(playerSession != null)
+                playerSession.getRoomSession().getArena().deleteObserver(this);
             Server.getInstance().getClients().remove(this);
-            logger.info("Connection closed (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ").");
-        } catch (IOException e) {
-            logger.error("Closing connection error (" + socket.getInetAddress().getHostAddress() + ":" + socket
-                    .getPort() + ")", e);
-            e.printStackTrace();
+            try {
+                if (writer != null)
+                    writer.close();
+                if (reader != null)
+                    reader.close();
+            } catch (IOException e) {
+                logger.error("Closing streams error (" + socket.getInetAddress().getHostAddress() + ":" + socket
+                        .getPort() + ")", e);
+            }
         }
     }
 

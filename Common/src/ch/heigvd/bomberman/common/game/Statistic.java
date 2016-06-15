@@ -23,7 +23,7 @@ public class Statistic implements Serializable {
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
-    @Column(name="suvivalTime")
+    @Column(name="suvivalTime", nullable = false)
     private Duration survivalTime;
 
     @Column(name="kills")

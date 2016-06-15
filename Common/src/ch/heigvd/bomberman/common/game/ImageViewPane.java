@@ -9,6 +9,8 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -42,7 +44,14 @@ public class ImageViewPane extends Region implements Serializable {
 				getChildren().add(newIV);
 			}
 		});
-		this.imageViewProperty.set(new ImageView(path));
+		try{
+			this.imageViewProperty.set(new ImageView(path));
+		} catch (Throwable e){
+			Log logger = LogFactory.getLog(ImageViewPane.class);
+			logger.fatal("Couldn't create image : " + path);
+			throw e;
+		}
+
 	}
 
 	public ObjectProperty<ImageView> imageViewProperty() {
