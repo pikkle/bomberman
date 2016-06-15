@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="mainPane" prefHeight="254.0" prefWidth="438.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.heigvd.bomberman.client.views.auth.LoginViewController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="172.0" prefWidth="320.0" spacing="15.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+            <children>
+                <HBox prefHeight="28.0" prefWidth="335.0">
+                    <children>
+                        <Label prefHeight="28.0" prefWidth="91.0" text="Server status:" />
+                        <ImageView fx:id="serverStatusIcon" fitHeight="27.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="serverStatusLabel" prefHeight="30.0" prefWidth="120" text="Label" />
+                    </children>
+                </HBox>
+                <GridPane prefHeight="79.0" prefWidth="408.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="163.0" minWidth="10.0" prefWidth="90.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="245.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="User name" />
+                        <Label text="Password:" GridPane.rowIndex="1" />
+                        <TextField fx:id="userId" prefHeight="27.0" prefWidth="155.0" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="pwd" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    </children>
+                </GridPane>
+                <ButtonBar prefHeight="34.0" prefWidth="335.0">
+                    <buttons>
+                        <Button fx:id="login" mnemonicParsing="false" onAction="#login" text="Login" />
+                        <Button mnemonicParsing="false" onAction="#closeApp" text="Exit" />
+                    </buttons>
+                </ButtonBar>
+                <HBox alignment="CENTER" prefHeight="34.0" prefWidth="335.0">
+                    <children>
+                        <Button fx:id="createAcount" contentDisplay="CENTER" mnemonicParsing="false" onAction="#newUser" text="Creat Acount" />
+                    </children>
+                </HBox>
+            </children>
+            <opaqueInsets>
+                <Insets left="15.0" right="15.0" />
+            </opaqueInsets>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -1,0 +1,28 @@
+.root{
+    -fx-background-color: lightgray;
+}
+
+.footer{
+    -fx-background-color: #141510;
+}
+
+.button{
+    -fx-background-color :  #6e6e6e;
+    -fx-border-color :  #8b8b8b;
+}
+
+.button:hover{
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #6e6e6e;
+    -fx-cursor: hand;
+}
+
+.map {
+    -fx-padding: 10;
+    -fx-background-color: #6e6e6e;
+    -fx-border-color: #141510;
+    -fx-border-width: 2;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-cursor: hand;
+}
