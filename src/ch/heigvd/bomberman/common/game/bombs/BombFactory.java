@@ -1,6 +1,6 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.util.Point;
 
 import java.io.Serializable;

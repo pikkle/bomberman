@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.communication.requests.*;
 import ch.heigvd.bomberman.common.communication.responses.*;
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.Player;
 import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.common.game.StartPoint;

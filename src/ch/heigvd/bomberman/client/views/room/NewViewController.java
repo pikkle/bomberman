@@ -6,7 +6,7 @@ import ch.heigvd.bomberman.client.views.game.ReadyController;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.client.views.tabs.controllers.RoomsController;
 import ch.heigvd.bomberman.common.communication.Message;
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

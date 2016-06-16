@@ -1,6 +1,5 @@
 package ch.heigvd.bomberman.common.game;
 
-import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.util.Point;
 
 import javax.persistence.Entity;

@@ -1,6 +1,6 @@
 package ch.heigvd.bomberman.server.database;
 
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 
 import java.util.List;
 import java.util.Optional;

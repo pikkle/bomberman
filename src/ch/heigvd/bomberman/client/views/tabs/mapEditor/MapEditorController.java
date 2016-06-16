@@ -4,7 +4,7 @@ import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.util.ImageViewPane;
 import ch.heigvd.bomberman.common.communication.Message;
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.powerups.BombUpPowerUp;
 import ch.heigvd.bomberman.common.util.Point;

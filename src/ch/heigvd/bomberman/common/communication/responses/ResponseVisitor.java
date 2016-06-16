@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.communication.responses;
 
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.*;
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 
 import java.util.List;
 

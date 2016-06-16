@@ -1,6 +1,5 @@
-package ch.heigvd.bomberman.common.game.Arena;
+package ch.heigvd.bomberman.common.game;
 
-import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.util.Direction;
 import ch.heigvd.bomberman.common.util.Pair;
 import ch.heigvd.bomberman.common.util.Point;

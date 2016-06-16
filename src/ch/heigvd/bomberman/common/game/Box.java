@@ -1,6 +1,5 @@
 package ch.heigvd.bomberman.common.game;
 
-import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.powerups.*;
 import ch.heigvd.bomberman.common.util.Point;
 import org.hibernate.annotations.Cascade;

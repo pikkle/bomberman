@@ -1,6 +1,6 @@
 package ch.heigvd.bomberman.common.game.explosion;
 
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.util.Point;
 

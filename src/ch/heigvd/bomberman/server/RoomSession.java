@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.server;
 
 import ch.heigvd.bomberman.common.game.*;
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,6 +1,6 @@
 package ch.heigvd.bomberman.test;
 
-import ch.heigvd.bomberman.common.game.Arena.Arena;
+import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.server.database.DBManager;
 import org.junit.After;
 import org.junit.Before;
