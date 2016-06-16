@@ -14,24 +14,40 @@ import org.apache.commons.logging.LogFactory;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The processor of the requests received by the client. Implements the visitor pattern.
+ */
 public class RequestProcessor implements RequestVisitor{
 	private static Log logger = LogFactory.getLog(RequestProcessor.class);
 	private RequestManager requestManager;
 	private static Server server = Server.getInstance();
 	private static DBManager db;
 
+	/**
+	 * Constructs the request processor.
+	 * @param requestManager the request manager caller.
+     */
 	public RequestProcessor(RequestManager requestManager){
 		this.requestManager = requestManager;
 		db = DBManager.getInstance();
 	}
 
+	/**
+	 * Processes a Hello Request.
+	 * @param request the HelloRequest received
+	 * @return an HelloResponse
+     */
 	@Override
 	public Response visit(HelloRequest request){
 		System.out.println("Received message: ");
 		System.out.println(request.getMessage());
 		return new HelloResponse(request.getID(), "Hello !");
 	}
-
+	/**
+	 * Processes an AccountCreationRequest.
+	 * @param request the HelloRequest received
+	 * @return an ErrorResponse or a SuccessResponse
+	 */
 	@Override
 	public Response visit(AccountCreationRequest request) {
 		if (requestManager.isLoggedIn())
@@ -45,6 +61,11 @@ public class RequestProcessor implements RequestVisitor{
 				});
 	}
 
+	/**
+	 * Processes an AccountModifyRequest.
+	 * @param request the AccountModifyRequest received
+	 * @return an ErrorResponse or a SuccessResponse
+	 */
 	@Override
 	public Response visit(AccountModifyRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -70,6 +91,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new SuccessResponse(request.getID(), "Account successfully updated !");
 	}
 
+	/**
+	 * Processes a LoginRequest.
+	 * @param request the LoginRequest received
+	 * @return an ErrorResponse or a SuccessResponse
+	 */
 	@Override
 	public Response visit(LoginRequest request) {
 		if (requestManager.isLoggedIn())
@@ -84,6 +110,11 @@ public class RequestProcessor implements RequestVisitor{
 				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
 
+	/**
+	 * Processes a PlayerRequest.
+	 * @param request the PlayerRequest received
+	 * @return a NoResponse or a PlayerResponse
+	 */
 	@Override
 	public Response visit(PlayerRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -92,6 +123,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new PlayerResponse(request.getID(), requestManager.getPlayer());
 	}
 
+	/**
+	 * Processes an ArenasRequest.
+	 * @param request the ArenasRequest received
+	 * @return an ArenasResponse
+	 */
 	@Override
 	public Response visit(ArenasRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -99,6 +135,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new ArenasResponse(request.getID(), db.arenas().findAll());
 	}
 
+	/**
+	 * Processes a SaveArenaRequest.
+	 * @param request the SaveArenaRequest received
+	 * @return an ErrorResponse or a SuccessResponse
+	 */
 	@Override
 	public Response visit(SaveArenaRequest request) {
 		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
@@ -111,6 +152,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new SuccessResponse(request.getID(), "Arean successfully saved");
 	}
 
+	/**
+	 * Processes a RemoveArenaRequest.
+	 * @param request the RemoveArenaRequest received
+	 * @return an ErrorResponse or a SuccessResponse
+	 */
 	@Override
 	public Response visit(RemoveArenaRequest request) {
 		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
@@ -120,6 +166,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new SuccessResponse(request.getID(), "Arean successfully removed");
 	}
 
+	/**
+	 * Processes a CreateRoomRequest.
+	 * @param request the CreateRoomRequest received
+	 * @return an ErrorResponse or a SuccessResponse
+	 */
 	@Override
 	public Response visit(CreateRoomRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -142,6 +193,11 @@ public class RequestProcessor implements RequestVisitor{
 				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
 
+	/**
+	 * Processes a RoomsRequest.
+	 * @param request the RoomsRequest received
+	 * @return a NoResponse
+	 */
 	@Override
 	public Response visit(RoomsRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -154,6 +210,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new NoResponse(request.getID());
 	}
 
+	/**
+	 * Processes a RoomsRequest.
+	 * @param request the RoomsRequest received
+	 * @return a NoResponse
+	 */
 	@Override
 	public Response visit(JoinRoomRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -195,7 +256,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new NoResponse(request.getID());
 	}
 
-	// Game requests, allowed
+	/**
+	 * Processes a ReadyRequest.
+	 * @param request the ReadyRequest received
+	 * @return a NoResponse
+	 */
 	@Override
 	public Response visit(ReadyRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -228,6 +293,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new NoResponse(request.getID());
 	}
 
+	/**
+	 * Processes a MoveRequest.
+	 * @param request the MoveRequest received
+	 * @return a NoResponse
+	 */
 	@Override
 	public Response visit(MoveRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -252,6 +322,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new NoResponse(request.getID());
 	}
 
+	/**
+	 * Processes an AddElementRequest.
+	 * @param request the AddElementRequest received
+	 * @return a NoResponse
+	 */
 	@Override
 	public Response visit(AddElementRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -268,6 +343,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new NoResponse(request.getID());
 	}
 
+	/**
+	 * Processes a DestroyElementsRequest.
+	 * @param request the DestroyElementsRequest received
+	 * @return a NoResponse
+	 */
 	@Override
 	public Response visit(DestroyElementsRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -284,6 +364,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new NoResponse(request.getID());
 	}
 
+	/**
+	 * Processes a DropBombRequest.
+	 * @param request the DropBombRequest received
+	 * @return a NoResponse
+	 */
 	@Override
 	public Response visit(DropBombRequest request) {
 		if (!requestManager.isLoggedIn())
@@ -304,6 +389,11 @@ public class RequestProcessor implements RequestVisitor{
 		return new NoResponse(request.getID());
 	}
 
+	/**
+	 * Processes an EndGameRequest.
+	 * @param request the EndGameRequest received
+	 * @return a NoResponse
+	 */
 	@Override
 	public Response visit(EndGameRequest request) {
 		if (!requestManager.isLoggedIn())

@@ -9,6 +9,9 @@ import javafx.collections.ObservableList;
 import java.time.Instant;
 import java.util.Optional;
 
+/**
+ * Represents a room session containing players to play a game of bomberman.
+ */
 public class RoomSession {
 	private String name;
 	private Arena arena;
@@ -21,11 +24,13 @@ public class RoomSession {
 	private Player owner;
 
 	/**
-	 * Creates a room
-	 *
-	 * @param name
-	 * @param password
-	 */
+	 * Creates a room.
+	 * @param name the name of the room
+	 * @param password the password of the room
+	 * @param minPlayer the minimum amount of players required to launch the game
+	 * @param arena the arena that will be used for the game
+     * @param owner the creator of the arena
+     */
 	public RoomSession(String name, String password, int minPlayer, Arena arena, Player owner) {
 		this.name = name;
 		this.password = password;
@@ -34,18 +39,33 @@ public class RoomSession {
 		this.owner = owner;
 	}
 
+	/**
+	 * Gets the creator of the room.
+	 * @return the owner of the room
+     */
 	public Player getOwner(){
 		return owner;
 	}
 
+	/**
+	 * Gets the game start's time.
+	 * @return the time at which the game has started.
+     */
 	public Instant getStart(){
 		return start;
 	}
 
+	/**
+	 * Gets the game corresponding to the room session.
+	 * @return the game
+     */
 	public Game getGame(){
 		return game;
 	}
 
+	/**
+	 * Closes the room and tells the players inside to quit.
+	 */
 	public synchronized void close(){
 		while(!players.isEmpty()){
 			players.stream().findFirst().get().close();
@@ -54,26 +74,51 @@ public class RoomSession {
 		Server.getInstance().getRoomSessions().remove(this);
 	}
 
+	/**
+	 * Gets the name of the room.
+	 * @return the room's name
+     */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Gets the arena of the room session.
+	 * @return the room's arena
+     */
 	public Arena getArena() {
 		return arena;
 	}
 
+	/**
+	 * Gets the room's password.
+	 * @return the room's password
+     */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * Gets the minimum amount of players required to launch a game.
+	 * @return the minimum amount of players required
+     */
 	public int getMinPlayer() {
 		return minPlayer;
 	}
 
+	/**
+	 * Gets the players in a list.
+	 * @return the players list
+     */
 	public synchronized ObservableList<PlayerSession> getPlayers() {
 		return players;
 	}
 
+	/**
+	 * Adds a player in the room
+	 * @param p the player to add
+	 * @throws Exception
+     */
 	public synchronized void addPlayer(PlayerSession p) throws Exception {
 		if (!players.contains(p)) {
 			if (players.size() >= 4) throw new Exception("Already 4 players !");
@@ -81,12 +126,19 @@ public class RoomSession {
 		}
 	}
 
+	/**
+	 * Removes a player from the room.
+	 * @param p the player to remove
+     */
 	public synchronized void removePlayer(PlayerSession p) {
 		if (players.contains(p)) {
 			players.remove(p);
 		}
 	}
 
+	/**
+	 * Starts the game.
+	 */
 	public synchronized void start() {
 		game.getStatistics().clear();
 		for (PlayerSession player : players) {
@@ -123,6 +175,10 @@ public class RoomSession {
 		}).start();
 	}
 
+	/**
+	 * Returns whether the game is running
+	 * @return the game status
+     */
 	public synchronized boolean isRunning() {
 		return running;
 	}
