@@ -1,20 +1,30 @@
 package ch.heigvd.bomberman.common.game;
 
-/*public enum Skin {
-    SKIN1("img/skins/skin1.png"),
-    SKIN2("img/skins/skin2.png"),
-    SKIN3("img/skins/skin3.png"),
-    SKIN4("img/skins/skin4.png");
+public enum Skin {
 
-    private String path;
+	SKIN1 {
+		@Override
+		public String path() {
+			return src + "skin1.png";
+		}
+	}, SKIN2 {
+		@Override
+		public String path() {
+			return src + "skin2.png";
+		}
+	}, SKIN3 {
+		@Override
+		public String path() {
+			return src + "skin3.png";
+		}
+	}, SKIN4 {
+		@Override
+		public String path() {
+			return src + "skin4.png";
+		}
+	};
 
-    private Skin(String s) {
-        path = "ch/heigvd/bomberman/client/" + s;
-    }
+	private final static String src = "ch/heigvd/bomberman/common/game/img/skins/";
 
-    public String path(){
-        return path;
-    }
-}*/
-
-public enum Skin{SKIN1, SKIN2, SKIN3, SKIN4};
+	public abstract String path();
+}

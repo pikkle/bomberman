@@ -1,12 +1,5 @@
 package ch.heigvd.bomberman.test;
 
-import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.game.Direction;
-import ch.heigvd.bomberman.common.game.Skin;
-import javafx.geometry.Point2D;
-
-import static org.junit.Assert.*;
-
 public class BombermanTest {
 
    /* @org.junit.Test

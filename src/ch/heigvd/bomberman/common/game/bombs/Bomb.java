@@ -1,9 +1,9 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Direction;
+import ch.heigvd.bomberman.common.util.Direction;
 import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.Pair;
+import ch.heigvd.bomberman.common.util.Pair;
 import ch.heigvd.bomberman.common.game.Point;
 import ch.heigvd.bomberman.common.game.explosion.*;
 import javafx.animation.KeyFrame;

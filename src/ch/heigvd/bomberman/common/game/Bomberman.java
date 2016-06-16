@@ -6,6 +6,7 @@ import ch.heigvd.bomberman.common.game.bombs.BasicBombFactory;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.bombs.BombFactory;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
+import ch.heigvd.bomberman.common.util.Direction;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -128,6 +129,6 @@ public class Bomberman extends Element {
 	 */
 	@Override
 	public String getPath() {
-		return "ch/heigvd/bomberman/common/game/img/skins/" + skin + ".png";
+		return skin.path();
 	}
 }
