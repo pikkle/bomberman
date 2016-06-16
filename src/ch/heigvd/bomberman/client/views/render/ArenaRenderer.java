@@ -3,7 +3,7 @@ package ch.heigvd.bomberman.client.views.render;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.ImageViewPane;
+import ch.heigvd.bomberman.common.util.ImageViewPane;
 import ch.heigvd.bomberman.common.game.Point;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;

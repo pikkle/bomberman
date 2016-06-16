@@ -1,6 +1,8 @@
 package ch.heigvd.bomberman.common.game.Arena;
 
 import ch.heigvd.bomberman.common.game.*;
+import ch.heigvd.bomberman.common.util.Direction;
+import ch.heigvd.bomberman.common.util.Pair;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -13,7 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ch.heigvd.bomberman.common.game.Direction.*;
+import static ch.heigvd.bomberman.common.util.Direction.*;
 
 /**
  * Created by matthieu.villard on 09.05.2016.
