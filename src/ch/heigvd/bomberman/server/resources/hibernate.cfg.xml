@@ -15,6 +15,7 @@
 
         <mapping class="ch.heigvd.bomberman.common.game.Wall"/>
         <mapping class="ch.heigvd.bomberman.common.game.Box"/>
+        <mapping class="ch.heigvd.bomberman.common.game.powerups.PowerUp"/>
         <mapping class="ch.heigvd.bomberman.common.game.powerups.BombUpPowerUp"/>
         <mapping class="ch.heigvd.bomberman.common.game.Player"/>
         <mapping class="ch.heigvd.bomberman.common.game.StartPoint"/>

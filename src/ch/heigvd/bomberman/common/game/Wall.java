@@ -4,6 +4,7 @@ import ch.heigvd.bomberman.common.game.util.Point;
 
 import javax.persistence.Entity;
 
+
 /**
  * An indestructible element which stop de blast and can't be traversed.
  * Commonly used all around the arena.
