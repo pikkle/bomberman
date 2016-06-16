@@ -1,10 +1,7 @@
 package ch.heigvd.bomberman.common.util;
 
 /**
- * Projet : GEN_Projet
- * Créé le 07.05.2016.
- *
- * @author Adriano Ruberto
+ * The direction a bomberman can go.
  */
 public enum Direction {
 	RIGHT, LEFT, UP, DOWN

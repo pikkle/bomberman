@@ -44,7 +44,7 @@ public class ReadyController implements Observer {
     public void loadRoom(Room room){
         this.room = room;
         lblRoom.setText("Room \"" + room.getName() + "\"");
-        number.setText(room.getPlayerNumber() + " player" + (room.getPlayerNumber() > 1 ? "s" : ""));
+        number.setText(room.getPlayers().size() + " player" + (room.getPlayers().size() > 1 ? "s" : ""));
     }
 
     @FXML

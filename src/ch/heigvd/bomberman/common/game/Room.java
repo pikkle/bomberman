@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * A room is where player are logged in.
+ */
 public class Room implements Serializable {
 	private String name;
 	private boolean isPrivate;
@@ -44,7 +47,7 @@ public class Room implements Serializable {
 	}
 
 	/**
-	 * Gets the minimum player for this room.
+	 * Gets the minimum player for the room.
 	 *
 	 * @return the minimum player for this room
 	 */
@@ -53,32 +56,29 @@ public class Room implements Serializable {
 	}
 
 	/**
-	 * TODO
+	 * Gets the list of player in the room.
 	 *
-	 * @return
-	 */
-	public int getPlayerNumber(){
-		return players.size();
-	}
-
-	/**
-	 * TODO
+	 * @return the list of player in the room.
 	 */
 	public List<String> getPlayers() {
 		return players;
 	}
 
 	/**
-	 * TODO
+	 * Adds a player to the room.
+	 *
+	 * @param name the name of the player
 	 */
-	public void addPlayer(String name){
+	public void addPlayer(String name) {
 		players.add(name);
 	}
 
 	/**
-	 * TODO
+	 * Remove a player of the room.
+	 *
+	 * @param name the name of the player
 	 */
-	public void removePlayer(String name){
+	public void removePlayer(String name) {
 		players.remove(name);
 	}
 
@@ -92,9 +92,9 @@ public class Room implements Serializable {
 	}
 
 	/**
-	 * TODO
+	 * Gets if is in room.
 	 *
-	 * @return
+	 * @return if is in room.
 	 */
 	public boolean isInRoom() {
 		return inRoom;
