@@ -36,32 +36,14 @@ public class Box extends Element {
 	 * Drops an optional of a power up.
 	 * It can be empty if no power up is in the box.
 	 *
+	 * {@link ch.heigvd.bomberman.common.game.powerups.RandomPowerUpFactory#generate}
 	 * @return an optional of a power up
 	 */
 	public Optional<PowerUp> dropPowerUp() {
 		if (powerUp != null)
 			return Optional.of(powerUp);
 
-		int gaps = 25;
-		int p = new Random().nextInt(gaps * 10);
-
-		if (p < gaps) {
-			return Optional.of(new BombDownPowerUp(position, arena));
-		} else if (p < gaps * 2) {
-			return Optional.of(new BombUpPowerUp(position, arena));
-		} else if (p < gaps * 3) {
-			return Optional.of(new FireDownPowerUp(position, arena));
-		} else if (p < gaps * 4) {
-			return Optional.of(new FireUpPowerUp(position, arena));
-		} else if (p < gaps * 5) {
-			return Optional.of(new FullFirePowerUp(position, arena));
-		} else if (p < gaps * 6) {
-			return Optional.of(new PowerBombPowerUp(position, arena));
-		} else if (p < gaps * 7) {
-			return Optional.of(new RedBombPowerUp(position, arena));
-		} else {
-			return Optional.empty();
-		}
+		return RandomPowerUpFactory.generate(position, arena);
 	}
 
 	/**
