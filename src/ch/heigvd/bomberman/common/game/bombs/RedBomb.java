@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Adriano on 09.06.2016.
+ * Like a {@link Bomb} but this bomb can't be stopped by a wall.
  */
 public class RedBomb extends Bomb {
 
@@ -17,6 +17,9 @@ public class RedBomb extends Bomb {
 		super(position, countdown, blastRange, arena);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Element> getElementsInRange() {
 		return arena.elementsInRange(this, blastRange).reduce(new LinkedList<>(), (res, elems) -> {
@@ -27,6 +30,9 @@ public class RedBomb extends Bomb {
 		}, (a, b) -> a);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getPath() {
 		return "ch/heigvd/bomberman/common/game/img/bombs/RedBomb.png";

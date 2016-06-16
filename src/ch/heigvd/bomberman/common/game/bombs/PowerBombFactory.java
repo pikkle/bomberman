@@ -11,6 +11,9 @@ public class PowerBombFactory extends BombFactory {
 		super(bf);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Bomb generate(Point position) {
 		return new PowerBomb(position, countdown, arena);

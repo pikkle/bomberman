@@ -8,17 +8,13 @@ import ch.heigvd.bomberman.common.game.bombs.PowerBombFactory;
 import javax.persistence.Entity;
 
 /**
- * Created by Adriano on 09.06.2016.
+ * The power up who change the actual bomb of the bomberman to
+ * {@link ch.heigvd.bomberman.common.game.bombs.PowerBomb}
  */
-
-@Entity
 public class PowerBombPowerUp extends PowerUp {
 
 	public PowerBombPowerUp(Point position, Arena arena) {
 		super(position, arena);
-	}
-
-	protected PowerBombPowerUp() {
 	}
 
 	/**

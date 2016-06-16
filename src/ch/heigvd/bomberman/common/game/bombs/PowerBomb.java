@@ -4,7 +4,7 @@ import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.util.Point;
 
 /**
- * Created by Adriano on 09.06.2016.
+ * Like a {@link BasicBomb} but with unlimited blast range
  */
 public class PowerBomb extends BasicBomb {
 
@@ -12,6 +12,9 @@ public class PowerBomb extends BasicBomb {
 		super(position, countdown, Math.max(arena.width(), arena.height()), arena);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getPath() {
 		return "ch/heigvd/bomberman/common/game/img/bombs/PowerBomb.png";
