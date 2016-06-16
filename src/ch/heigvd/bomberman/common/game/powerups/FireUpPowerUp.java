@@ -9,6 +9,10 @@ import ch.heigvd.bomberman.common.game.util.Point;
  */
 public class FireUpPowerUp extends PowerUp {
 
+	public FireUpPowerUp(){
+
+	}
+
 	public FireUpPowerUp(Point position, Arena arena) {
 		super(position, arena);
 	}

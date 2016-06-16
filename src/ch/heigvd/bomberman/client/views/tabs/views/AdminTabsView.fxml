@@ -10,6 +10,6 @@
     <Tab fx:id="statisticsTab" text="Statistics"><fx:include source="StatsTab.fxml" fx:id="statistics" /></Tab>
     <Tab fx:id="profileTab" text="Profil"><fx:include source="ProfileTab.fxml" fx:id="profile" /></Tab>
     <Tab fx:id="mapsTab" text="Maps"><fx:include source="MapsTab.fxml" fx:id="maps" /></Tab>
-    <Tab fx:id="playersTab" text="Maps"><fx:include source="PlayersTab.fxml" fx:id="players" /></Tab>
+    <Tab fx:id="playersTab" text="Players"><fx:include source="PlayersTab.fxml" fx:id="players" /></Tab>
 </tabs>
 </TabPane>

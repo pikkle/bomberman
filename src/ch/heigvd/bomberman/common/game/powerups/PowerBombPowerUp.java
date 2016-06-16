@@ -11,6 +11,10 @@ import ch.heigvd.bomberman.common.game.bombs.PowerBombFactory;
  */
 public class PowerBombPowerUp extends PowerUp {
 
+	public PowerBombPowerUp(){
+
+	}
+
 	public PowerBombPowerUp(Point position, Arena arena) {
 		super(position, arena);
 	}

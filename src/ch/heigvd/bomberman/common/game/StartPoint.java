@@ -2,9 +2,12 @@ package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.util.Point;
 
+import javax.persistence.Entity;
+
 /**
  * A StartPoint is where a bomberman can begin a game in the arena.
  */
+@Entity
 public class StartPoint extends Element {
 
 	/**

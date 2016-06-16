@@ -92,6 +92,15 @@ public class Room implements Serializable {
 	}
 
 	/**
+	 * Gets the number of players for the room.
+	 *
+	 * @return gets the number of players
+	 */
+	public int getPlayerNumber() {
+		return players.size();
+	}
+
+	/**
 	 * Gets if is in room.
 	 *
 	 * @return if is in room.

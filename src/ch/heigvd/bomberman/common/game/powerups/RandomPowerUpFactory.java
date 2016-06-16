@@ -12,6 +12,10 @@ import java.util.Random;
  */
 public class RandomPowerUpFactory {
 
+	public RandomPowerUpFactory(){
+
+	}
+
 	private static Random rand = new Random();
 
 	/**
