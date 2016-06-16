@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.game.explosion;
 
 import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.util.Point;
+import ch.heigvd.bomberman.common.game.util.Point;
 
 /**
  * An explosion of a bomb.

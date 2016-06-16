@@ -2,10 +2,8 @@ package ch.heigvd.bomberman.common.game.powerups;
 
 import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.util.Point;
+import ch.heigvd.bomberman.common.game.util.Point;
 import ch.heigvd.bomberman.common.game.bombs.PowerBombFactory;
-
-import javax.persistence.Entity;
 
 /**
  * The power up who change the actual bomb of the bomberman to

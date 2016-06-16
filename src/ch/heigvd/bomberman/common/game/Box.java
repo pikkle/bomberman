@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import ch.heigvd.bomberman.common.game.powerups.RandomPowerUpFactory;
-import ch.heigvd.bomberman.common.util.Point;
+import ch.heigvd.bomberman.common.game.util.Point;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.Entity;

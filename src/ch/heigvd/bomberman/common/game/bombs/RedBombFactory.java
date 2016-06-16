@@ -1,6 +1,6 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
-import ch.heigvd.bomberman.common.util.Point;
+import ch.heigvd.bomberman.common.game.util.Point;
 
 /**
  * A simple red bomb factory which generate {@link RedBomb}

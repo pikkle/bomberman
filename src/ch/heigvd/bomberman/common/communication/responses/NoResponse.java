@@ -1,6 +1,6 @@
 package ch.heigvd.bomberman.common.communication.responses;
 
-import ch.heigvd.bomberman.common.util.Direction;
+import ch.heigvd.bomberman.common.game.util.Direction;
 
 import java.util.UUID;
 

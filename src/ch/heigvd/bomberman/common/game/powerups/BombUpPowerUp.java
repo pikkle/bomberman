@@ -2,9 +2,7 @@ package ch.heigvd.bomberman.common.game.powerups;
 
 import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.util.Point;
-
-import javax.persistence.Entity;
+import ch.heigvd.bomberman.common.game.util.Point;
 
 /**
  * The power up who give one bomb.

@@ -4,7 +4,7 @@ import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
 import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.util.Direction;
+import ch.heigvd.bomberman.common.game.util.Direction;
 import ch.heigvd.bomberman.common.game.Room;
 import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import javafx.application.Platform;

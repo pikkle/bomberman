@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena;
-import ch.heigvd.bomberman.common.util.Point;
+import ch.heigvd.bomberman.common.game.util.Point;
 
 /**
  * A {@link BasicBomb} factory which begin with a 3 countdown, 1 blastRange

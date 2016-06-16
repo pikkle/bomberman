@@ -1,4 +1,4 @@
-package ch.heigvd.bomberman.common.util;
+package ch.heigvd.bomberman.common.game.util;
 
 /**
  * A basic implementation of a pair of two objects.

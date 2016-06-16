@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
-import ch.heigvd.bomberman.common.util.ImageViewPane;
-import ch.heigvd.bomberman.common.util.Point;
+import ch.heigvd.bomberman.common.game.util.ImageViewPane;
+import ch.heigvd.bomberman.common.game.util.Point;
 
 import javax.persistence.*;
 import java.io.Serializable;

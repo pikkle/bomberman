@@ -1,4 +1,4 @@
-package ch.heigvd.bomberman.common.util;
+package ch.heigvd.bomberman.common.game.util;
 
 /**
  * Copyright (c) 2012, Oracle and/or its affiliates. All rights reserved.

@@ -1,8 +1,8 @@
 package ch.heigvd.bomberman.common.game;
 
-import ch.heigvd.bomberman.common.util.Direction;
-import ch.heigvd.bomberman.common.util.Pair;
-import ch.heigvd.bomberman.common.util.Point;
+import ch.heigvd.bomberman.common.game.util.Direction;
+import ch.heigvd.bomberman.common.game.util.Pair;
+import ch.heigvd.bomberman.common.game.util.Point;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ch.heigvd.bomberman.common.util.Direction.*;
+import static ch.heigvd.bomberman.common.game.util.Direction.*;
 
 /**
  * An arena have all the elements and give some function to go search any

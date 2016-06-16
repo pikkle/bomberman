@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.client.views.tabs.mapEditor;
 
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
-import ch.heigvd.bomberman.common.util.ImageViewPane;
+import ch.heigvd.bomberman.common.game.util.ImageViewPane;
 import ch.heigvd.bomberman.common.game.Element;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;

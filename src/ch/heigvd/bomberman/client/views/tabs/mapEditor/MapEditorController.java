@@ -2,12 +2,12 @@ package ch.heigvd.bomberman.client.views.tabs.mapEditor;
 
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
-import ch.heigvd.bomberman.common.util.ImageViewPane;
+import ch.heigvd.bomberman.common.game.util.ImageViewPane;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.powerups.BombUpPowerUp;
-import ch.heigvd.bomberman.common.util.Point;
+import ch.heigvd.bomberman.common.game.util.Point;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;

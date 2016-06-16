@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.communication.requests;
 
 import ch.heigvd.bomberman.common.communication.responses.Response;
 import ch.heigvd.bomberman.common.game.Bomberman;
-import ch.heigvd.bomberman.common.util.Direction;
+import ch.heigvd.bomberman.common.game.util.Direction;
 
 /**
  * Projet : GEN_Projet
