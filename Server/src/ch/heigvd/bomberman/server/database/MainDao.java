@@ -1,5 +1,6 @@
 package ch.heigvd.bomberman.server.database;
 
+import ch.heigvd.bomberman.common.game.Player;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
@@ -74,7 +75,9 @@ public abstract class MainDao<T> {
         T obj = null;
         try {
             startOperation();
-            obj = (T)session.get(clazz, id);
+            Query query = session.createQuery("from " + clazz.getSimpleName() +" where id=:id");
+            query.setParameter("id", id);
+            obj = (T)query.uniqueResult();
             tx.commit();
         } catch (DataAccessLayerException e) {
             handleException(e);

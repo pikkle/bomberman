@@ -49,11 +49,6 @@ public class Client extends Application {
     public void start(Stage primaryStage) throws IOException {
         logger.info("Starting client...");
         this.primaryStage = primaryStage;
-        reset();
-        logger.info("Client started");
-    }
-
-    public void reset() throws IOException{
         primaryStage.setTitle("Bomberman");
 
         primaryStage.setResizable(false);
@@ -73,6 +68,7 @@ public class Client extends Application {
 
         primaryStage.setScene(new Scene(mainLayout));
         primaryStage.show();
+        logger.info("Client started");
     }
 
     @Override

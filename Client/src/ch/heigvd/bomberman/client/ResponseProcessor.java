@@ -49,6 +49,11 @@ public class ResponseProcessor implements ResponseVisitor {
 	}
 
 	@Override
+	public List<Player> visit(PlayersResponse response) {
+		return response.getPlayers();
+	}
+
+	@Override
 	public Bomberman visit(ReadyResponse response) {
 		return response.getBomberman();
 	}

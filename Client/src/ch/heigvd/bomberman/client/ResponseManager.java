@@ -10,7 +10,10 @@ import javafx.scene.control.Alert;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
@@ -108,12 +111,7 @@ public class ResponseManager extends Observable
                 alert.setTitle("Server error");
                 alert.setContentText("Server is unreachable. Try to connect again.");
                 alert.showAndWait();
-                try {
-                    Client.getInstance().reset();
-                } catch (IOException e) {
-                    logger.fatal("Unable to reload the application", e);
-                    Platform.exit();
-                }
+                Platform.exit();
             });
         }
     }
@@ -143,6 +141,18 @@ public class ResponseManager extends Observable
     public void playerRequest(Consumer<Player> callback)
     {
         PlayerRequest r = new PlayerRequest();
+        send(r, callback);
+    }
+
+    public void playerStateRequest(long id, boolean isLocked, Consumer<Message> callback)
+    {
+        PlayerStateRequest r = new PlayerStateRequest(id, isLocked);
+        send(r, callback);
+    }
+
+    public void playersRequest(Consumer<List<Player>> callback)
+    {
+        PlayersRequest r = new PlayersRequest();
         send(r, callback);
     }
 

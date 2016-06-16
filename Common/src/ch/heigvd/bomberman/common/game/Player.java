@@ -34,6 +34,9 @@ public class Player implements Serializable {
 	@Column(name="isAdmin", nullable = false)
 	private Boolean isAdmin = false;
 
+	@Column(name="isLocked", nullable = false)
+	private Boolean isLocked = false;
+
 	@OneToMany(targetEntity = Statistic.class, fetch = FetchType.EAGER, mappedBy="player")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
 	private List<Statistic> statistics = new LinkedList<>();
@@ -54,7 +57,7 @@ public class Player implements Serializable {
 	 *
 	 * @return the ID of the player
 	 */
-	public Long id() {
+	public Long getId() {
 		return id;
 	}
 
@@ -101,6 +104,24 @@ public class Player implements Serializable {
 	 */
 	public boolean isAdmin(){
 		return isAdmin != null && isAdmin;
+	}
+
+	/**
+	 * Gets if the player is an admin
+	 *
+	 * @return true if it's an admin
+	 */
+	public boolean isLocked(){
+		return isLocked != null && isLocked;
+	}
+
+	/**
+	 * Sets the isLocked of the player.
+	 *
+	 * @param isLocked the isLocked of the player.
+	 */
+	public void setIsLocked(boolean isLocked) {
+		this.isLocked = isLocked;
 	}
 
 	public  void addStatistic(Statistic statistic){

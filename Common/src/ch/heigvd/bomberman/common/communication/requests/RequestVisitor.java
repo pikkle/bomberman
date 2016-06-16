@@ -9,6 +9,8 @@ public interface RequestVisitor {
 	Response visit(AccountModifyRequest request);
 	Response visit(LoginRequest request);
 	Response visit(PlayerRequest request);
+	Response visit(PlayersRequest request);
+	Response visit(PlayerStateRequest request);
 	Response visit(ArenasRequest request);
 	Response visit(SaveArenaRequest request);
 	Response visit(RemoveArenaRequest request);

@@ -48,8 +48,6 @@ public class RoomsController extends Observable
     public RoomsController(){
         client = Client.getInstance();
         synchronized(RoomsController.class){
-            if(instance != null) throw new UnsupportedOperationException(
-                    getClass()+" is singleton but constructor called more than once");
             instance = this;
         }
     }
