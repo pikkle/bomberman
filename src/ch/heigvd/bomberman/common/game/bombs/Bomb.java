@@ -4,7 +4,7 @@ import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.util.Direction;
 import ch.heigvd.bomberman.common.game.Element;
 import ch.heigvd.bomberman.common.util.Pair;
-import ch.heigvd.bomberman.common.game.Point;
+import ch.heigvd.bomberman.common.util.Point;
 import ch.heigvd.bomberman.common.game.explosion.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

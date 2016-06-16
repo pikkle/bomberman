@@ -7,6 +7,7 @@ import ch.heigvd.bomberman.common.game.bombs.Bomb;
 import ch.heigvd.bomberman.common.game.bombs.BombFactory;
 import ch.heigvd.bomberman.common.game.powerups.PowerUp;
 import ch.heigvd.bomberman.common.util.Direction;
+import ch.heigvd.bomberman.common.util.Point;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,9 +1,7 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Point;
-
-import java.util.Optional;
+import ch.heigvd.bomberman.common.util.Point;
 
 /**
  * Created by Adriano on 12.05.2016.

@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.common.game;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.powerups.*;
+import ch.heigvd.bomberman.common.util.Point;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.Entity;
@@ -9,7 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * Projet : GEN_Projet

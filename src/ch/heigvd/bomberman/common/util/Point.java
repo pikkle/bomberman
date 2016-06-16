@@ -1,4 +1,4 @@
-package ch.heigvd.bomberman.common.game;
+package ch.heigvd.bomberman.common.util;
 
 import java.io.Serializable;
 

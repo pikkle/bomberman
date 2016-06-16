@@ -2,7 +2,7 @@ package ch.heigvd.bomberman.common.game.explosion;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.Element;
-import ch.heigvd.bomberman.common.game.Point;
+import ch.heigvd.bomberman.common.util.Point;
 
 /**
  * Created by matthieu.villard on 31.05.2016.

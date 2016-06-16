@@ -3,6 +3,7 @@ package ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.util.Direction;
 import ch.heigvd.bomberman.common.util.Pair;
+import ch.heigvd.bomberman.common.util.Point;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;

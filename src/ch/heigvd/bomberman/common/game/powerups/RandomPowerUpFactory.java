@@ -1,7 +1,7 @@
 package ch.heigvd.bomberman.common.game.powerups;
 
 import ch.heigvd.bomberman.common.game.Arena.Arena;
-import ch.heigvd.bomberman.common.game.Point;
+import ch.heigvd.bomberman.common.util.Point;
 
 import java.util.Optional;
 import java.util.Random;

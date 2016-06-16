@@ -7,6 +7,7 @@ import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.game.Arena.Arena;
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.powerups.BombUpPowerUp;
+import ch.heigvd.bomberman.common.util.Point;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
