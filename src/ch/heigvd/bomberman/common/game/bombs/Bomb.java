@@ -16,7 +16,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-
+/**
+ * A bomb is a destructible element which explode after short time.
+ * If a another bomb is in the range of the explosion, she's triggered too.
+ */
 public abstract class Bomb extends Element {
 	private int countdown;
 	protected int blastRange;
@@ -161,7 +164,6 @@ public abstract class Bomb extends Element {
 	@Override
 	public void delete() {
 		super.delete();
-		//showExplosion();
 		getElementsInRange().stream().filter(element -> !(element instanceof Explosion)).forEach(Element::delete);
 	}
 }

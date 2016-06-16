@@ -7,10 +7,8 @@ import java.util.Optional;
 import java.util.Random;
 
 /**
- * Projet : GEN_Projet
- * Créé le 16.06.2016.
- *
- * @author Adriano Ruberto
+ * An random powerup factory.
+ * All the powerup have the same ratio of spawning.
  */
 public class RandomPowerUpFactory {
 

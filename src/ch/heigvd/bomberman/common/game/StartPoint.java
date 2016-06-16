@@ -5,7 +5,7 @@ import ch.heigvd.bomberman.common.util.Point;
 import javax.persistence.Entity;
 
 /**
- * Created by matthieu.villard on 23.05.2016.
+ * A StartPoint is where a bomberman can begin a game in the arena.
  */
 @Entity
 public class StartPoint extends Element {
@@ -19,6 +19,9 @@ public class StartPoint extends Element {
 		super(position, arena);
 	}
 
+	/**
+	 * Constructor for Hibernate
+	 */
 	public StartPoint() {
 	}
 

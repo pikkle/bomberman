@@ -5,7 +5,7 @@ import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.util.Point;
 
 /**
- * Created by Adriano on 09.06.2016.
+ * The power up who take off one range.
  */
 public class FireDownPowerUp extends PowerUp {
 

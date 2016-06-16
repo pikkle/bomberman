@@ -5,7 +5,8 @@ import ch.heigvd.bomberman.common.util.Point;
 import javax.persistence.Entity;
 
 /**
- * Created by matthieu.villard on 09.05.2016.
+ * An indestructible element which stop de blast and can't be traversed.
+ * Commonly used all around the arena.
  */
 @Entity
 public class Wall extends Element {

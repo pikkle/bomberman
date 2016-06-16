@@ -26,5 +26,10 @@ public enum Skin {
 
 	private final static String src = "ch/heigvd/bomberman/common/game/img/skins/";
 
+	/**
+	 * Gets the path to the skin.
+	 *
+	 * @return the path to the skin
+	 */
 	public abstract String path();
 }

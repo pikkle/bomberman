@@ -7,6 +7,11 @@ import ch.heigvd.bomberman.common.util.Point;
 
 import javax.persistence.Entity;
 
+/**
+ * A power up is applied on a bomberman when he walk on.
+ * Power up have different kind of changes, which are implemented by
+ * subclasses.
+ */
 @Entity
 public abstract class PowerUp extends Element {
 

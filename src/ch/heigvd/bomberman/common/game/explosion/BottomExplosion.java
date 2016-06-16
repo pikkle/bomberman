@@ -4,7 +4,7 @@ import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.util.Point;
 
 /**
- * Created by matthieu.villard on 31.05.2016.
+ * The bottom-ended explosion.
  */
 public class BottomExplosion extends Explosion {
 

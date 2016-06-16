@@ -5,15 +5,12 @@ import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.util.Point;
 
 /**
- * Created by Adriano on 09.06.2016.
+ * The power up who give infinite range.
  */
 public class FullFirePowerUp extends PowerUp {
 
 	public FullFirePowerUp(Point position, Arena arena) {
 		super(position, arena);
-	}
-
-	protected FullFirePowerUp() {
 	}
 
 	/**

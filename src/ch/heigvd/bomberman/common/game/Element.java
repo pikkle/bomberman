@@ -9,7 +9,7 @@ import java.util.Observable;
 import java.util.UUID;
 
 /**
- * Created by matthieu.villard on 09.05.2016.
+ * All object in an arena is an element.
  */
 @Entity
 @Table(name = "element")

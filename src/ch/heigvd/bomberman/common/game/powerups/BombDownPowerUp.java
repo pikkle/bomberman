@@ -5,7 +5,7 @@ import ch.heigvd.bomberman.common.game.Bomberman;
 import ch.heigvd.bomberman.common.util.Point;
 
 /**
- * Created by Adriano on 09.06.2016.
+ * The power up who take off one bomb.
  */
 public class BombDownPowerUp extends PowerUp {
 	public BombDownPowerUp(Point position, Arena arena) {

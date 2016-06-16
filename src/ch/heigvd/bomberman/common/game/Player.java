@@ -8,12 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Projet : GEN_Projet
- * Créé le 07.05.2016.
  *
- * @author Adriano Ruberto
  */
-
 @Entity
 @Table(name = "player")
 public class Player implements Serializable {
@@ -31,17 +27,17 @@ public class Player implements Serializable {
 	@Column(name = "password", nullable = true)
 	private String password;
 
-	@Column(name="isAdmin", nullable = false)
+	@Column(name = "isAdmin", nullable = false)
 	private Boolean isAdmin = false;
 
-	@OneToMany(targetEntity = Statistic.class, fetch = FetchType.EAGER, mappedBy="player")
+	@OneToMany(targetEntity = Statistic.class, fetch = FetchType.EAGER, mappedBy = "player")
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
 	private List<Statistic> statistics = new LinkedList<>();
+
 	/**
 	 * Constructor for Hibernate
 	 */
 	protected Player() {
-		// all persisted classes must define a no-arg constructor with at least package visibility
 	}
 
 	public Player(String pseudo, String password) {
@@ -99,17 +95,27 @@ public class Player implements Serializable {
 	 *
 	 * @return true if it's an admin
 	 */
-	public boolean isAdmin(){
+	public boolean isAdmin() {
 		return isAdmin != null && isAdmin;
 	}
 
-	public  void addStatistic(Statistic statistic){
-		if(!statistics.contains(statistic)){
+	/**
+	 * Adds statistics at a player.
+	 *
+	 * @param statistic the statistics to add
+	 */
+	public void addStatistic(Statistic statistic) {
+		if (!statistics.contains(statistic)) {
 			statistics.add(statistic);
 		}
 	}
 
-	public List<Statistic> getStatistics(){
+	/**
+	 * Gets the static of the player
+	 *
+	 * @return the statistics
+	 */
+	public List<Statistic> getStatistics() {
 		return statistics;
 	}
 }

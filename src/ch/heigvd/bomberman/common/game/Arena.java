@@ -18,11 +18,12 @@ import java.util.stream.Stream;
 import static ch.heigvd.bomberman.common.util.Direction.*;
 
 /**
- * Created by matthieu.villard on 09.05.2016.
+ * An arena have all the elements and give some function to go search any
+ * elements.
  */
 @Entity
 @Table(name = "arena")
-public class Arena extends Observable implements Serializable {
+public class Arena extends Observable implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -7494940591783142675L;
 
@@ -212,6 +213,10 @@ public class Arena extends Observable implements Serializable {
 		return Stream.of(up, left, down, right).map(l -> Pair.of(l, it.next()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Arena clone() {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();

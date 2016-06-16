@@ -7,18 +7,12 @@ import ch.heigvd.bomberman.common.util.Point;
 import javax.persistence.Entity;
 
 /**
- * Created by Adriano on 12.05.2016.
+ * The power up who give one bomb.
  */
-
-@Entity
 public class BombUpPowerUp extends PowerUp {
 
 	public BombUpPowerUp(Point position, Arena arena) {
 		super(position, arena);
-	}
-
-	public BombUpPowerUp() {
-
 	}
 
 	/**

@@ -8,10 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Projet : GEN_Projet
- * Créé le 12.05.2016.
- *
- * @author Adriano Ruberto
+ * A basic implementation of {@link Bomb}, with a cross ranged blast fire
  */
 public class BasicBomb extends Bomb {
 

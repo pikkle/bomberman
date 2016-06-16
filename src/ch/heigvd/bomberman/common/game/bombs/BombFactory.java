@@ -9,7 +9,8 @@ import java.util.Observer;
 import java.util.Optional;
 
 /**
- * Created by Adriano on 12.05.2016.
+ * A {@link Bomb} factory. Every subclasses needs to implement generate,
+ * which creates the actual bomb of the factory.
  */
 public abstract class BombFactory implements Observer, Serializable {
 	protected int countdown;
@@ -29,7 +30,8 @@ public abstract class BombFactory implements Observer, Serializable {
 	}
 
 	/**
-	 * Create the bomb at the position
+	 * Creates a bomb at the position. Can be empty if there isn't any bomb
+	 * left.
 	 *
 	 * @param position the position
 	 * @return the new bomb
@@ -45,6 +47,12 @@ public abstract class BombFactory implements Observer, Serializable {
 		return Optional.of(b);
 	}
 
+	/**
+	 * Generates a bomb at the given position
+	 *
+	 * @param position the position
+	 * @return the bomb
+	 */
 	protected abstract Bomb generate(Point position);
 
 	/**

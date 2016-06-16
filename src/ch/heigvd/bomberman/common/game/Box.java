@@ -1,6 +1,7 @@
 package ch.heigvd.bomberman.common.game;
 
-import ch.heigvd.bomberman.common.game.powerups.*;
+import ch.heigvd.bomberman.common.game.powerups.PowerUp;
+import ch.heigvd.bomberman.common.game.powerups.RandomPowerUpFactory;
 import ch.heigvd.bomberman.common.util.Point;
 import org.hibernate.annotations.Cascade;
 
@@ -11,10 +12,8 @@ import javax.persistence.OneToOne;
 import java.util.Optional;
 
 /**
- * Projet : GEN_Projet
- * Créé le 05.05.2016.
- *
- * @author Adriano Ruberto
+ * A box is a destructible element which can have a power up in it.
+ * When destroyed, if there's a power up, it will be dropped.
  */
 @Entity
 public class Box extends Element {
@@ -34,8 +33,9 @@ public class Box extends Element {
 	/**
 	 * Drops an optional of a power up.
 	 * It can be empty if no power up is in the box.
-	 *
+	 * <p>
 	 * {@link ch.heigvd.bomberman.common.game.powerups.RandomPowerUpFactory#generate}
+	 *
 	 * @return an optional of a power up
 	 */
 	public Optional<PowerUp> dropPowerUp() {

@@ -13,11 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Represents a bomberman character in-game
+ * A bomberman character in-game. Can move and drop bombs.
  */
 public class Bomberman extends Element {
 	private BombFactory bombFactory = new BasicBombFactory(arena);
-	private List<PowerUp> powerUps = new LinkedList<>();
 	private Skin skin;
 
 	/**
@@ -77,7 +76,6 @@ public class Bomberman extends Element {
 	 * @param powerUp the power up
 	 */
 	public void givePowerup(PowerUp powerUp) {
-		powerUps.add(powerUp);
 		powerUp.apply(this);
 		powerUp.delete();
 	}

@@ -7,20 +7,12 @@ import ch.heigvd.bomberman.common.util.Point;
 import javax.persistence.Entity;
 
 /**
- * Projet : GEN_Projet
- * Créé le 02.06.2016.
- *
- * @author Adriano Ruberto
+ * The power up who give one range.
  */
-
-@Entity
 public class FireUpPowerUp extends PowerUp {
 
 	public FireUpPowerUp(Point position, Arena arena) {
 		super(position, arena);
-	}
-
-	protected FireUpPowerUp() {
 	}
 
 	/**

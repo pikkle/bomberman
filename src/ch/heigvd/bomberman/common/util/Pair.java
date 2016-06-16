@@ -1,10 +1,10 @@
 package ch.heigvd.bomberman.common.util;
 
 /**
- * Projet : GEN_Projet
- * Créé le 09.06.2016.
+ * A basic implementation of a pair of two objects.
  *
- * @author Adriano Ruberto
+ * @param <A> the type of the first object
+ * @param <B> the type of the second object
  */
 public class Pair<A, B> {
 
