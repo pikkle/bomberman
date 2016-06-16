@@ -80,17 +80,29 @@ public class GameController {
         mapContainer.getChildren().clear();
         mapContainer.add(renderer.getView(), 0, 0);
 
-        int i = 0;
-        Iterator<String> it = room.getPlayers().iterator();
-        while (it.hasNext()){
-            if(i % 2 == 0){
-                header.add(new Label(it.next()), i / 2, 0);
+        rm.playerRequest(player -> {
+            int i = 0;
+            Iterator<String> it = room.getPlayers().iterator();
+            while (it.hasNext()){
+                Label lblPlayer;
+                if(i % 2 == 0){
+                    lblPlayer = new Label(it.next());
+                    header.add(lblPlayer, i / 2, 0);
+                }
+                else{
+                    lblPlayer = new Label(it.next());
+                    header.add(lblPlayer, 4 - i / 2, 0);
+                }
+                if(player.isAdmin() && !player.getPseudo().equals(lblPlayer.getText())){
+                    lblPlayer.setOnMouseClicked(event -> {
+                        if (event.getClickCount() == 2) {
+                            rm.ejectRequest(lblPlayer.getText());
+                        }
+                    });
+                }
+                i++;
             }
-            else{
-                header.add(new Label(it.next()), 4 - i / 2, 0);
-            }
-            i++;
-        }
+        });
 
         timer = new Timer();
         start = Instant.now();

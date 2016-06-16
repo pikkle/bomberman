@@ -23,4 +23,5 @@ public interface RequestVisitor {
 	Response visit(DestroyElementsRequest request);
 	Response visit(DropBombRequest request);
 	Response visit(EndGameRequest request);
+	Response visit(EjectRequest request);
 }
