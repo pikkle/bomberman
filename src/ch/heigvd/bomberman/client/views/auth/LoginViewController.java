@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -70,6 +71,11 @@ public class LoginViewController {
             serverStatusLabel.setText("Online");
             serverStatusIcon.setImage(new Image(Client.class.getResourceAsStream("img/ok_sign.png")));
             enableAll();
+            mainPane.setOnKeyPressed(event -> {
+                if(event.getCode() == KeyCode.ENTER){
+                    login();
+                }
+            });
             logger.info("Client connected");
         } catch (Exception e) {
             logger.warn(e.getMessage());

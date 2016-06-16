@@ -56,7 +56,7 @@ public class RequestProcessor implements RequestVisitor{
 		if(request.getUsername() != null && !request.getUsername().isEmpty()){
 			Optional<Player> player = db.players()
 			                            .findOneByPseudo(request.getUsername())
-			                            .filter(p -> !p.id().equals(requestManager.getPlayer().id()));
+			                            .filter(p -> !p.getId().equals(requestManager.getPlayer().getId()));
 			if(player.isPresent())
 				return new ErrorResponse(request.getID(), "Account name already exists !");
 			requestManager.getPlayer().setPseudo(request.getUsername());
@@ -72,11 +72,13 @@ public class RequestProcessor implements RequestVisitor{
 
 	@Override
 	public Response visit(LoginRequest request) {
-		if (requestManager.isLoggedIn())
+		if (requestManager.isLoggedIn() || server.getClients().stream().anyMatch(r -> r.getPlayer() != null && r
+				.getPlayer().getPseudo().equals(request.getUsername()))
+		)
 			return new ErrorResponse(request.getID(), "Already logged in");
 		Optional<Player> player;
 		player = db.players().findOneByPseudo(request.getUsername());
-		return player.filter(p->p.getPassword().equals(request.getPassword()))
+		return player.filter(p -> !p.isLocked() && p.getPassword().equals(request.getPassword()))
 				.map(p->{
 					requestManager.setLoggedIn(true);
 					requestManager.setPlayer(p);
@@ -90,6 +92,42 @@ public class RequestProcessor implements RequestVisitor{
 			return new NoResponse(request.getID());
 
 		return new PlayerResponse(request.getID(), requestManager.getPlayer());
+	}
+
+	@Override
+	public Response visit(PlayersRequest request) {
+		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
+			return new NoResponse(request.getID());
+
+		return new PlayersResponse(request.getID(), db.players().findAll());
+	}
+
+	@Override
+	public Response visit(PlayerStateRequest request) {
+		if (!requestManager.isLoggedIn() || !requestManager.getPlayer().isAdmin())
+			return new ErrorResponse(request.getID(), "Access denied");
+
+		Optional<Player> player = db.players().find(request.getId());
+		if(player.isPresent()){
+			if(request.isLocked()){
+				if(player.get().getId().equals(requestManager.getPlayer().getId()))
+					return new ErrorResponse(request.getID(), "You tried to banish yourself! NOOOB!!!");
+				server.getClients()
+				      .stream()
+				      .filter(r -> r.getPlayer() != null && r.getPlayer().getId().equals(request.getId()))
+				      .findFirst().ifPresent(r -> {
+					      r.getPlayerSession().ifPresent(p -> {
+						      p.getBomberman().delete();
+					      });
+				      });
+			}
+			player.get().setIsLocked(request.isLocked());
+			db.players().update(player.get());
+		}
+
+		if(request.isLocked())
+			return new SuccessResponse(request.getID(), "Player successfully banished.");
+		return new SuccessResponse(request.getID(), "Player successfully reset.");
 	}
 
 	@Override
@@ -173,7 +211,8 @@ public class RequestProcessor implements RequestVisitor{
 		if(roomSession.get().isRunning())
 			return new NoResponse(request.getID());
 
-		if(roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().id() == requestManager.getPlayer().id()).findFirst().isPresent())
+		if(roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().getId() ==
+				requestManager.getPlayer().getId()).findFirst().isPresent())
 			return new NoResponse(request.getID());
 
 		if(roomSession.get().getPassword() != null && !roomSession.get().getPassword().isEmpty() && !roomSession.get().getPassword().equals(request.getPassword()))
@@ -205,9 +244,6 @@ public class RequestProcessor implements RequestVisitor{
 			return new NoResponse(request.getID());
 
 		if(!request.getState()){
-			//if(requestManager.getPlayerSession().get().getRoomSession().isRunning())
-				//requestManager.getPlayerSession().get().getRoomSession().arena().destroy(requestManager.getPlayerSession().get().getBomberman());
-
 			requestManager.closePlayerSession();
 
 			return new NoResponse(request.getID());
@@ -316,6 +352,22 @@ public class RequestProcessor implements RequestVisitor{
 			return new NoResponse(request.getID());
 
 		requestManager.getPlayerSession().get().setEndUuid(request.getID());
+
+		return new NoResponse(request.getID());
+	}
+
+	@Override
+	public Response visit(EjectRequest request) {
+		if (!requestManager.isLoggedIn())
+			return new NoResponse(request.getID());
+
+		if(!requestManager.getPlayer().isAdmin())
+			return new NoResponse(request.getID());
+
+		server.getClients()
+		      .stream()
+		      .filter(r -> r.getPlayer() != null && r.getPlayer().getPseudo().equals(request.getPlayer()))
+		      .findFirst().ifPresent(r -> r.closePlayerSession());
 
 		return new NoResponse(request.getID());
 	}

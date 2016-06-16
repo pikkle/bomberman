@@ -13,6 +13,7 @@ public interface ResponseVisitor {
 	Message visit(SuccessResponse successResponse);
 	Message visit(ErrorResponse errorResponse);
 	Player visit(PlayerResponse response);
+	List<Player> visit(PlayersResponse response);
 	Bomberman visit(ReadyResponse response);
 	List<Arena> visit(ArenasResponse response);
 	Room visit(JoinRoomResponse response);

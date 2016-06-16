@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
+import java.io.IOException;
+
 /**
  * Created by julien on 27.05.16.
  */
@@ -25,6 +27,9 @@ public class TabsController
     private Tab profileTab;
 
     @FXML
+    private Tab playersTab;
+
+    @FXML
     private RoomsController roomsController;
 
     @FXML
@@ -35,6 +40,9 @@ public class TabsController
 
     @FXML
     private ProfileController profileController ;
+
+    @FXML
+    private PlayersController playersController ;
 
     @FXML
     private TabPane tabs;
@@ -51,6 +59,13 @@ public class TabsController
                     }
                     else if(newTab == profileTab){
                         profileController.initialize();
+                    }
+                    else if(newTab == playersTab){
+                        try {
+                            playersController.initialize();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }
