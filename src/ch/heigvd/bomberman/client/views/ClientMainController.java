@@ -2,7 +2,6 @@ package ch.heigvd.bomberman.client.views;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
-import ch.heigvd.bomberman.client.views.auth.LoginViewController;
 import ch.heigvd.bomberman.client.views.tabs.controllers.TabsController;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
@@ -20,8 +19,6 @@ import java.io.IOException;
 
 public class ClientMainController {
 
-    private static final int DEFAULT_PORT = 3737;
-    private static String DEFAULT_ADDRESS = "127.0.0.1";
 
     private ResponseManager rm;
     private Client client;
@@ -46,7 +43,6 @@ public class ClientMainController {
 
     @FXML
     private void initialize() {
-        DEFAULT_ADDRESS = LoginViewController.getAddress();
         rm = ResponseManager.getInstance();
         rm.playerRequest(player -> {
             if (player.isAdmin())
