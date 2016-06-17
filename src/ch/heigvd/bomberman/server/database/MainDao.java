@@ -10,18 +10,25 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by matthieu.villard on 30.05.2016.
+ * The main data access.
+ *
+ * @param <T> any elements of the game
  */
 public abstract class MainDao<T> {
+	private static Log log = LogFactory.getLog(MainDao.class);
 	protected Session session;
 	protected Transaction tx;
 	protected DBManager db;
-	private static Log log = LogFactory.getLog(MainDao.class);
 
 	public MainDao() {
 		db = DBManager.getInstance();
 	}
 
+	/**
+	 * Creates the object, save it in the session and commit the transaction.
+	 *
+	 * @param obj the created object
+	 */
 	public void create(T obj) {
 		try {
 			startOperation();
@@ -34,6 +41,11 @@ public abstract class MainDao<T> {
 		}
 	}
 
+	/**
+	 * Updates the object.
+	 *
+	 * @param obj the object to update
+	 */
 	public void update(T obj) {
 		try {
 			startOperation();
@@ -46,6 +58,11 @@ public abstract class MainDao<T> {
 		}
 	}
 
+	/**
+	 * Creates or updates the object.
+	 *
+	 * @param obj the object
+	 */
 	public void createOrUpdate(T obj) {
 		try {
 			startOperation();
@@ -58,6 +75,11 @@ public abstract class MainDao<T> {
 		}
 	}
 
+	/**
+	 * Deletes the object.
+	 *
+	 * @param obj the object
+	 */
 	public void delete(T obj) {
 		try {
 			startOperation();
@@ -70,6 +92,13 @@ public abstract class MainDao<T> {
 		}
 	}
 
+	/**
+	 * Finds the object with the same id and the same class.
+	 *
+	 * @param clazz the class of the object
+	 * @param id    the id of the object
+	 * @return the Object if he finds it
+	 */
 	public Optional<T> find(Class<T> clazz, Long id) {
 		T obj = null;
 		try {
@@ -86,6 +115,12 @@ public abstract class MainDao<T> {
 		return Optional.ofNullable(obj);
 	}
 
+	/**
+	 * Finds all the object of the given class.
+	 *
+	 * @param clazz the class
+	 * @return a list of all the objects
+	 */
 	public List<T> findAll(Class<T> clazz) {
 		List<T> objects = null;
 		try {
@@ -101,11 +136,21 @@ public abstract class MainDao<T> {
 		return objects;
 	}
 
+	/**
+	 * Handles an exception
+	 *
+	 * @param e the exception
+	 */
 	protected void handleException(DataAccessLayerException e) {
 		db.rollback(tx);
 		log.fatal("Database error", e);
 	}
 
+	/**
+	 * Starts an operation
+	 *
+	 * @throws DataAccessLayerException
+	 */
 	protected void startOperation() throws DataAccessLayerException {
 		session = db.openSession();
 		tx = session.beginTransaction();

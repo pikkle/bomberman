@@ -62,7 +62,10 @@ public class Bomberman extends Element {
 	}
 
 	/**
-	 * Drops a bomb
+	 * Drops a bomb, can be empty if the bomberman can't drop one.
+	 * {@link BombFactory}
+	 *
+	 * @return the dropped bomb
 	 */
 	public Optional<? extends Bomb> dropBomb() {
 		return bombFactory.create(position);

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by matthieu.villard on 30.05.2016.
+ * Data access for the arena
  */
 public class ArenaDao extends MainDao<Arena> {
 
@@ -14,10 +14,21 @@ public class ArenaDao extends MainDao<Arena> {
 		super();
 	}
 
+	/**
+	 * Finds the arena by an id.
+	 *
+	 * @param id the id of the arena
+	 * @return an arena, can't be empty if no arena match
+	 */
 	public Optional<Arena> find(Long id) {
 		return super.find(Arena.class, id);
 	}
 
+	/**
+	 * Gets all the arena.
+	 *
+	 * @return all the arena
+	 */
 	public List<Arena> findAll() {
 		return super.findAll(Arena.class);
 	}

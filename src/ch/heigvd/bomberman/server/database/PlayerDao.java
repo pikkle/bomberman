@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by matthieu.villard on 30.05.2016.
+ * Data access for the player
  */
 public class PlayerDao extends MainDao<Player> {
 
@@ -15,6 +15,12 @@ public class PlayerDao extends MainDao<Player> {
 		super();
 	}
 
+	/**
+	 * Finds a player by is pseudo.
+	 *
+	 * @param pseudo the pseudo of the player
+	 * @return the player if he is founded
+	 */
 	public Optional<Player> findOneByPseudo(String pseudo) {
 		Player player = null;
 		try {
@@ -31,10 +37,21 @@ public class PlayerDao extends MainDao<Player> {
 		return Optional.ofNullable(player);
 	}
 
+	/**
+	 * Finds a player by his id.
+	 *
+	 * @param id the id
+	 * @return the player if he is founded
+	 */
 	public Optional<Player> find(long id) {
 		return super.find(Player.class, id);
 	}
 
+	/**
+	 * Finds all the players.
+	 *
+	 * @return the player
+	 */
 	public List<Player> findAll() {
 		return super.findAll(Player.class);
 	}

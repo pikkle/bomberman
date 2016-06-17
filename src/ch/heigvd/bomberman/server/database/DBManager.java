@@ -3,14 +3,13 @@ package ch.heigvd.bomberman.server.database;
 import ch.heigvd.bomberman.server.Server;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 /**
- * Created by matthieu.villard on 26.05.2016.
+ * Gives functions to manage a database.
  */
 public class DBManager {
 	private static DBManager instance;
@@ -23,14 +22,29 @@ public class DBManager {
 		return instance;
 	}
 
+	/**
+	 * Gets a new {@link PlayerDao}.
+	 *
+	 * @return the new PlayerDao
+	 */
 	public PlayerDao players() {
 		return new PlayerDao();
 	}
 
+	/**
+	 * Gets a new {@link ArenaDao}.
+	 *
+	 * @return the new ArenaDao
+	 */
 	public ArenaDao arenas() {
 		return new ArenaDao();
 	}
 
+	/**
+	 * Gets a new {@link GameDao}.
+	 *
+	 * @return the new GameDao
+	 */
 	public GameDao games() {
 		return new GameDao();
 	}
@@ -38,8 +52,8 @@ public class DBManager {
 	/**
 	 * Constructs a new Singleton SessionFactory
 	 *
-	 * @return
-	 * @throws HibernateException
+	 * @return the configureSessionFactory
+	 * @throws DataAccessLayerException
 	 */
 	public SessionFactory buildSessionFactory() throws DataAccessLayerException {
 		if (sessionFactory != null) {
@@ -50,6 +64,9 @@ public class DBManager {
 
 	/**
 	 * Builds a SessionFactory, if it hasn't been already.
+	 *
+	 * @return the configureSessionFactory
+	 * @throws DataAccessLayerException
 	 */
 	public SessionFactory buildIfNeeded() throws DataAccessLayerException {
 		if (sessionFactory != null) {
@@ -58,16 +75,29 @@ public class DBManager {
 		return configureSessionFactory();
 	}
 
+	/**
+	 * Gets the {@link SessionFactory}.
+	 *
+	 * @return the SessionFactory
+	 */
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
-
+	/**
+	 * Opens a {@link Session}, build it if necessary.
+	 *
+	 * @return the session
+	 * @throws DataAccessLayerException
+	 */
 	public Session openSession() throws DataAccessLayerException {
 		buildIfNeeded();
 		return sessionFactory.openSession();
 	}
 
+	/**
+	 * Closes the factory
+	 */
 	public void closeFactory() {
 		if (sessionFactory != null) {
 			try {
@@ -78,6 +108,11 @@ public class DBManager {
 		}
 	}
 
+	/**
+	 * Closes the given session
+	 *
+	 * @param session the session
+	 */
 	public void close(Session session) {
 		if (session != null) {
 			try {
@@ -88,6 +123,11 @@ public class DBManager {
 		}
 	}
 
+	/**
+	 * Rollback the transaction
+	 *
+	 * @param tx the transaction
+	 */
 	public void rollback(Transaction tx) {
 		try {
 			if (tx != null) {
@@ -98,6 +138,12 @@ public class DBManager {
 		}
 	}
 
+	/**
+	 * Configures the session factory with the file at resources/hibernate.cfg.xml
+	 *
+	 * @return the SessionFactory
+	 * @throws DataAccessLayerException
+	 */
 	private SessionFactory configureSessionFactory() throws DataAccessLayerException {
 		try {
 			Configuration configuration = new Configuration();
