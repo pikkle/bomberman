@@ -5,6 +5,7 @@ import ch.heigvd.bomberman.common.communication.responses.Response;
 
 public class LoginRequest extends Request<Message> {
 	private String username, password;
+
 	public LoginRequest(String username, String password) {
 		this.username = username;
 		this.password = Password.generateHash(password);

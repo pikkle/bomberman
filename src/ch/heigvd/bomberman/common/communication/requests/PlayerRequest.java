@@ -8,8 +8,8 @@ import ch.heigvd.bomberman.common.game.Player;
  */
 public class PlayerRequest extends Request<Player> {
 
-    @Override
-    public Response<Player> accept(RequestVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Response<Player> accept(RequestVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

@@ -11,7 +11,7 @@ import ch.heigvd.bomberman.common.game.util.Point;
  */
 public class RedBombPowerUp extends PowerUp {
 
-	public RedBombPowerUp(){
+	public RedBombPowerUp() {
 
 	}
 

@@ -47,10 +47,10 @@ public class Server extends Application {
 	 * Creates a singleton server. Has to be public for JavaFX.
 	 */
 	public Server() {
-		synchronized(Server.class){
+		synchronized (Server.class) {
 			ConsoleAppender.setConsole(console);
-			if(instance != null) throw new UnsupportedOperationException(
-					getClass()+" is singleton but constructor called more than once");
+			if (instance != null) throw new UnsupportedOperationException(
+					getClass() + " is singleton but constructor called more than once");
 			this.port = DEFAULT_PORT;
 			instance = this;
 		}
@@ -58,8 +58,9 @@ public class Server extends Application {
 
 	/**
 	 * Singleton accessor
+	 *
 	 * @return the Server singleton instance
-     */
+	 */
 	public static Server getInstance() {
 		if (instance == null) instance = new Server();
 		return instance;
@@ -76,9 +77,10 @@ public class Server extends Application {
 
 	/**
 	 * Starts the server application
+	 *
 	 * @param primaryStage
 	 * @throws IOException
-     */
+	 */
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		logger.info("Starting server...");
@@ -123,7 +125,7 @@ public class Server extends Application {
 							clients.add(client);
 						}
 					}
-				} catch (SocketException e){
+				} catch (SocketException e) {
 					running = false;
 				} catch (IOException e) {
 					logger.error("Server error", e);
@@ -163,60 +165,65 @@ public class Server extends Application {
 
 	/**
 	 * Gets the database.
+	 *
 	 * @return the database
-     */
+	 */
 	public DBManager getDatabase() {
 		return database;
 	}
 
 	/**
 	 * Adds a room session to the server.
+	 *
 	 * @param roomSession the new room session
-     */
+	 */
 	public void addRoom(RoomSession roomSession) {
 		roomSessions.add(roomSession);
 	}
 
 	/**
 	 * Removes a room session of the server.
+	 *
 	 * @param roomSession the room to be deleted
-     */
+	 */
 	public void removeRoomSession(RoomSession roomSession) {
 		roomSessions.remove(roomSession);
 	}
 
 	/**
 	 * Gets the rooms list.
+	 *
 	 * @return a list of the available rooms
-     */
+	 */
 	public List<RoomSession> getRoomSessions() {
 		return roomSessions;
 	}
 
 	/**
 	 * Gets the clients list.
+	 *
 	 * @return a list of the logged in clients
-     */
-	public List<RequestManager> getClients(){
+	 */
+	public List<RequestManager> getClients() {
 		return clients;
 	}
 
 	/**
 	 * Sends the new rooms list to the clients.
 	 */
-    public void sendRooms(){
-        clients.stream()
-			.filter(client -> client.getRoomsCallback() != null)
-			.forEach(client -> client.send(
-				new RoomsResponse(
-					   client.getRoomsCallback(),
-					   roomSessions.stream()
-							.map(r -> new Room(r.getName(),
-								  r.getPassword() != null && ! r.getPassword().isEmpty(),
-								  r.getMinPlayer(),
-								  r.getPlayers().stream().map(p -> p.getPlayer().getPseudo()).collect(Collectors.toList()),
-								  r.getArena(),
-								  client.getPlayerSession().isPresent() && r.getPlayers().contains(client.getPlayerSession().get())))
-							.collect(Collectors.toList()))));
-    }
+	public void sendRooms() {
+		clients.stream()
+		       .filter(client -> client.getRoomsCallback() != null)
+		       .forEach(client -> client.send(
+				       new RoomsResponse(
+						       client.getRoomsCallback(),
+						       roomSessions.stream()
+						                   .map(r -> new Room(r.getName(),
+						                                      r.getPassword() != null && !r.getPassword().isEmpty(),
+						                                      r.getMinPlayer(),
+						                                      r.getPlayers().stream().map(p -> p.getPlayer().getPseudo()).collect(Collectors.toList()),
+						                                      r.getArena(),
+						                                      client.getPlayerSession().isPresent() && r.getPlayers().contains(client.getPlayerSession().get())))
+						                   .collect(Collectors.toList()))));
+	}
 }

@@ -6,6 +6,7 @@ import ch.heigvd.bomberman.common.game.Bomberman;
 public class ReadyRequest extends Request<Bomberman> {
 
 	private boolean state;
+
 	public ReadyRequest(boolean state) {
 		this.state = state;
 	}

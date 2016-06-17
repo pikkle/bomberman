@@ -4,12 +4,15 @@ import java.util.UUID;
 
 public class HelloResponse extends Response<String> {
 	private String message;
+
 	public HelloResponse(UUID uuid, String message) {
 		super(uuid);
 		this.message = message;
 	}
 
-	public String message() {return message;}
+	public String message() {
+		return message;
+	}
 
 	@Override
 	public String accept(ResponseVisitor visitor) {

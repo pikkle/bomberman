@@ -9,19 +9,19 @@ import java.util.UUID;
  */
 public class JoinRoomResponse extends Response<Room> {
 
-    private Room room;
+	private Room room;
 
-    public JoinRoomResponse(UUID uuid, Room room){
-        super(uuid);
-        this.room = room;
-    }
+	public JoinRoomResponse(UUID uuid, Room room) {
+		super(uuid);
+		this.room = room;
+	}
 
-    public Room getRoom(){
-        return room;
-    }
+	public Room getRoom() {
+		return room;
+	}
 
-    @Override
-    public Room accept(ResponseVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Room accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

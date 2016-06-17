@@ -10,7 +10,7 @@ public class EjectRequest extends Request<Message> {
 
 	private String player;
 
-	public EjectRequest(String player){
+	public EjectRequest(String player) {
 		this.player = player;
 	}
 
@@ -19,7 +19,7 @@ public class EjectRequest extends Request<Message> {
 		return visitor.visit(this);
 	}
 
-	public String getPlayer(){
+	public String getPlayer() {
 		return this.player;
 	}
 }

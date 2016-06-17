@@ -21,82 +21,80 @@ import java.util.Observer;
  */
 public class ReadyController implements Observer {
 
-    private ResponseManager rm;
-    private Room room;
-    private Client client;
+	private ResponseManager rm;
+	private Room room;
+	private Client client;
 
-    @FXML
-    private Label lblRoom, number;
+	@FXML
+	private Label lblRoom, number;
 
-    @FXML
-    private AnchorPane mainPane;
+	@FXML
+	private AnchorPane mainPane;
 
-    public ReadyController(){
-        client = Client.getInstance();
-    }
+	public ReadyController() {
+		client = Client.getInstance();
+	}
 
-    @FXML
-    private void initialize()
-    {
-        rm = ResponseManager.getInstance();
-    }
+	@FXML
+	private void initialize() {
+		rm = ResponseManager.getInstance();
+	}
 
-    public void loadRoom(Room room){
-        this.room = room;
-        lblRoom.setText("Room \"" + room.getName() + "\"");
-        number.setText(room.getPlayers().size() + " player" + (room.getPlayers().size() > 1 ? "s" : ""));
-    }
+	public void loadRoom(Room room) {
+		this.room = room;
+		lblRoom.setText("Room \"" + room.getName() + "\"");
+		number.setText(room.getPlayers().size() + " player" + (room.getPlayers().size() > 1 ? "s" : ""));
+	}
 
-    @FXML
-    private void leave(){
-        rm.readyRequest(false, null);
-        ((Stage)mainPane.getScene().getWindow()).close();
-        client.getPrimatyStage().show();
-    }
+	@FXML
+	private void leave() {
+		rm.readyRequest(false, null);
+		((Stage) mainPane.getScene().getWindow()).close();
+		client.getPrimatyStage().show();
+	}
 
-    @FXML
-    private void ready(){
-        rm.readyRequest(true, bomberman -> {
-            if(bomberman != null){
-                Stage stage = new Stage();
-                AnchorPane pane;
-                GameController controller;
-                FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/GameView.fxml"));
+	@FXML
+	private void ready() {
+		rm.readyRequest(true, bomberman -> {
+			if (bomberman != null) {
+				Stage stage = new Stage();
+				AnchorPane pane;
+				GameController controller;
+				FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/game/GameView.fxml"));
 
-                stage.setTitle("Bomberman");
+				stage.setTitle("Bomberman");
 
-                stage.setOnCloseRequest(event -> {
-                    rm.readyRequest(false, null);
-                    event.consume();
-                });
+				stage.setOnCloseRequest(event -> {
+					rm.readyRequest(false, null);
+					event.consume();
+				});
 
-                try {
-                    pane = loader.load();
+				try {
+					pane = loader.load();
 
-                    controller = loader.getController();
-                    controller.loadGame(bomberman, room);
+					controller = loader.getController();
+					controller.loadGame(bomberman, room);
 
-                    stage.initModality(Modality.APPLICATION_MODAL);
+					stage.initModality(Modality.APPLICATION_MODAL);
 
-                    stage.setScene(new Scene(pane));
+					stage.setScene(new Scene(pane));
 
-                    ((Stage)mainPane.getScene().getWindow()).close();
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+					((Stage) mainPane.getScene().getWindow()).close();
+					stage.show();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-    @Override
-    public void update(Observable o, Object arg) {
-        List<Room> rooms = (List<Room>)arg;
-        if(rooms.contains(room)) {
-            loadRoom(room);
-        }
-        else if(rooms.stream().filter(r -> r.getName().equals(room.getName())).findFirst().isPresent()){
-            loadRoom(rooms.stream().filter(r -> r.getName().equals(room.getName())).findFirst().get());
-        }
-    }
+	@Override
+	public void update(Observable o, Object arg) {
+		List<Room> rooms = (List<Room>) arg;
+		if (rooms.contains(room)) {
+			loadRoom(room);
+		} else if (rooms.stream().filter(r -> r.getName().equals(room.getName())).findFirst().isPresent()) {
+			loadRoom(rooms.stream().filter(r -> r.getName().equals(room.getName())).findFirst().get());
+		}
+	}
 }

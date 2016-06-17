@@ -18,7 +18,7 @@ public class ConsoleAppender extends WriterAppender {
 
 	@Override
 	public void append(LoggingEvent loggingEvent) {
-		if(console != null) {
+		if (console != null) {
 			final String message = this.layout.format(loggingEvent);
 
 			Platform.runLater(() -> console.appendText(message));

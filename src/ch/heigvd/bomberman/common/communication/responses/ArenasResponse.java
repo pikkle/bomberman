@@ -10,19 +10,19 @@ import java.util.UUID;
  */
 public class ArenasResponse extends Response<List<Arena>> {
 
-    private List<Arena> arenas;
+	private List<Arena> arenas;
 
-    public ArenasResponse(UUID uuid, List<Arena> arenas) {
-        super(uuid);
-        this.arenas = arenas;
-    }
+	public ArenasResponse(UUID uuid, List<Arena> arenas) {
+		super(uuid);
+		this.arenas = arenas;
+	}
 
-    public List<Arena> getArenas(){
-        return arenas;
-    }
+	public List<Arena> getArenas() {
+		return arenas;
+	}
 
-    @Override
-    public List<Arena> accept(ResponseVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public List<Arena> accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 public class ErrorResponse extends Response<Message> {
 	private String message;
+
 	public ErrorResponse(UUID uuid, String message) {
 		super(uuid);
 		this.message = message;

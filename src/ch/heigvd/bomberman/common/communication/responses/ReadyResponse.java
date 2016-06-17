@@ -9,19 +9,19 @@ import java.util.UUID;
  */
 public class ReadyResponse extends Response<Bomberman> {
 
-    private Bomberman bomberman;
+	private Bomberman bomberman;
 
-    public ReadyResponse(UUID uuid, Bomberman bomberman){
-        super(uuid);
-        this.bomberman = bomberman;
-    }
+	public ReadyResponse(UUID uuid, Bomberman bomberman) {
+		super(uuid);
+		this.bomberman = bomberman;
+	}
 
-    public Bomberman getBomberman(){
-        return bomberman;
-    }
+	public Bomberman getBomberman() {
+		return bomberman;
+	}
 
-    @Override
-    public Bomberman accept(ResponseVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Bomberman accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

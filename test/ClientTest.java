@@ -1,7 +1,5 @@
 package ch.heigvd.bomberman.test;
 
-import org.junit.Test;
-
 public class ClientTest {
 /*
     @Test

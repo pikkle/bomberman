@@ -1,11 +1,11 @@
 package ch.heigvd.bomberman.common.game.bombs;
 
 import ch.heigvd.bomberman.common.game.Arena;
-import ch.heigvd.bomberman.common.game.util.Direction;
 import ch.heigvd.bomberman.common.game.Element;
+import ch.heigvd.bomberman.common.game.explosion.*;
+import ch.heigvd.bomberman.common.game.util.Direction;
 import ch.heigvd.bomberman.common.game.util.Pair;
 import ch.heigvd.bomberman.common.game.util.Point;
-import ch.heigvd.bomberman.common.game.explosion.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;

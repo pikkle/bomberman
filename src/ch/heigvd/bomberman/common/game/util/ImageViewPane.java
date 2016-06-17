@@ -46,9 +46,9 @@ public class ImageViewPane extends Region implements Serializable {
 				getChildren().add(newIV);
 			}
 		});
-		try{
+		try {
 			this.imageViewProperty.set(new ImageView(path));
-		} catch (Throwable e){
+		} catch (Throwable e) {
 			Log logger = LogFactory.getLog(ImageViewPane.class);
 			logger.fatal("Couldn't create image : " + path);
 			throw e;

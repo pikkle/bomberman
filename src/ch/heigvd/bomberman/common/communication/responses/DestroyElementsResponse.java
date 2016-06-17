@@ -9,19 +9,19 @@ import java.util.UUID;
  */
 public class DestroyElementsResponse extends Response<Element> {
 
-    private Element element;
+	private Element element;
 
-    public DestroyElementsResponse(UUID uuid, Element element) {
-        super(uuid);
-        this.element = element;
-    }
+	public DestroyElementsResponse(UUID uuid, Element element) {
+		super(uuid);
+		this.element = element;
+	}
 
-    public Element getElement(){
-        return element;
-    }
+	public Element getElement() {
+		return element;
+	}
 
-    @Override
-    public Element accept(ResponseVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Element accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

@@ -13,7 +13,9 @@ import ch.heigvd.bomberman.common.game.util.Direction;
 public class MoveRequest extends Request<Bomberman> {
 	private Direction direction;
 
-	public MoveRequest(Direction direction) {this.direction = direction;}
+	public MoveRequest(Direction direction) {
+		this.direction = direction;
+	}
 
 	public Direction getDirection() {
 		return direction;

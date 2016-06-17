@@ -11,31 +11,31 @@ import java.util.Optional;
  */
 public class PlayerDao extends MainDao<Player> {
 
-    public PlayerDao() {
-        super();
-    }
+	public PlayerDao() {
+		super();
+	}
 
-    public Optional<Player> findOneByPseudo(String pseudo){
-        Player player = null;
-        try {
-            startOperation();
-            Query query = session.createQuery("from Player where pseudo=:pseudo");
-            query.setParameter("pseudo", pseudo);
-            player = (Player) query.uniqueResult();
-            tx.commit();
-        } catch (DataAccessLayerException e) {
-            handleException(e);
-        } finally {
-            db.close(session);
-        }
-        return Optional.ofNullable(player);
-    }
+	public Optional<Player> findOneByPseudo(String pseudo) {
+		Player player = null;
+		try {
+			startOperation();
+			Query query = session.createQuery("from Player where pseudo=:pseudo");
+			query.setParameter("pseudo", pseudo);
+			player = (Player) query.uniqueResult();
+			tx.commit();
+		} catch (DataAccessLayerException e) {
+			handleException(e);
+		} finally {
+			db.close(session);
+		}
+		return Optional.ofNullable(player);
+	}
 
-    public Optional<Player> find(long id) {
-        return super.find(Player.class, id);
-    }
+	public Optional<Player> find(long id) {
+		return super.find(Player.class, id);
+	}
 
-    public List<Player> findAll() {
-        return super.findAll(Player.class);
-    }
+	public List<Player> findAll() {
+		return super.findAll(Player.class);
+	}
 }

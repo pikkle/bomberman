@@ -9,19 +9,19 @@ import ch.heigvd.bomberman.common.game.Arena;
  */
 public class RemoveArenaRequest extends Request<Message> {
 
-    private Arena arena;
+	private Arena arena;
 
-    public RemoveArenaRequest(Arena arena){
-        this.arena = arena;
-    }
+	public RemoveArenaRequest(Arena arena) {
+		this.arena = arena;
+	}
 
-    public Arena getArena(){
-        return arena;
-    }
+	public Arena getArena() {
+		return arena;
+	}
 
 
-    @Override
-    public Response<Message> accept(RequestVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Response<Message> accept(RequestVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

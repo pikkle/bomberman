@@ -12,16 +12,16 @@ public class PlayerStateRequest extends Request<Message> {
 
 	private boolean isLocked;
 
-	public PlayerStateRequest(long id, boolean isLocked){
+	public PlayerStateRequest(long id, boolean isLocked) {
 		this.id = id;
 		this.isLocked = isLocked;
 	}
 
-	public long getId(){
+	public long getId() {
 		return id;
 	}
 
-	public boolean isLocked(){
+	public boolean isLocked() {
 		return isLocked;
 	}
 

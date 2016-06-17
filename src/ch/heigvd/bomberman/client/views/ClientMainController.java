@@ -20,89 +20,83 @@ import java.io.IOException;
 public class ClientMainController {
 
 
-    private ResponseManager rm;
-    private Client client;
-    private TabsController userTabsController;
+	private ResponseManager rm;
+	private Client client;
+	private TabsController userTabsController;
 
-    @FXML
-    private TableView<Room> roomsTableView;
+	@FXML
+	private TableView<Room> roomsTableView;
 
-    @FXML
-    private Pane tabsPane;
+	@FXML
+	private Pane tabsPane;
 
-    @FXML
-    private Pane mainPane;
+	@FXML
+	private Pane mainPane;
 
-    /***********
-     * Methodes*
-     ***********/
+	/***********
+	 * Methodes*
+	 ***********/
 
-    public ClientMainController(){
-        client = Client.getInstance();
-    }
+	public ClientMainController() {
+		client = Client.getInstance();
+	}
 
-    @FXML
-    private void initialize() {
-        rm = ResponseManager.getInstance();
-        rm.playerRequest(player -> {
-            if (player.isAdmin())
-            {
-                try
-                {
-                    FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/AdminTabsView.fxml"));
-                    TabPane pane = loader.load();
-                    userTabsController = loader.getController();
-                    userTabsController.initalize();
-                    tabsPane.getChildren().add(pane);
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            } else {
-                try
-                {
-                    FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
-                    TabPane pane = loader.load();
-                    userTabsController = loader.getController();
-                    userTabsController.initalize();
-                    tabsPane.getChildren().add(pane);
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+	@FXML
+	private void initialize() {
+		rm = ResponseManager.getInstance();
+		rm.playerRequest(player -> {
+			if (player.isAdmin()) {
+				try {
+					FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/AdminTabsView.fxml"));
+					TabPane pane = loader.load();
+					userTabsController = loader.getController();
+					userTabsController.initalize();
+					tabsPane.getChildren().add(pane);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/tabs/views/UserTabsView.fxml"));
+					TabPane pane = loader.load();
+					userTabsController = loader.getController();
+					userTabsController.initalize();
+					tabsPane.getChildren().add(pane);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 
-    public ResponseManager getRm(){
-        return rm;
-    }
+	public ResponseManager getRm() {
+		return rm;
+	}
 
-    @FXML
-    private void about() {
-        Stage stage = new Stage();
-        AnchorPane pane;
+	@FXML
+	private void about() {
+		Stage stage = new Stage();
+		AnchorPane pane;
 
-        try {
-            FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/About.fxml"));
+		try {
+			FXMLLoader loader = new FXMLLoader(Client.class.getResource("views/About.fxml"));
 
-            stage.setTitle("Bomberman - About");
-            pane = loader.load();
+			stage.setTitle("Bomberman - About");
+			pane = loader.load();
 
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setResizable(false);
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setResizable(false);
 
-            stage.setScene(new Scene(pane));
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			stage.setScene(new Scene(pane));
+			stage.showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @FXML
-    private void closeApp () throws Exception
-    {
-        Platform.exit();
-    }
+	@FXML
+	private void closeApp() throws Exception {
+		Platform.exit();
+	}
 }

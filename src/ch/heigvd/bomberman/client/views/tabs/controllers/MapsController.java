@@ -31,7 +31,7 @@ public class MapsController {
 	@FXML
 	FlowPane mapsContainer;
 
-	public MapsController(){
+	public MapsController() {
 		client = Client.getInstance();
 	}
 

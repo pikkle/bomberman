@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class ArenasRequest extends Request<List<Arena>> {
 
-    @Override
-    public Response<List<Arena>> accept(RequestVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Response<List<Arena>> accept(RequestVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

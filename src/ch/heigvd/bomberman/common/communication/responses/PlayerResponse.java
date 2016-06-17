@@ -9,19 +9,19 @@ import java.util.UUID;
  */
 public class PlayerResponse extends Response<Player> {
 
-    private Player player;
+	private Player player;
 
-    public PlayerResponse(UUID uuid, Player player) {
-        super(uuid);
-        this.player = player;
-    }
+	public PlayerResponse(UUID uuid, Player player) {
+		super(uuid);
+		this.player = player;
+	}
 
-    public Player getPlayer(){
-        return player;
-    }
+	public Player getPlayer() {
+		return player;
+	}
 
-    @Override
-    public Player accept(ResponseVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Player accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

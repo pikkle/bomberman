@@ -7,9 +7,9 @@ import ch.heigvd.bomberman.common.game.Element;
  * Created by matthieu.villard on 29.05.2016.
  */
 public class DropBombRequest extends Request<Element> {
-    @Override
-    public Response<Element> accept(RequestVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Response<Element> accept(RequestVisitor visitor) {
+		return visitor.visit(this);
+	}
 
 }

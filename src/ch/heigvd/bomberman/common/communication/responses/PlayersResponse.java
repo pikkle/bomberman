@@ -17,7 +17,7 @@ public class PlayersResponse extends Response<List<Player>> {
 		this.players = players;
 	}
 
-	public List<Player> getPlayers(){
+	public List<Player> getPlayers() {
 		return players;
 	}
 

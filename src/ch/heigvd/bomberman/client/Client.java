@@ -15,89 +15,88 @@ import java.io.IOException;
  * Client executable class
  */
 public class Client extends Application {
-    private static Log logger = LogFactory.getLog(Client.class);
-    private static Client instance;
-    private Stage primaryStage;
-    private Pane mainLayout;
-    private ResponseManager rm = ResponseManager.getInstance();
+	private static Log logger = LogFactory.getLog(Client.class);
+	private static Client instance;
+	private Stage primaryStage;
+	private Pane mainLayout;
+	private ResponseManager rm = ResponseManager.getInstance();
 
-    public Client(){
-        synchronized(Client.class){
-            if(instance != null) throw new UnsupportedOperationException(
-                    getClass()+" is singleton but constructor called more than once");
-            instance = this;
-        }
-    }
+	public Client() {
+		synchronized (Client.class) {
+			if (instance != null) throw new UnsupportedOperationException(
+					getClass() + " is singleton but constructor called more than once");
+			instance = this;
+		}
+	}
 
-    public static Client getInstance() {
-        if (instance == null)
-            instance = new Client();
-        return instance;
-    }
-
-
-
-    /**
-     * Entry point of the client
-     *
-     * @param args Not used
-     */
-    public static void main(String... args) {
-        launch(args);
-    }
+	public static Client getInstance() {
+		if (instance == null)
+			instance = new Client();
+		return instance;
+	}
 
 
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        logger.info("Starting client...");
-        this.primaryStage = primaryStage;
-        primaryStage.setTitle("Bomberman");
+	/**
+	 * Entry point of the client
+	 *
+	 * @param args Not used
+	 */
+	public static void main(String... args) {
+		launch(args);
+	}
 
-        primaryStage.setResizable(false);
 
-        FXMLLoader loader = new FXMLLoader();
+	@Override
+	public void start(Stage primaryStage) throws IOException {
+		logger.info("Starting client...");
+		this.primaryStage = primaryStage;
+		primaryStage.setTitle("Bomberman");
 
-        loader.setLocation(Client.class.getResource("views/auth/LoginView.fxml"));
+		primaryStage.setResizable(false);
 
-        try {
-            mainLayout = loader.load();
-        } catch (IOException e) {
-            logger.fatal("Couldn't create login form", e);
-            throw e;
-        }
+		FXMLLoader loader = new FXMLLoader();
 
-        LoginViewController controller = loader.getController();
+		loader.setLocation(Client.class.getResource("views/auth/LoginView.fxml"));
 
-        primaryStage.setScene(new Scene(mainLayout));
-        primaryStage.show();
-        logger.info("Client started");
-    }
+		try {
+			mainLayout = loader.load();
+		} catch (IOException e) {
+			logger.fatal("Couldn't create login form", e);
+			throw e;
+		}
 
-    @Override
-    public void stop(){
-        logger.info("Closing client...");
-        if(rm.isConnected())
-            rm.stop();
-        logger.info("Client closed");
-    }
+		LoginViewController controller = loader.getController();
 
-    public void changeScene(Pane pane){
-        primaryStage.hide();
-        mainLayout = pane;
-        primaryStage.setScene(new Scene(mainLayout));
+		primaryStage.setScene(new Scene(mainLayout));
+		primaryStage.show();
+		logger.info("Client started");
+	}
 
-        primaryStage.show();
-    }
+	@Override
+	public void stop() {
+		logger.info("Closing client...");
+		if (rm.isConnected())
+			rm.stop();
+		logger.info("Client closed");
+	}
 
-    public void setTitle(String title){
-        primaryStage.setTitle(title);
-    }
+	public void changeScene(Pane pane) {
+		primaryStage.hide();
+		mainLayout = pane;
+		primaryStage.setScene(new Scene(mainLayout));
 
-    public ResponseManager getRm() {
-        return rm;
-    }
+		primaryStage.show();
+	}
 
-    public Stage getPrimatyStage(){
-        return primaryStage;
-    }
+	public void setTitle(String title) {
+		primaryStage.setTitle(title);
+	}
+
+	public ResponseManager getRm() {
+		return rm;
+	}
+
+	public Stage getPrimatyStage() {
+		return primaryStage;
+	}
 }

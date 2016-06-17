@@ -126,9 +126,9 @@ public class InsertHandler extends Observable {
 					Constructor constructor = findConstructor(clazz);
 					Element element = (Element) constructor.newInstance(renderer.getCell(t.getX(), t.getY()),
 					                                                    renderer.getArena());
-					if(element instanceof PowerUp) {
+					if (element instanceof PowerUp) {
 						element.delete();
-						((Box)element.arena().elements(element.position()).get(0)).setPowerUp((PowerUp)element);
+						((Box) element.arena().elements(element.position()).get(0)).setPowerUp((PowerUp) element);
 					}
 
 

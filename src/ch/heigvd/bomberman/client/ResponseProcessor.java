@@ -3,14 +3,14 @@ package ch.heigvd.bomberman.client;
 import ch.heigvd.bomberman.common.communication.Message;
 import ch.heigvd.bomberman.common.communication.responses.*;
 import ch.heigvd.bomberman.common.game.*;
-import ch.heigvd.bomberman.common.game.Arena;
 
 import java.util.List;
 
 public class ResponseProcessor implements ResponseVisitor {
 	private static ResponseProcessor instance = new ResponseProcessor();
 
-	private ResponseProcessor(){	}
+	private ResponseProcessor() {
+	}
 
 	public static ResponseProcessor getInstance() {
 		return instance;

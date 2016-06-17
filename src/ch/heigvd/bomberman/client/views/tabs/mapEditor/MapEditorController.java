@@ -2,11 +2,10 @@ package ch.heigvd.bomberman.client.views.tabs.mapEditor;
 
 import ch.heigvd.bomberman.client.ResponseManager;
 import ch.heigvd.bomberman.client.views.render.ArenaRenderer;
-import ch.heigvd.bomberman.common.game.util.ImageViewPane;
 import ch.heigvd.bomberman.common.communication.Message;
-import ch.heigvd.bomberman.common.game.Arena;
 import ch.heigvd.bomberman.common.game.*;
 import ch.heigvd.bomberman.common.game.powerups.BombUpPowerUp;
+import ch.heigvd.bomberman.common.game.util.ImageViewPane;
 import ch.heigvd.bomberman.common.game.util.Point;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -28,25 +27,35 @@ import java.util.Observer;
  */
 public class MapEditorController implements Observer {
 
-	@FXML private AnchorPane mainPane;
+	@FXML
+	private AnchorPane mainPane;
 
-	@FXML private Spinner<Integer> width;
+	@FXML
+	private Spinner<Integer> width;
 
-	@FXML private Spinner<Integer> height;
+	@FXML
+	private Spinner<Integer> height;
 
-	@FXML private AnchorPane gridContainer;
+	@FXML
+	private AnchorPane gridContainer;
 
-	@FXML private VBox elementsContainer;
+	@FXML
+	private VBox elementsContainer;
 
-	@FXML private ImageView wall;
+	@FXML
+	private ImageView wall;
 
-	@FXML private ImageView box;
+	@FXML
+	private ImageView box;
 
-	@FXML private ImageView startPoint;
+	@FXML
+	private ImageView startPoint;
 
-	@FXML private ImageView addBombPowerUp;
+	@FXML
+	private ImageView addBombPowerUp;
 
-	@FXML private ImageView trash;
+	@FXML
+	private ImageView trash;
 
 	private ResponseManager rm;
 	private Arena arena;

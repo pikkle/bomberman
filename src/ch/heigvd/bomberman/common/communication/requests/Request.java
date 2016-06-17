@@ -6,11 +6,12 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public abstract class Request<T> implements Serializable {
-    private UUID uuid = UUID.randomUUID();
-    public abstract Response<T> accept(RequestVisitor visitor);
+	private UUID uuid = UUID.randomUUID();
+
+	public abstract Response<T> accept(RequestVisitor visitor);
 
 
-    public UUID getID() {
-        return uuid;
-    }
+	public UUID getID() {
+		return uuid;
+	}
 }

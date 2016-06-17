@@ -19,7 +19,7 @@ public class MoveResponse extends Response<Bomberman> {
 		this.bomberman = bomberman;
 	}
 
-	public Bomberman getBomberman(){
+	public Bomberman getBomberman() {
 		return bomberman;
 	}
 

@@ -10,15 +10,15 @@ import java.util.Optional;
  */
 public class ArenaDao extends MainDao<Arena> {
 
-    public ArenaDao() {
-        super();
-    }
+	public ArenaDao() {
+		super();
+	}
 
-    public Optional<Arena> find(Long id) {
-        return super.find(Arena.class, id);
-    }
+	public Optional<Arena> find(Long id) {
+		return super.find(Arena.class, id);
+	}
 
-    public List<Arena> findAll() {
-        return super.findAll(Arena.class);
-    }
+	public List<Arena> findAll() {
+		return super.findAll(Arena.class);
+	}
 }

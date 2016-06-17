@@ -10,20 +10,20 @@ import java.util.UUID;
  */
 public class RoomsResponse extends Response<List<Room>> {
 
-    private List<Room> rooms;
-    private int n;
+	private List<Room> rooms;
+	private int n;
 
-    public RoomsResponse(UUID uuid, List<Room> rooms) {
-        super(uuid);
-        this.rooms = rooms;
-    }
+	public RoomsResponse(UUID uuid, List<Room> rooms) {
+		super(uuid);
+		this.rooms = rooms;
+	}
 
-    public List<Room> getRooms(){
-        return rooms;
-    }
+	public List<Room> getRooms() {
+		return rooms;
+	}
 
-    @Override
-    public List<Room> accept(ResponseVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public List<Room> accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

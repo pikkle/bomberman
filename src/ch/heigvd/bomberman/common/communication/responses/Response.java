@@ -4,18 +4,19 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public abstract class Response<T> implements Serializable {
-    private UUID uuid;
-    public Response(UUID uuid) {
-        this.uuid = uuid;
-    }
+	private UUID uuid;
 
-    public boolean isSendable() {
-        return true;
-    }
+	public Response(UUID uuid) {
+		this.uuid = uuid;
+	}
 
-    public abstract T accept(ResponseVisitor visitor);
+	public boolean isSendable() {
+		return true;
+	}
 
-    public UUID getID() {
-        return uuid;
-    }
+	public abstract T accept(ResponseVisitor visitor);
+
+	public UUID getID() {
+		return uuid;
+	}
 }

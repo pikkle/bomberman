@@ -11,18 +11,18 @@ public class BombermanTest {
 	   assertEquals(positionExpected, bomberman.getPosition());
     }*/
 
-    @org.junit.Test
-    public void testDropBomb() throws Exception {
+	@org.junit.Test
+	public void testDropBomb() throws Exception {
 
-    }
+	}
 
-    @org.junit.Test
-    public void testGivePowerup() throws Exception {
+	@org.junit.Test
+	public void testGivePowerup() throws Exception {
 
-    }
+	}
 
-    @org.junit.Test
-    public void testGetBomb() throws Exception {
+	@org.junit.Test
+	public void testGetBomb() throws Exception {
 
-    }
+	}
 }

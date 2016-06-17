@@ -8,9 +8,9 @@ import ch.heigvd.bomberman.common.game.Element;
  */
 public class AddElementRequest extends Request<Element> {
 
-    @Override
-    public Response<Element> accept(RequestVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Response<Element> accept(RequestVisitor visitor) {
+		return visitor.visit(this);
+	}
 
 }

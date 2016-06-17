@@ -9,19 +9,19 @@ import java.util.UUID;
  */
 public class EndGameResponse extends Response<Statistic> {
 
-    private Statistic statistic;
+	private Statistic statistic;
 
-    public EndGameResponse(UUID uuid, Statistic statistic) {
-        super(uuid);
-        this.statistic = statistic;
-    }
+	public EndGameResponse(UUID uuid, Statistic statistic) {
+		super(uuid);
+		this.statistic = statistic;
+	}
 
-    public Statistic getStatistic(){
-        return statistic;
-    }
+	public Statistic getStatistic() {
+		return statistic;
+	}
 
-    @Override
-    public Statistic accept(ResponseVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Statistic accept(ResponseVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

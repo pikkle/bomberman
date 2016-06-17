@@ -10,15 +10,15 @@ import java.util.Optional;
  */
 public class GameDao extends MainDao<Game> {
 
-    public GameDao() {
-        super();
-    }
+	public GameDao() {
+		super();
+	}
 
-    public Optional<Game> find(Long id) {
-        return super.find(Game.class, id);
-    }
+	public Optional<Game> find(Long id) {
+		return super.find(Game.class, id);
+	}
 
-    public List<Game> findAll() {
-        return super.findAll(Game.class);
-    }
+	public List<Game> findAll() {
+		return super.findAll(Game.class);
+	}
 }

@@ -8,24 +8,24 @@ import ch.heigvd.bomberman.common.game.Room;
  */
 public class JoinRoomRequest extends Request<Room> {
 
-    private String room;
-    String password;
+	private String room;
+	String password;
 
-    public JoinRoomRequest(String room, String password){
-        this.room = room;
-        this.password = password;
-    }
+	public JoinRoomRequest(String room, String password) {
+		this.room = room;
+		this.password = password;
+	}
 
-    public String getRoom(){
-        return room;
-    }
+	public String getRoom() {
+		return room;
+	}
 
-    public String getPassword(){
-        return  password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    @Override
-    public Response<Room> accept(RequestVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Response<Room> accept(RequestVisitor visitor) {
+		return visitor.visit(this);
+	}
 }

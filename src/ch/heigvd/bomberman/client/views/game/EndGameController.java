@@ -12,26 +12,26 @@ import javafx.stage.Stage;
  */
 public class EndGameController {
 
-    private Client client;
+	private Client client;
 
-    @FXML
-    private Label lblTitle, lblRank;
+	@FXML
+	private Label lblTitle, lblRank;
 
-    @FXML
-    private AnchorPane mainPane;
+	@FXML
+	private AnchorPane mainPane;
 
-    public EndGameController(){
-        client = Client.getInstance();
-    }
+	public EndGameController() {
+		client = Client.getInstance();
+	}
 
-    public void setStatistic(Statistic statistic){
-        lblTitle.setText(statistic.getRank() == 1 ? "You win !" : "You just loose the game !");
-        lblRank.setText(String.valueOf(statistic.getRank()));
-    }
+	public void setStatistic(Statistic statistic) {
+		lblTitle.setText(statistic.getRank() == 1 ? "You win !" : "You just loose the game !");
+		lblRank.setText(String.valueOf(statistic.getRank()));
+	}
 
-    @FXML
-    private void leave(){
-        ((Stage)mainPane.getScene().getWindow()).close();
-        client.getPrimatyStage().show();
-    }
+	@FXML
+	private void leave() {
+		((Stage) mainPane.getScene().getWindow()).close();
+		client.getPrimatyStage().show();
+	}
 }

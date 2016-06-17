@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * The processor of the requests received by the client. Implements the visitor pattern.
  */
-public class RequestProcessor implements RequestVisitor{
+public class RequestProcessor implements RequestVisitor {
 	private static Log logger = LogFactory.getLog(RequestProcessor.class);
 	private RequestManager requestManager;
 	private static Server server = Server.getInstance();
@@ -25,26 +25,30 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Constructs the request processor.
+	 *
 	 * @param requestManager the request manager caller.
-     */
-	public RequestProcessor(RequestManager requestManager){
+	 */
+	public RequestProcessor(RequestManager requestManager) {
 		this.requestManager = requestManager;
 		db = DBManager.getInstance();
 	}
 
 	/**
 	 * Processes a Hello Request.
+	 *
 	 * @param request the HelloRequest received
 	 * @return an HelloResponse
-     */
+	 */
 	@Override
-	public Response visit(HelloRequest request){
+	public Response visit(HelloRequest request) {
 		System.out.println("Received message: ");
 		System.out.println(request.getMessage());
 		return new HelloResponse(request.getID(), "Hello !");
 	}
+
 	/**
 	 * Processes an AccountCreationRequest.
+	 *
 	 * @param request the HelloRequest received
 	 * @return an ErrorResponse or a SuccessResponse
 	 */
@@ -54,15 +58,16 @@ public class RequestProcessor implements RequestVisitor{
 			return new ErrorResponse(request.getID(), "Already logged in");
 		Optional<Player> player = db.players().findOneByPseudo(request.getUsername());
 		return player.map(p -> (Response) new ErrorResponse(request.getID(), "Account name already exists !"))
-				.orElseGet(()->{
-					Player newPlayer = new Player(request.getUsername(), request.getPassword());
-					db.players().create(newPlayer);
-					return new SuccessResponse(request.getID(), "Account successfully created !");
-				});
+		             .orElseGet(() -> {
+			             Player newPlayer = new Player(request.getUsername(), request.getPassword());
+			             db.players().create(newPlayer);
+			             return new SuccessResponse(request.getID(), "Account successfully created !");
+		             });
 	}
 
 	/**
 	 * Processes an AccountModifyRequest.
+	 *
 	 * @param request the AccountModifyRequest received
 	 * @return an ErrorResponse or a SuccessResponse
 	 */
@@ -70,20 +75,20 @@ public class RequestProcessor implements RequestVisitor{
 	public Response visit(AccountModifyRequest request) {
 		if (!requestManager.isLoggedIn())
 			return new ErrorResponse(request.getID(), "You are not logged in");
-		if((request.getUsername() == null || request.getUsername().isEmpty()) && (request.getPassword() == null ||
+		if ((request.getUsername() == null || request.getUsername().isEmpty()) && (request.getPassword() == null ||
 				request.getPassword().isEmpty()))
 			return new ErrorResponse(request.getID(), "Wrong values");
 
-		if(request.getUsername() != null && !request.getUsername().isEmpty()){
+		if (request.getUsername() != null && !request.getUsername().isEmpty()) {
 			Optional<Player> player = db.players()
 			                            .findOneByPseudo(request.getUsername())
 			                            .filter(p -> !p.getId().equals(requestManager.getPlayer().getId()));
-			if(player.isPresent())
+			if (player.isPresent())
 				return new ErrorResponse(request.getID(), "Account name already exists !");
 			requestManager.getPlayer().setPseudo(request.getUsername());
 		}
 
-		if(request.getPassword() != null && !request.getPassword().isEmpty()){
+		if (request.getPassword() != null && !request.getPassword().isEmpty()) {
 			requestManager.getPlayer().setPassword(request.getPassword());
 		}
 
@@ -93,6 +98,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a LoginRequest.
+	 *
 	 * @param request the LoginRequest received
 	 * @return an ErrorResponse or a SuccessResponse
 	 */
@@ -100,20 +106,21 @@ public class RequestProcessor implements RequestVisitor{
 	public Response visit(LoginRequest request) {
 		if (requestManager.isLoggedIn() || server.getClients().stream().anyMatch(r -> r.getPlayer() != null && r
 				.getPlayer().getPseudo().equals(request.getUsername()))
-		)
+				)
 			return new ErrorResponse(request.getID(), "Already logged in");
 		Optional<Player> player;
 		player = db.players().findOneByPseudo(request.getUsername());
 		return player.filter(p -> !p.isLocked() && p.getPassword().equals(request.getPassword()))
-				.map(p->{
-					requestManager.setLoggedIn(true);
-					requestManager.setPlayer(p);
-					return (Response) new SuccessResponse(request.getID(), "Successfully logged in !");
-				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
+		             .map(p -> {
+			             requestManager.setLoggedIn(true);
+			             requestManager.setPlayer(p);
+			             return (Response) new SuccessResponse(request.getID(), "Successfully logged in !");
+		             }).orElseGet(() -> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
 
 	/**
 	 * Processes a PlayerRequest.
+	 *
 	 * @param request the PlayerRequest received
 	 * @return a NoResponse or a PlayerResponse
 	 */
@@ -127,6 +134,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes an ArenasRequest.
+	 *
 	 * @param request the ArenasRequest received
 	 * @return an ArenasResponse
 	 */
@@ -144,24 +152,24 @@ public class RequestProcessor implements RequestVisitor{
 			return new ErrorResponse(request.getID(), "Access denied");
 
 		Optional<Player> player = db.players().find(request.getId());
-		if(player.isPresent()){
-			if(request.isLocked()){
-				if(player.get().getId().equals(requestManager.getPlayer().getId()))
+		if (player.isPresent()) {
+			if (request.isLocked()) {
+				if (player.get().getId().equals(requestManager.getPlayer().getId()))
 					return new ErrorResponse(request.getID(), "You tried to banish yourself! NOOOB!!!");
 				server.getClients()
 				      .stream()
 				      .filter(r -> r.getPlayer() != null && r.getPlayer().getId().equals(request.getId()))
 				      .findFirst().ifPresent(r -> {
-					      r.getPlayerSession().ifPresent(p -> {
-						      p.getBomberman().delete();
-					      });
-				      });
+					r.getPlayerSession().ifPresent(p -> {
+						p.getBomberman().delete();
+					});
+				});
 			}
 			player.get().setIsLocked(request.isLocked());
 			db.players().update(player.get());
 		}
 
-		if(request.isLocked())
+		if (request.isLocked())
 			return new SuccessResponse(request.getID(), "Player successfully banished.");
 		return new SuccessResponse(request.getID(), "Player successfully reset.");
 	}
@@ -175,6 +183,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a SaveArenaRequest.
+	 *
 	 * @param request the SaveArenaRequest received
 	 * @return an ErrorResponse or a SuccessResponse
 	 */
@@ -192,6 +201,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a RemoveArenaRequest.
+	 *
 	 * @param request the RemoveArenaRequest received
 	 * @return an ErrorResponse or a SuccessResponse
 	 */
@@ -206,6 +216,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a CreateRoomRequest.
+	 *
 	 * @param request the CreateRoomRequest received
 	 * @return an ErrorResponse or a SuccessResponse
 	 */
@@ -214,25 +225,26 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn())
 			return new ErrorResponse(request.getID(), "You must be logged !");
 
-		if(request.getName() == null || request.getName().isEmpty() || request.getMinPlayer() < 2 || request.getMinPlayer() > 4)
+		if (request.getName() == null || request.getName().isEmpty() || request.getMinPlayer() < 2 || request.getMinPlayer() > 4)
 			return new ErrorResponse(request.getID(), "Some fields are wrong or are missing !");
 
-		if(server.getRoomSessions().stream().filter(session -> session.getName().equals(request.getName())).findFirst().isPresent())
+		if (server.getRoomSessions().stream().filter(session -> session.getName().equals(request.getName())).findFirst().isPresent())
 			return new ErrorResponse(request.getID(), "This name is already used!");
 
 
 		Optional<Arena> arena = db.arenas().find(request.getArena());
 
-		return arena.filter(a-> a .getId() != null && a.getId().equals(request.getArena()))
-				.map(a->{
-					server.addRoom(new RoomSession(request.getName(), request.getPassword(), request.getMinPlayer(),
-					                               a, requestManager.getPlayer()));
-					return (Response) new SuccessResponse(request.getID(), "Room successfully created !");
-				}).orElseGet(()-> new ErrorResponse(request.getID(), "Wrong credentials"));
+		return arena.filter(a -> a.getId() != null && a.getId().equals(request.getArena()))
+		            .map(a -> {
+			            server.addRoom(new RoomSession(request.getName(), request.getPassword(), request.getMinPlayer(),
+			                                           a, requestManager.getPlayer()));
+			            return (Response) new SuccessResponse(request.getID(), "Room successfully created !");
+		            }).orElseGet(() -> new ErrorResponse(request.getID(), "Wrong credentials"));
 	}
 
 	/**
 	 * Processes a RoomsRequest.
+	 *
 	 * @param request the RoomsRequest received
 	 * @return a NoResponse
 	 */
@@ -250,6 +262,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a RoomsRequest.
+	 *
 	 * @param request the RoomsRequest received
 	 * @return a NoResponse
 	 */
@@ -262,21 +275,21 @@ public class RequestProcessor implements RequestVisitor{
 			return new NoResponse(request.getID());
 
 		Optional<RoomSession> roomSession = server.getRoomSessions()
-		                                                      .stream()
-		                                                      .filter(r -> r.getName().equals(request.getRoom()))
-		                                                      .findFirst();
+		                                          .stream()
+		                                          .filter(r -> r.getName().equals(request.getRoom()))
+		                                          .findFirst();
 
-		if(!roomSession.isPresent())
+		if (!roomSession.isPresent())
 			return new NoResponse(request.getID());
 
-		if(roomSession.get().isRunning())
+		if (roomSession.get().isRunning())
 			return new NoResponse(request.getID());
 
-		if(roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().getId() ==
+		if (roomSession.get().getPlayers().stream().filter(playerSession -> playerSession.getPlayer().getId() ==
 				requestManager.getPlayer().getId()).findFirst().isPresent())
 			return new NoResponse(request.getID());
 
-		if(roomSession.get().getPassword() != null && !roomSession.get().getPassword().isEmpty() && !roomSession.get().getPassword().equals(request.getPassword()))
+		if (roomSession.get().getPassword() != null && !roomSession.get().getPassword().isEmpty() && !roomSession.get().getPassword().equals(request.getPassword()))
 			return new NoResponse(request.getID());
 
 		try {
@@ -285,9 +298,9 @@ public class RequestProcessor implements RequestVisitor{
 			return new NoResponse(request.getID());
 		}
 
-		if(roomSession.get().getPlayers().size() >= roomSession.get().getMinPlayer()){
+		if (roomSession.get().getPlayers().size() >= roomSession.get().getMinPlayer()) {
 			roomSession.get().getPlayers().stream().filter(player -> player.getReadyUuid() != null).forEach(player -> {
-				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && ! roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().stream().map(p -> p.getPlayer().getPseudo()).collect(Collectors.toList()), roomSession.get().getArena(), roomSession.get().getPlayers().contains(player))));
+				player.getRequestManager().send(new JoinRoomResponse(player.getReadyUuid(), new Room(roomSession.get().getName(), roomSession.get().getPassword() != null && !roomSession.get().getPassword().isEmpty(), roomSession.get().getMinPlayer(), roomSession.get().getPlayers().stream().map(p -> p.getPlayer().getPseudo()).collect(Collectors.toList()), roomSession.get().getArena(), roomSession.get().getPlayers().contains(player))));
 				player.setReadyUuid(null);
 			});
 		}
@@ -297,6 +310,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a ReadyRequest.
+	 *
 	 * @param request the ReadyRequest received
 	 * @return a NoResponse
 	 */
@@ -305,10 +319,10 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
+		if (!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!request.getState()){
+		if (!request.getState()) {
 			requestManager.closePlayerSession();
 
 			return new NoResponse(request.getID());
@@ -317,7 +331,7 @@ public class RequestProcessor implements RequestVisitor{
 		requestManager.getPlayerSession().get().setStartUuid(request.getID());
 		requestManager.getPlayerSession().get().ready(request.getState());
 
-		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
+		if (!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
 		requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getStartUuid() != null).forEach(player -> {
@@ -331,6 +345,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a MoveRequest.
+	 *
 	 * @param request the MoveRequest received
 	 * @return a NoResponse
 	 */
@@ -339,16 +354,15 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
+		if (!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
+		if (!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
-		if(request.getDirection() == null){
+		if (request.getDirection() == null) {
 			requestManager.getPlayerSession().get().setMoveUuid(request.getID());
-		}
-		else{
+		} else {
 			requestManager.getPlayerSession().get().getBomberman().move(request.getDirection());
 			requestManager.getPlayerSession().get().getRoomSession().getPlayers().stream().filter(player -> player.getMoveUuid() != null).forEach(player -> {
 				player.getRequestManager().send(new MoveResponse(player.getMoveUuid(), requestManager.getPlayerSession().get().getBomberman()));
@@ -360,6 +374,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes an AddElementRequest.
+	 *
 	 * @param request the AddElementRequest received
 	 * @return a NoResponse
 	 */
@@ -368,10 +383,10 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
+		if (!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
+		if (!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
 		requestManager.getPlayerSession().get().setAddUuid(request.getID());
@@ -381,6 +396,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a DestroyElementsRequest.
+	 *
 	 * @param request the DestroyElementsRequest received
 	 * @return a NoResponse
 	 */
@@ -389,10 +405,10 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().isPresent() ||requestManager.getPlayerSession().get().getRoomSession() == null)
+		if (!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
+		if (!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
 		requestManager.getPlayerSession().get().setDestroyUuid(request.getID());
@@ -402,6 +418,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes a DropBombRequest.
+	 *
 	 * @param request the DropBombRequest received
 	 * @return a NoResponse
 	 */
@@ -410,10 +427,10 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
+		if (!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
+		if (!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
 		Optional<? extends Bomb> bomb = requestManager.getPlayerSession().get().getBomberman().dropBomb();
@@ -427,6 +444,7 @@ public class RequestProcessor implements RequestVisitor{
 
 	/**
 	 * Processes an EndGameRequest.
+	 *
 	 * @param request the EndGameRequest received
 	 * @return a NoResponse
 	 */
@@ -435,10 +453,10 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
+		if (!requestManager.getPlayerSession().isPresent() || requestManager.getPlayerSession().get().getRoomSession() == null)
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayerSession().get().getRoomSession().isRunning())
+		if (!requestManager.getPlayerSession().get().getRoomSession().isRunning())
 			return new NoResponse(request.getID());
 
 		requestManager.getPlayerSession().get().setEndUuid(request.getID());
@@ -451,7 +469,7 @@ public class RequestProcessor implements RequestVisitor{
 		if (!requestManager.isLoggedIn())
 			return new NoResponse(request.getID());
 
-		if(!requestManager.getPlayer().isAdmin())
+		if (!requestManager.getPlayer().isAdmin())
 			return new NoResponse(request.getID());
 
 		server.getClients()

@@ -9,7 +9,7 @@ import ch.heigvd.bomberman.common.game.util.Point;
  */
 public class FireUpPowerUp extends PowerUp {
 
-	public FireUpPowerUp(){
+	public FireUpPowerUp() {
 
 	}
 
