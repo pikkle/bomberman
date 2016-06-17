@@ -73,6 +73,7 @@ public class LoginViewController {
     @FXML
     private void testServer(){
         logger.info("Client connecting...");
+        DEFAULT_ADDRESS = ip.getText();
         try
         {
             rm.connect(DEFAULT_ADDRESS, DEFAULT_PORT);
