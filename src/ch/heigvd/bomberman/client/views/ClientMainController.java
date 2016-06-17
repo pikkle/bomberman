@@ -2,6 +2,7 @@ package ch.heigvd.bomberman.client.views;
 
 import ch.heigvd.bomberman.client.Client;
 import ch.heigvd.bomberman.client.ResponseManager;
+import ch.heigvd.bomberman.client.views.auth.LoginViewController;
 import ch.heigvd.bomberman.client.views.tabs.controllers.TabsController;
 import ch.heigvd.bomberman.common.game.Room;
 import javafx.application.Platform;
@@ -45,7 +46,7 @@ public class ClientMainController {
 
     @FXML
     private void initialize() {
-        DEFAULT_ADDRESS = Client.getAddress();
+        DEFAULT_ADDRESS = LoginViewController.getAddress();
         rm = ResponseManager.getInstance();
         rm.playerRequest(player -> {
             if (player.isAdmin())

@@ -48,6 +48,9 @@ public class LoginViewController {
     @FXML
     private ImageView serverStatusIcon;
 
+    @FXML
+    private TextField ip;
+
     /***********
      * Methodes*
      ***********/
@@ -56,9 +59,13 @@ public class LoginViewController {
         client = Client.getInstance();
     }
 
+    public static String getAddress(){
+        return DEFAULT_ADDRESS;
+    }
+
     @FXML
     private void initialize() {
-        DEFAULT_ADDRESS = Client.getAddress();
+        ip.setText(DEFAULT_ADDRESS);
         rm = ResponseManager.getInstance();
         testServer();
     }
