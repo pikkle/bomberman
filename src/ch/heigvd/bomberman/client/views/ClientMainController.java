@@ -20,7 +20,7 @@ import java.io.IOException;
 public class ClientMainController {
 
     private static final int DEFAULT_PORT = 3737;
-    private static final String DEFAULT_ADDRESS = "127.0.0.1";
+    private static String DEFAULT_ADDRESS = "127.0.0.1";
 
     private ResponseManager rm;
     private Client client;
@@ -45,6 +45,7 @@ public class ClientMainController {
 
     @FXML
     private void initialize() {
+        DEFAULT_ADDRESS = Client.getAddress();
         rm = ResponseManager.getInstance();
         rm.playerRequest(player -> {
             if (player.isAdmin())

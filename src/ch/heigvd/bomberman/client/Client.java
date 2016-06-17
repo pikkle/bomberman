@@ -20,6 +20,7 @@ public class Client extends Application {
     private Stage primaryStage;
     private Pane mainLayout;
     private ResponseManager rm = ResponseManager.getInstance();
+    private static String address;
 
     public Client(){
         synchronized(Client.class){
@@ -35,12 +36,19 @@ public class Client extends Application {
         return instance;
     }
 
+    public static String getAddress(){
+        return address;
+    }
+
+
+
     /**
      * Entry point of the client
      *
      * @param args Not used
      */
     public static void main(String... args) {
+        address = args[0];
         launch(args);
     }
 
